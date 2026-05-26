@@ -1,0 +1,23 @@
+/*
+  X-Frame-Options: SAMEORIGIN
+  X-Content-Type-Options: nosniff
+  X-XSS-Protection: 1; mode=block
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+  Content-Security-Policy: default-src 'self' https: data: 'unsafe-inline' 'unsafe-eval'; img-src 'self' https: data: blob:; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; connect-src 'self' https://xxtkywcchutdhwcjawrz.supabase.co wss://xxtkywcchutdhwcjawrz.supabase.co https://api.anthropic.com;
+
+/admin.html
+  X-Robots-Tag: noindex, nofollow
+  Cache-Control: no-store, no-cache, must-revalidate
+
+/*.html
+  Cache-Control: public, max-age=3600
+
+/style.css
+  Cache-Control: public, max-age=86400
+
+/script.js
+  Cache-Control: public, max-age=86400
+
+/images/*
+  Cache-Control: public, max-age=2592000

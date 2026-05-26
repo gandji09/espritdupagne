@@ -1,0 +1,1362 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Admin — Esprit du Pagne</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root{
+  --red:#CC0000;--red-dark:#A30000;--red-soft:#FFF2F2;
+  --white:#FFFFFF;--black:#1A1A1A;--muted:#6B6B6B;
+  --line:#ECECEC;--bg:#F6F6F6;--bg-soft:#FAFAFA;
+  --green:#16A34A;--green-soft:#F0FDF4;
+  --orange:#EA580C;--orange-soft:#FFF7ED;
+  --blue:#2563EB;--blue-soft:#EFF6FF;
+  --shadow-sm:0 2px 8px rgba(26,26,26,.06);
+  --shadow-md:0 10px 30px rgba(26,26,26,.10);
+  --radius:14px;--radius-sm:10px;
+  --transition:.3s cubic-bezier(.2,.7,.2,1);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Poppins',sans-serif;background:var(--bg);color:var(--black);min-height:100vh;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:'Playfair Display',serif}
+a{text-decoration:none;color:inherit}
+button{cursor:pointer;font-family:'Poppins',sans-serif}
+input,textarea,select{font-family:'Poppins',sans-serif}
+
+/* ── LOGIN ── */
+#loginScreen{
+  position:fixed;inset:0;background:var(--black);
+  display:flex;align-items:center;justify-content:center;z-index:9999;
+}
+.login-box{
+  background:var(--white);border-radius:24px;padding:48px 40px;
+  width:100%;max-width:400px;text-align:center;
+  box-shadow:0 40px 80px rgba(0,0,0,.4);
+}
+.login-logo{
+  width:64px;height:64px;background:var(--red);border-radius:16px;
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 24px;font-family:'Playfair Display',serif;
+  color:#fff;font-size:1.6rem;font-weight:900;
+}
+.login-box h2{font-size:1.5rem;margin-bottom:6px}
+.login-box p{color:var(--muted);font-size:.88rem;margin-bottom:30px}
+.login-field{
+  width:100%;padding:14px 16px;border:2px solid var(--line);
+  border-radius:var(--radius-sm);font-size:.95rem;
+  transition:border-color .2s;outline:none;margin-bottom:14px;
+}
+.login-field:focus{border-color:var(--red)}
+.login-btn{
+  width:100%;padding:14px;background:var(--red);color:#fff;
+  border:none;border-radius:var(--radius-sm);font-size:1rem;font-weight:600;
+  transition:background .2s;
+}
+.login-btn:hover{background:var(--red-dark)}
+.login-error{color:var(--red);font-size:.85rem;margin-top:10px;display:none}
+
+/* ── LAYOUT ── */
+#app{display:none;min-height:100vh}
+.sidebar{
+  position:fixed;left:0;top:0;bottom:0;width:260px;
+  background:var(--black);color:#fff;
+  display:flex;flex-direction:column;z-index:100;
+  transition:transform .3s;
+}
+.sidebar-header{
+  padding:28px 24px 20px;border-bottom:1px solid rgba(255,255,255,.08);
+}
+.sidebar-logo{display:flex;align-items:center;gap:12px}
+.sidebar-logo-icon{
+  width:42px;height:42px;background:var(--red);border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Playfair Display',serif;font-weight:900;font-size:1.1rem;color:#fff;
+}
+.sidebar-logo-text{font-size:.88rem;font-weight:600;line-height:1.3}
+.sidebar-logo-text span{color:var(--red)}
+.sidebar-logo-sub{font-size:.7rem;opacity:.5;font-weight:300;letter-spacing:.1em;text-transform:uppercase}
+.sidebar-nav{flex:1;padding:16px 12px;overflow-y:auto}
+.nav-section-label{
+  font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;
+  opacity:.4;padding:16px 12px 8px;font-weight:600;
+}
+.nav-item{
+  display:flex;align-items:center;gap:12px;padding:11px 14px;
+  border-radius:var(--radius-sm);font-size:.9rem;font-weight:500;
+  color:rgba(255,255,255,.65);transition:all .2s;cursor:pointer;
+  margin-bottom:2px;border:none;background:none;width:100%;text-align:left;
+}
+.nav-item:hover{background:rgba(255,255,255,.06);color:#fff}
+.nav-item.active{background:var(--red);color:#fff}
+.nav-item i{width:18px;text-align:center;font-size:.95rem}
+.nav-badge{
+  margin-left:auto;background:var(--red);color:#fff;
+  font-size:.7rem;font-weight:700;padding:2px 8px;border-radius:20px;
+}
+.nav-item.active .nav-badge{background:rgba(255,255,255,.25)}
+.sidebar-footer{
+  padding:16px 12px;border-top:1px solid rgba(255,255,255,.08);
+}
+.logout-btn{
+  display:flex;align-items:center;gap:10px;padding:11px 14px;
+  border-radius:var(--radius-sm);color:rgba(255,255,255,.5);
+  font-size:.88rem;cursor:pointer;transition:all .2s;
+  border:none;background:none;width:100%;
+}
+.logout-btn:hover{color:#fff;background:rgba(255,255,255,.06)}
+
+/* ── MAIN ── */
+.main{margin-left:260px;min-height:100vh;display:flex;flex-direction:column}
+.topbar{
+  background:var(--white);border-bottom:1px solid var(--line);
+  padding:18px 32px;display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:50;
+}
+.topbar-title{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700}
+.topbar-right{display:flex;align-items:center;gap:12px}
+.topbar-date{font-size:.82rem;color:var(--muted)}
+.site-link{
+  display:flex;align-items:center;gap:6px;padding:8px 14px;
+  border-radius:var(--radius-sm);background:var(--bg);
+  font-size:.85rem;font-weight:500;transition:background .2s;
+}
+.site-link:hover{background:var(--line)}
+.content{padding:32px;flex:1}
+
+/* ── SECTIONS ── */
+.section{display:none}
+.section.active{display:block}
+
+/* ── STATS ── */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:32px}
+.stat-card{
+  background:var(--white);border-radius:var(--radius);padding:24px;
+  box-shadow:var(--shadow-sm);display:flex;align-items:center;gap:16px;
+}
+.stat-icon{
+  width:52px;height:52px;border-radius:14px;
+  display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0;
+}
+.stat-icon.red{background:var(--red-soft);color:var(--red)}
+.stat-icon.green{background:var(--green-soft);color:var(--green)}
+.stat-icon.orange{background:var(--orange-soft);color:var(--orange)}
+.stat-icon.blue{background:var(--blue-soft);color:var(--blue)}
+.stat-num{font-size:1.8rem;font-weight:700;line-height:1;font-family:'Playfair Display',serif}
+.stat-label{font-size:.8rem;color:var(--muted);margin-top:3px}
+
+/* ── CARDS ── */
+.card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow-sm);overflow:hidden;margin-bottom:24px}
+.card-header{
+  padding:20px 24px;border-bottom:1px solid var(--line);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.card-title{font-size:1rem;font-weight:600}
+.card-body{padding:24px}
+
+/* ── BUTTONS ── */
+.btn{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:10px 18px;border-radius:var(--radius-sm);
+  font-size:.88rem;font-weight:600;border:none;
+  transition:all .2s;cursor:pointer;
+}
+.btn-primary{background:var(--red);color:#fff}
+.btn-primary:hover{background:var(--red-dark)}
+.btn-ghost{background:var(--bg);color:var(--black)}
+.btn-ghost:hover{background:var(--line)}
+.btn-danger{background:#FEE2E2;color:#B91C1C}
+.btn-danger:hover{background:#FECACA}
+.btn-success{background:var(--green-soft);color:var(--green)}
+.btn-sm{padding:7px 12px;font-size:.8rem}
+
+/* ── TABLE ── */
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+th{
+  text-align:left;padding:12px 16px;font-size:.75rem;font-weight:600;
+  letter-spacing:.08em;text-transform:uppercase;color:var(--muted);
+  border-bottom:2px solid var(--line);background:var(--bg-soft);
+}
+td{padding:14px 16px;border-bottom:1px solid var(--line);font-size:.9rem;vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--bg-soft)}
+.td-img{width:52px;height:52px;object-fit:cover;border-radius:10px}
+.badge{
+  display:inline-block;padding:4px 10px;border-radius:20px;
+  font-size:.75rem;font-weight:600;
+}
+.badge-green{background:var(--green-soft);color:var(--green)}
+.badge-orange{background:var(--orange-soft);color:var(--orange)}
+.badge-red{background:var(--red-soft);color:var(--red)}
+.badge-blue{background:var(--blue-soft);color:var(--blue)}
+.badge-gray{background:var(--line);color:var(--muted)}
+
+/* ── FORM ── */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.form-grid.single{grid-template-columns:1fr}
+.form-group{display:flex;flex-direction:column;gap:6px}
+.form-group.full{grid-column:1/-1}
+label{font-size:.82rem;font-weight:600;color:var(--black)}
+input[type=text],input[type=number],input[type=email],input[type=url],
+textarea,select{
+  padding:11px 14px;border:2px solid var(--line);border-radius:var(--radius-sm);
+  font-size:.9rem;outline:none;transition:border-color .2s;background:var(--white);
+}
+input:focus,textarea:focus,select:focus{border-color:var(--red)}
+textarea{resize:vertical;min-height:100px}
+.form-actions{display:flex;gap:10px;margin-top:20px}
+
+/* ── MODAL ── */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.5);
+  display:flex;align-items:center;justify-content:center;
+  z-index:1000;opacity:0;pointer-events:none;transition:opacity .25s;
+  padding:20px;
+}
+.modal-overlay.active{opacity:1;pointer-events:all}
+.modal{
+  background:var(--white);border-radius:20px;width:100%;max-width:560px;
+  max-height:90vh;overflow-y:auto;
+  transform:translateY(20px);transition:transform .25s;
+}
+.modal-overlay.active .modal{transform:translateY(0)}
+.modal-header{
+  padding:24px 28px;border-bottom:1px solid var(--line);
+  display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:#fff;
+}
+.modal-header h3{font-size:1.1rem}
+.modal-close{
+  width:36px;height:36px;border-radius:10px;background:var(--bg);border:none;
+  display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1rem;
+}
+.modal-close:hover{background:var(--line)}
+.modal-body{padding:28px}
+.modal-footer{padding:20px 28px;border-top:1px solid var(--line);display:flex;gap:10px;justify-content:flex-end}
+
+/* ── EMPTY STATE ── */
+.empty{text-align:center;padding:60px 20px;color:var(--muted)}
+.empty i{font-size:2.5rem;margin-bottom:12px;opacity:.3}
+.empty p{font-size:.9rem}
+
+/* ── GALLERY GRID ── */
+.gallery-admin-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px;
+}
+.gallery-admin-item{
+  position:relative;border-radius:var(--radius);overflow:hidden;aspect-ratio:1;
+  box-shadow:var(--shadow-sm);
+}
+.gallery-admin-item img{width:100%;height:100%;object-fit:cover}
+.gallery-admin-overlay{
+  position:absolute;inset:0;background:rgba(0,0,0,.6);
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  opacity:0;transition:opacity .2s;
+}
+.gallery-admin-item:hover .gallery-admin-overlay{opacity:1}
+.gallery-admin-title{
+  position:absolute;bottom:0;left:0;right:0;
+  background:linear-gradient(transparent,rgba(0,0,0,.8));
+  color:#fff;padding:16px 12px 10px;font-size:.8rem;font-weight:500;
+}
+
+/* ── TOAST ── */
+.toast{
+  position:fixed;bottom:30px;right:30px;z-index:9999;
+  background:var(--black);color:#fff;padding:14px 20px;
+  border-radius:12px;font-size:.9rem;font-weight:500;
+  box-shadow:var(--shadow-md);display:flex;align-items:center;gap:10px;
+  transform:translateY(20px);opacity:0;transition:all .3s;pointer-events:none;
+}
+.toast.show{transform:translateY(0);opacity:1}
+.toast.success i{color:#4ADE80}
+.toast.error i{color:#F87171}
+
+/* ── LOADING ── */
+.spinner{
+  display:inline-block;width:20px;height:20px;
+  border:2px solid var(--line);border-top-color:var(--red);
+  border-radius:50%;animation:spin .7s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-row td{text-align:center;padding:40px;color:var(--muted)}
+
+/* ── ACTIVITY ── */
+.activity-list{display:flex;flex-direction:column;gap:0}
+.activity-item{
+  display:flex;align-items:flex-start;gap:14px;padding:14px 0;
+  border-bottom:1px solid var(--line);
+}
+.activity-item:last-child{border-bottom:none}
+.activity-icon{
+  width:36px;height:36px;border-radius:10px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:.9rem;
+}
+.activity-text{font-size:.88rem;line-height:1.5}
+.activity-text strong{font-weight:600}
+.activity-time{font-size:.75rem;color:var(--muted);margin-top:2px}
+
+/* ── RESPONSIVE ── */
+@media(max-width:768px){
+  .sidebar{transform:translateX(-100%)}
+  .sidebar.open{transform:translateX(0)}
+  .main{margin-left:0}
+  .topbar{padding:16px 20px}
+  .content{padding:20px}
+  .form-grid{grid-template-columns:1fr}
+  .stats-grid{grid-template-columns:1fr 1fr}
+  .hamburger{display:flex}
+}
+.hamburger{
+  display:none;width:40px;height:40px;border-radius:10px;
+  background:var(--bg);border:none;align-items:center;
+  justify-content:center;cursor:pointer;font-size:1.1rem;
+}
+.sidebar-overlay{
+  display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:99;
+}
+.sidebar-overlay.active{display:block}
+
+/* ── Upload image ── */
+.upload-zone{
+  border:2px dashed var(--line);border-radius:var(--radius-sm);
+  padding:20px;text-align:center;cursor:pointer;
+  transition:border-color .2s,background .2s;
+  background:var(--bg-soft);position:relative;
+}
+.upload-zone:hover{border-color:var(--red);background:var(--red-soft)}
+.upload-zone input[type=file]{
+  position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;
+}
+.upload-zone i{font-size:1.8rem;color:var(--muted);margin-bottom:8px;display:block}
+.upload-zone p{font-size:.85rem;color:var(--muted);margin:0}
+.upload-zone .upload-preview{
+  width:100%;height:140px;object-fit:cover;
+  border-radius:8px;margin-bottom:8px;display:none;
+}
+.upload-progress{
+  height:4px;background:var(--line);border-radius:2px;
+  margin-top:10px;overflow:hidden;display:none;
+}
+.upload-progress-bar{
+  height:100%;background:var(--red);border-radius:2px;
+  width:0%;transition:width .3s;
+}
+.upload-url-display{
+  font-size:.75rem;color:var(--green);margin-top:6px;
+  word-break:break-all;display:none;
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="loginScreen">
+  <div class="login-box">
+    <div class="login-logo">E</div>
+    <h2>Espace Admin</h2>
+    <p>Esprit du Pagne — Tableau de bord</p>
+    <input type="password" id="loginPassword" class="login-field" placeholder="Mot de passe admin" onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="login-btn" onclick="doLogin()"><i class="fas fa-unlock"></i> Connexion</button>
+    <p class="login-error" id="loginError"><i class="fas fa-exclamation-circle"></i> Mot de passe incorrect</p>
+  </div>
+</div>
+
+<!-- SIDEBAR OVERLAY (mobile) -->
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+<!-- APP -->
+<div id="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">
+        <div class="sidebar-logo-icon">E</div>
+        <div>
+          <div class="sidebar-logo-text">Esprit <span>du Pagne</span></div>
+          <div class="sidebar-logo-sub">Administration</div>
+        </div>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Tableau de bord</div>
+      <button class="nav-item active" onclick="showSection('dashboard')">
+        <i class="fas fa-chart-pie"></i> Vue d'ensemble
+      </button>
+      <div class="nav-section-label">Catalogue</div>
+      <button class="nav-item" onclick="showSection('produits')">
+        <i class="fas fa-shirt"></i> Produits
+      </button>
+      <button class="nav-item" onclick="showSection('galerie')">
+        <i class="fas fa-images"></i> Galerie
+      </button>
+      <button class="nav-item" onclick="showSection('blog')">
+        <i class="fas fa-pen-nib"></i> Blog
+      </button>
+      <div class="nav-section-label">Clients</div>
+      <button class="nav-item" onclick="showSection('commandes')" id="navCommandes">
+        <i class="fas fa-bag-shopping"></i> Commandes
+        <span class="nav-badge" id="badgeCommandes" style="display:none">0</span>
+      </button>
+      <button class="nav-item" onclick="showSection('messages')" id="navMessages">
+        <i class="fas fa-envelope"></i> Messages
+        <span class="nav-badge" id="badgeMessages" style="display:none">0</span>
+      </button>
+      <button class="nav-item" onclick="showSection('inscriptions')" id="navInscriptions">
+        <i class="fas fa-graduation-cap"></i> Inscriptions
+        <span class="nav-badge" id="badgeInscriptions" style="display:none">0</span>
+      </button>
+      <button class="nav-item" onclick="showSection('temoignages')" id="navTemoignages">
+        <i class="fas fa-comment-dots"></i> Témoignages
+        <span class="nav-badge" id="badgeTemoignages" style="display:none">0</span>
+      </button>
+      <button class="nav-item" onclick="showSection('newsletter')" id="navNewsletter">
+        <i class="fas fa-envelope-open-text"></i> Newsletter
+      </button>
+    </nav>
+    <div class="sidebar-footer">
+      <button class="logout-btn" onclick="logout()"><i class="fas fa-right-from-bracket"></i> Déconnexion</button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <div style="display:flex;align-items:center;gap:14px">
+        <button class="hamburger" id="hamburger" onclick="openSidebar()"><i class="fas fa-bars"></i></button>
+        <div class="topbar-title" id="pageTitle">Vue d'ensemble</div>
+      </div>
+      <div class="topbar-right">
+        <span class="topbar-date" id="todayDate"></span>
+        <a href="index.html" target="_blank" class="site-link btn-ghost btn btn-sm">
+          <i class="fas fa-arrow-up-right-from-square"></i> Voir le site
+        </a>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- ══ DASHBOARD ══ -->
+      <div class="section active" id="sec-dashboard">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon red"><i class="fas fa-shirt"></i></div>
+            <div><div class="stat-num" id="st-produits">—</div><div class="stat-label">Produits actifs</div></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon green"><i class="fas fa-bag-shopping"></i></div>
+            <div><div class="stat-num" id="st-commandes">—</div><div class="stat-label">Commandes</div></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon orange"><i class="fas fa-envelope"></i></div>
+            <div><div class="stat-num" id="st-messages">—</div><div class="stat-label">Messages non lus</div></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon blue"><i class="fas fa-graduation-cap"></i></div>
+            <div><div class="stat-num" id="st-inscriptions">—</div><div class="stat-label">Inscriptions</div></div>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
+          <div class="card">
+            <div class="card-header"><span class="card-title">Dernières commandes</span></div>
+            <div class="card-body">
+              <div id="dash-commandes"><div class="empty"><div class="spinner"></div></div></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><span class="card-title">Derniers messages</span></div>
+            <div class="card-body">
+              <div id="dash-messages"><div class="empty"><div class="spinner"></div></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ PRODUITS ══ -->
+      <div class="section" id="sec-produits">
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title"><i class="fas fa-shirt" style="color:var(--red);margin-right:8px"></i>Produits</span>
+            <button class="btn btn-primary btn-sm" onclick="openModal('produit')">
+              <i class="fas fa-plus"></i> Ajouter
+            </button>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Photo</th><th>Nom</th><th>Catégorie</th><th>Prix (FCFA)</th><th>Statut</th><th>Actions</th></tr></thead>
+              <tbody id="produits-tbody"><tr class="loading-row"><td colspan="6"><div class="spinner"></div></td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ GALERIE ══ -->
+      <div class="section" id="sec-galerie">
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title"><i class="fas fa-images" style="color:var(--red);margin-right:8px"></i>Galerie</span>
+            <button class="btn btn-primary btn-sm" onclick="openModal('galerie')">
+              <i class="fas fa-plus"></i> Ajouter une photo
+            </button>
+          </div>
+          <div class="card-body">
+            <div class="gallery-admin-grid" id="galerie-grid">
+              <div class="empty" style="grid-column:1/-1"><div class="spinner"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ BLOG ══ -->
+      <div class="section" id="sec-blog">
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title"><i class="fas fa-pen-nib" style="color:var(--red);margin-right:8px"></i>Articles</span>
+            <button class="btn btn-primary btn-sm" onclick="openModal('article')">
+              <i class="fas fa-plus"></i> Nouvel article
+            </button>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Titre</th><th>Extrait</th><th>Statut</th><th>Date</th><th>Actions</th></tr></thead>
+              <tbody id="blog-tbody"><tr class="loading-row"><td colspan="5"><div class="spinner"></div></td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ COMMANDES ══ -->
+      <div class="section" id="sec-commandes">
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title"><i class="fas fa-bag-shopping" style="color:var(--red);margin-right:8px"></i>Commandes</span>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Client</th><th>Téléphone</th><th>Articles</th><th>Total</th><th>Paiement</th><th>Statut</th><th>Date</th><th>Actions</th></tr></thead>
+              <tbody id="commandes-tbody"><tr class="loading-row"><td colspan="8"><div class="spinner"></div></td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ MESSAGES ══ -->
+      <div class="section" id="sec-messages">
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title"><i class="fas fa-envelope" style="color:var(--red);margin-right:8px"></i>Messages de contact</span>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Nom</th><th>Email</th><th>Sujet</th><th>Message</th><th>Lu</th><th>Date</th><th>Actions</th></tr></thead>
+              <tbody id="messages-tbody"><tr class="loading-row"><td colspan="7"><div class="spinner"></div></td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ TÉMOIGNAGES ══ -->
+      <div class="section" id="sec-temoignages">
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title"><i class="fas fa-comment-dots" style="color:var(--red);margin-right:8px"></i>Témoignages à valider</span>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Nom</th><th>Ville</th><th>Note</th><th>Message</th><th>Statut</th><th>Date</th><th>Actions</th></tr></thead>
+              <tbody id="temoignages-tbody"><tr class="loading-row"><td colspan="7"><div class="spinner"></div></td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ NEWSLETTER ══ -->
+      <div class="section" id="sec-newsletter">
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title"><i class="fas fa-envelope-open-text" style="color:var(--red);margin-right:8px"></i>Abonnés Newsletter</span>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Email</th><th>Date d'inscription</th><th>Actions</th></tr></thead>
+              <tbody id="newsletter-tbody"><tr class="loading-row"><td colspan="3"><div class="spinner"></div></td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ INSCRIPTIONS ══ -->
+      <div class="section" id="sec-inscriptions">
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title"><i class="fas fa-graduation-cap" style="color:var(--red);margin-right:8px"></i>Inscriptions formations</span>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Nom</th><th>Email</th><th>Téléphone</th><th>Formation</th><th>Statut</th><th>Date</th><th>Actions</th></tr></thead>
+              <tbody id="inscriptions-tbody"><tr class="loading-row"><td colspan="7"><div class="spinner"></div></td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /content -->
+  </main>
+</div><!-- /app -->
+
+<!-- ══ MODAL PRODUIT ══ -->
+<div class="modal-overlay" id="modalProduit">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="modalProduitTitle">Ajouter un produit</h3>
+      <button class="modal-close" onclick="closeModal('produit')"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group full">
+          <label>Nom du produit *</label>
+          <input type="text" id="p-nom" placeholder="Ex: Robe Wax Prestige">
+        </div>
+        <div class="form-group">
+          <label>Catégorie *</label>
+          <select id="p-categorie">
+            <option value="Robes">Robes femmes</option>
+            <option value="Boubous">Boubous</option>
+            <option value="Ensembles">Ensembles</option>
+            <option value="Homme">Homme</option>
+            <option value="Enfants">Enfants</option>
+            <option value="Accessoires">Accessoires</option>
+            <option value="Sur-mesure">Sur-mesure</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Prix (FCFA) *</label>
+          <input type="number" id="p-prix" placeholder="85000">
+        </div>
+        <div class="form-group full">
+          <label>Image du produit</label>
+          <div class="upload-zone" id="zone-p-image">
+            <input type="file" accept="image/*" onchange="handleFileInput(this,'p-image','zone-p-image')">
+            <img class="upload-preview" alt="preview">
+            <i class="fas fa-cloud-arrow-up"></i>
+            <p>Appuyer pour choisir une photo</p>
+            <div class="upload-progress"><div class="upload-progress-bar"></div></div>
+            <div class="upload-url-display"></div>
+          </div>
+          <input type="url" id="p-image" placeholder="URL générée automatiquement" style="margin-top:8px;font-size:.8rem;color:var(--muted)" readonly>
+        </div>
+        <div class="form-group">
+          <label>Badge (optionnel)</label>
+          <input type="text" id="p-badge" placeholder="Ex: Nouveau, Promo">
+        </div>
+        <div class="form-group">
+          <label>Statut</label>
+          <select id="p-actif">
+            <option value="true">Actif (visible sur le site)</option>
+            <option value="false">Masqué</option>
+          </select>
+        </div>
+        <div class="form-group full">
+          <label>Description</label>
+          <textarea id="p-description" placeholder="Description du produit..."></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('produit')">Annuler</button>
+      <button class="btn btn-primary" onclick="saveProduit()" id="saveProduitBtn">
+        <i class="fas fa-save"></i> Enregistrer
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL GALERIE ══ -->
+<div class="modal-overlay" id="modalGalerie">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Ajouter une photo</h3>
+      <button class="modal-close" onclick="closeModal('galerie')"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid single">
+        <div class="form-group">
+          <label>Titre (optionnel)</label>
+          <input type="text" id="g-titre" placeholder="Ex: Collection Été 2025">
+        </div>
+        <div class="form-group">
+          <label>Image *</label>
+          <div class="upload-zone" id="zone-g-image">
+            <input type="file" accept="image/*" onchange="handleFileInput(this,'g-image','zone-g-image')">
+            <img class="upload-preview" alt="preview">
+            <i class="fas fa-cloud-arrow-up"></i>
+            <p>Appuyer pour choisir une photo</p>
+            <div class="upload-progress"><div class="upload-progress-bar"></div></div>
+            <div class="upload-url-display"></div>
+          </div>
+          <input type="url" id="g-image" placeholder="URL générée automatiquement" style="margin-top:8px;font-size:.8rem;color:var(--muted)" readonly>
+        </div>
+        <div class="form-group">
+          <label>Ordre d'affichage</label>
+          <input type="number" id="g-ordre" placeholder="1" value="0">
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('galerie')">Annuler</button>
+      <button class="btn btn-primary" onclick="saveGalerie()"><i class="fas fa-save"></i> Ajouter</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL ARTICLE ══ -->
+<div class="modal-overlay" id="modalArticle">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="modalArticleTitle">Nouvel article</h3>
+      <button class="modal-close" onclick="closeModal('article')"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid single">
+        <div class="form-group">
+          <label>Titre *</label>
+          <input type="text" id="a-titre" placeholder="Titre de l'article">
+        </div>
+        <div class="form-group">
+          <label>Image de couverture</label>
+          <div class="upload-zone" id="zone-a-image">
+            <input type="file" accept="image/*" onchange="handleFileInput(this,'a-image','zone-a-image')">
+            <img class="upload-preview" alt="preview">
+            <i class="fas fa-cloud-arrow-up"></i>
+            <p>Appuyer pour choisir une photo</p>
+            <div class="upload-progress"><div class="upload-progress-bar"></div></div>
+            <div class="upload-url-display"></div>
+          </div>
+          <input type="url" id="a-image" placeholder="URL générée automatiquement" style="margin-top:8px;font-size:.8rem;color:var(--muted)" readonly>
+        </div>
+        <div class="form-group">
+          <label>Extrait (résumé court)</label>
+          <textarea id="a-extrait" style="min-height:70px" placeholder="2-3 phrases de résumé..."></textarea>
+        </div>
+        <div class="form-group">
+          <label>Contenu complet</label>
+          <textarea id="a-contenu" style="min-height:180px" placeholder="Contenu de l'article..."></textarea>
+        </div>
+        <div class="form-group">
+          <label>Statut</label>
+          <select id="a-publie">
+            <option value="true">Publié (visible sur le site)</option>
+            <option value="false">Brouillon (masqué)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('article')">Annuler</button>
+      <button class="btn btn-primary" onclick="saveArticle()" id="saveArticleBtn"><i class="fas fa-save"></i> Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"><i class="fas fa-check-circle"></i> <span id="toastMsg"></span></div>
+
+<script>
+// ══════════════════════════════════
+// CONFIG
+// ══════════════════════════════════
+const ADMIN_PASSWORD = 'espritdupagne2025'; // ← CHANGE CE MOT DE PASSE
+const SUPABASE_URL = 'https://xxtkywcchutdhwcjawrz.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh4dGt5d2NjaHV0ZGh3Y2phd3J6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg1Njk3MjAsImV4cCI6MjA5NDE0NTcyMH0.UzDTCSboartGYeiLJ6bo8P-3NibVMVEiBMLgkxdKSRQ';
+
+let sb = null;
+let editingId = null;
+let editingArticleId = null;
+
+// ══════════════════════════════════
+// SUPABASE INIT
+// ══════════════════════════════════
+function loadSupabase(){
+  return new Promise(resolve=>{
+    if(window.supabase){ sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY); return resolve(); }
+    const s=document.createElement('script');
+    s.src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js';
+    s.onload=()=>{ sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY); resolve(); };
+    s.onerror=()=>resolve();
+    document.head.appendChild(s);
+  });
+}
+
+// ══════════════════════════════════
+// LOGIN
+// ══════════════════════════════════
+function doLogin(){
+  const pw=document.getElementById('loginPassword').value;
+  const err=document.getElementById('loginError');
+  if(pw===ADMIN_PASSWORD){
+    document.getElementById('loginScreen').style.display='none';
+    document.getElementById('app').style.display='flex';
+    initApp();
+  } else {
+    err.style.display='block';
+    document.getElementById('loginPassword').value='';
+  }
+}
+function logout(){
+  document.getElementById('loginScreen').style.display='flex';
+  document.getElementById('app').style.display='none';
+  document.getElementById('loginPassword').value='';
+}
+
+// ══════════════════════════════════
+// APP INIT
+// ══════════════════════════════════
+async function initApp(){
+  document.getElementById('todayDate').textContent=new Date().toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  await loadSupabase();
+  loadDashboard();
+  loadProduits();
+  // Load other sections lazily when visited
+}
+
+// ══════════════════════════════════
+// NAVIGATION
+// ══════════════════════════════════
+const titles={dashboard:'Vue d\'ensemble',produits:'Produits',galerie:'Galerie',blog:'Blog',commandes:'Commandes',messages:'Messages',inscriptions:'Inscriptions',temoignages:'Témoignages',newsletter:'Newsletter'};
+function showSection(name){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
+  document.getElementById('sec-'+name).classList.add('active');
+  event.currentTarget.classList.add('active');
+  document.getElementById('pageTitle').textContent=titles[name]||name;
+  closeSidebar();
+  if(name==='galerie') loadGalerie();
+  if(name==='blog') loadBlog();
+  if(name==='commandes') loadCommandes();
+  if(name==='messages') loadMessages();
+  if(name==='inscriptions') loadInscriptions();
+  if(name==='temoignages') loadTemoignagesAdmin();
+  if(name==='newsletter') loadNewsletterAdmin();
+}
+function openSidebar(){document.getElementById('sidebar').classList.add('open');document.getElementById('sidebarOverlay').classList.add('active')}
+function closeSidebar(){document.getElementById('sidebar').classList.remove('open');document.getElementById('sidebarOverlay').classList.remove('active')}
+
+// ══════════════════════════════════
+// DASHBOARD
+// ══════════════════════════════════
+async function loadDashboard(){
+  if(!sb) return;
+  const [p,c,m,i]=await Promise.all([
+    sb.from('produits').select('id',{count:'exact'}).eq('actif',true),
+    sb.from('commandes').select('id',{count:'exact'}),
+    sb.from('messages_contact').select('id',{count:'exact'}).eq('lu',false),
+    sb.from('inscriptions_formation').select('id',{count:'exact'}),
+  ]);
+  document.getElementById('st-produits').textContent=p.count||0;
+  document.getElementById('st-commandes').textContent=c.count||0;
+  document.getElementById('st-messages').textContent=m.count||0;
+  document.getElementById('st-inscriptions').textContent=i.count||0;
+  // Badges
+  if(c.count>0){document.getElementById('badgeCommandes').textContent=c.count;document.getElementById('badgeCommandes').style.display='inline-block'}
+  if(m.count>0){document.getElementById('badgeMessages').textContent=m.count;document.getElementById('badgeMessages').style.display='inline-block'}
+  if(i.count>0){document.getElementById('badgeInscriptions').textContent=i.count;document.getElementById('badgeInscriptions').style.display='inline-block'}
+
+  // Recent commandes
+  const rc=await sb.from('commandes').select('*').order('created_at',{ascending:false}).limit(4);
+  const dcEl=document.getElementById('dash-commandes');
+  if(rc.data&&rc.data.length){
+    dcEl.innerHTML='<div class="activity-list">'+rc.data.map(c=>`
+      <div class="activity-item">
+        <div class="activity-icon" style="background:var(--green-soft);color:var(--green)"><i class="fas fa-bag-shopping"></i></div>
+        <div class="activity-text">
+          <strong>${c.client_nom}</strong> — ${fmt(c.total)} FCFA<br>
+          <span class="activity-time">${fmtDate(c.created_at)} · ${c.mode_paiement}</span>
+        </div>
+      </div>`).join('')+'</div>';
+  } else {dcEl.innerHTML='<div class="empty"><i class="fas fa-bag-shopping"></i><p>Aucune commande</p></div>'}
+
+  // Recent messages
+  const rm=await sb.from('messages_contact').select('*').order('created_at',{ascending:false}).limit(4);
+  const dmEl=document.getElementById('dash-messages');
+  if(rm.data&&rm.data.length){
+    dmEl.innerHTML='<div class="activity-list">'+rm.data.map(m=>`
+      <div class="activity-item">
+        <div class="activity-icon" style="background:var(--orange-soft);color:var(--orange)"><i class="fas fa-envelope"></i></div>
+        <div class="activity-text">
+          <strong>${m.nom}</strong>${!m.lu?' <span class="badge badge-orange" style="font-size:.65rem">Non lu</span>':''}<br>
+          <span style="font-size:.85rem;color:var(--muted)">${(m.sujet||'').substring(0,40)}</span><br>
+          <span class="activity-time">${fmtDate(m.created_at)}</span>
+        </div>
+      </div>`).join('')+'</div>';
+  } else {dmEl.innerHTML='<div class="empty"><i class="fas fa-envelope"></i><p>Aucun message</p></div>'}
+}
+
+// ══════════════════════════════════
+// PRODUITS
+// ══════════════════════════════════
+async function loadProduits(){
+  if(!sb) return;
+  const {data}=await sb.from('produits').select('*').order('created_at',{ascending:false});
+  const tb=document.getElementById('produits-tbody');
+  if(!data||!data.length){tb.innerHTML='<tr><td colspan="6"><div class="empty"><i class="fas fa-shirt"></i><p>Aucun produit</p></div></td></tr>';return}
+  tb.innerHTML=data.map(p=>`<tr>
+    <td>${p.image_url?`<img src="${p.image_url}" class="td-img" alt="">`:'-'}</td>
+    <td><strong>${p.nom}</strong>${p.badge?` <span class="badge badge-blue">${p.badge}</span>`:''}</td>
+    <td>${p.categorie}</td>
+    <td>${fmt(p.prix)} FCFA</td>
+    <td><span class="badge ${p.actif?'badge-green':'badge-gray'}">${p.actif?'Actif':'Masqué'}</span></td>
+    <td>
+      <button class="btn btn-ghost btn-sm" onclick="editProduit('${p.id}')"><i class="fas fa-pen"></i></button>
+      <button class="btn btn-danger btn-sm" onclick="deleteProduit('${p.id}')"><i class="fas fa-trash"></i></button>
+    </td>
+  </tr>`).join('');
+}
+
+function openModal(type){
+  editingId=null;editingArticleId=null;
+  if(type==='produit'){
+    document.getElementById('modalProduitTitle').textContent='Ajouter un produit';
+    ['p-nom','p-prix','p-image','p-badge','p-description'].forEach(id=>document.getElementById(id).value='');
+    document.getElementById('p-categorie').value='Robes';
+    document.getElementById('p-actif').value='true';
+    document.getElementById('modalProduit').classList.add('active');
+  }
+  if(type==='galerie'){document.getElementById('g-titre').value='';document.getElementById('g-image').value='';document.getElementById('g-ordre').value='0';document.getElementById('modalGalerie').classList.add('active')}
+  if(type==='article'){
+    document.getElementById('modalArticleTitle').textContent='Nouvel article';
+    ['a-titre','a-image','a-extrait','a-contenu'].forEach(id=>document.getElementById(id).value='');
+    document.getElementById('a-publie').value='true';
+    document.getElementById('modalArticle').classList.add('active');
+  }
+}
+function closeModal(type){document.getElementById('modal'+type.charAt(0).toUpperCase()+type.slice(1)).classList.remove('active')}
+
+async function editProduit(id){
+  const {data}=await sb.from('produits').select('*').eq('id',id).single();
+  if(!data) return;
+  editingId=id;
+  document.getElementById('modalProduitTitle').textContent='Modifier le produit';
+  document.getElementById('p-nom').value=data.nom||'';
+  document.getElementById('p-categorie').value=data.categorie||'Robes';
+  document.getElementById('p-prix').value=data.prix||'';
+  document.getElementById('p-image').value=data.image_url||'';
+  document.getElementById('p-badge').value=data.badge||'';
+  document.getElementById('p-actif').value=String(data.actif);
+  document.getElementById('p-description').value=data.description||'';
+  document.getElementById('modalProduit').classList.add('active');
+}
+
+async function saveProduit(){
+  const nom=document.getElementById('p-nom').value.trim();
+  const prix=parseInt(document.getElementById('p-prix').value);
+  if(!nom||!prix){showToast('Nom et prix requis','error');return}
+  const payload={
+    nom, categorie:document.getElementById('p-categorie').value,
+    prix, image_url:document.getElementById('p-image').value.trim()||null,
+    badge:document.getElementById('p-badge').value.trim()||null,
+    actif:document.getElementById('p-actif').value==='true',
+    description:document.getElementById('p-description').value.trim()||null,
+  };
+  const btn=document.getElementById('saveProduitBtn');
+  btn.innerHTML='<div class="spinner"></div> Enregistrement…';btn.disabled=true;
+  let error;
+  if(editingId){({error}=await sb.from('produits').update(payload).eq('id',editingId));}
+  else{({error}=await sb.from('produits').insert(payload));}
+  btn.innerHTML='<i class="fas fa-save"></i> Enregistrer';btn.disabled=false;
+  if(error){showToast('Erreur: '+error.message,'error');return}
+  showToast(editingId?'Produit modifié ✓':'Produit ajouté ✓');
+  closeModal('produit');loadProduits();loadDashboard();
+}
+
+async function deleteProduit(id){
+  if(!confirm('Supprimer ce produit ?')) return;
+  await sb.from('produits').delete().eq('id',id);
+  showToast('Produit supprimé');loadProduits();loadDashboard();
+}
+
+// ══════════════════════════════════
+// GALERIE
+// ══════════════════════════════════
+async function loadGalerie(){
+  if(!sb) return;
+  const {data}=await sb.from('galerie').select('*').order('ordre');
+  const grid=document.getElementById('galerie-grid');
+  if(!data||!data.length){grid.innerHTML='<div class="empty" style="grid-column:1/-1"><i class="fas fa-images"></i><p>Aucune photo</p></div>';return}
+  grid.innerHTML=data.map(g=>`
+    <div class="gallery-admin-item">
+      <img src="${g.image_url}" alt="${g.titre||''}">
+      <div class="gallery-admin-title">${g.titre||'Sans titre'}</div>
+      <div class="gallery-admin-overlay">
+        <button class="btn btn-danger btn-sm" onclick="deleteGalerie('${g.id}')"><i class="fas fa-trash"></i></button>
+      </div>
+    </div>`).join('');
+}
+
+async function saveGalerie(){
+  const image_url=document.getElementById('g-image').value.trim();
+  if(!image_url){showToast('URL image requise','error');return}
+  const {error}=await sb.from('galerie').insert({
+    titre:document.getElementById('g-titre').value.trim()||null,
+    image_url, ordre:parseInt(document.getElementById('g-ordre').value)||0
+  });
+  if(error){showToast('Erreur: '+error.message,'error');return}
+  showToast('Photo ajoutée ✓');closeModal('galerie');loadGalerie();
+}
+
+async function deleteGalerie(id){
+  if(!confirm('Supprimer cette photo ?')) return;
+  await sb.from('galerie').delete().eq('id',id);
+  showToast('Photo supprimée');loadGalerie();
+}
+
+// ══════════════════════════════════
+// BLOG
+// ══════════════════════════════════
+async function loadBlog(){
+  if(!sb) return;
+  const {data}=await sb.from('articles').select('*').order('created_at',{ascending:false});
+  const tb=document.getElementById('blog-tbody');
+  if(!data||!data.length){tb.innerHTML='<tr><td colspan="5"><div class="empty"><i class="fas fa-pen-nib"></i><p>Aucun article</p></div></td></tr>';return}
+  tb.innerHTML=data.map(a=>`<tr>
+    <td><strong>${a.titre}</strong></td>
+    <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--muted);font-size:.85rem">${a.extrait||''}</td>
+    <td><span class="badge ${a.publie?'badge-green':'badge-gray'}">${a.publie?'Publié':'Brouillon'}</span></td>
+    <td style="color:var(--muted);font-size:.85rem">${fmtDate(a.created_at)}</td>
+    <td>
+      <button class="btn btn-ghost btn-sm" onclick="editArticle('${a.id}')"><i class="fas fa-pen"></i></button>
+      <button class="btn btn-danger btn-sm" onclick="deleteArticle('${a.id}')"><i class="fas fa-trash"></i></button>
+    </td>
+  </tr>`).join('');
+}
+
+async function editArticle(id){
+  const {data}=await sb.from('articles').select('*').eq('id',id).single();
+  if(!data) return;
+  editingArticleId=id;
+  document.getElementById('modalArticleTitle').textContent='Modifier l\'article';
+  document.getElementById('a-titre').value=data.titre||'';
+  document.getElementById('a-image').value=data.image_url||'';
+  document.getElementById('a-extrait').value=data.extrait||'';
+  document.getElementById('a-contenu').value=data.contenu||'';
+  document.getElementById('a-publie').value=String(data.publie);
+  document.getElementById('modalArticle').classList.add('active');
+}
+
+async function saveArticle(){
+  const titre=document.getElementById('a-titre').value.trim();
+  if(!titre){showToast('Titre requis','error');return}
+  const payload={
+    titre, image_url:document.getElementById('a-image').value.trim()||null,
+    extrait:document.getElementById('a-extrait').value.trim()||null,
+    contenu:document.getElementById('a-contenu').value.trim()||null,
+    publie:document.getElementById('a-publie').value==='true',
+  };
+  const btn=document.getElementById('saveArticleBtn');
+  btn.innerHTML='<div class="spinner"></div> Enregistrement…';btn.disabled=true;
+  let error;
+  if(editingArticleId){({error}=await sb.from('articles').update(payload).eq('id',editingArticleId));}
+  else{({error}=await sb.from('articles').insert(payload));}
+  btn.innerHTML='<i class="fas fa-save"></i> Enregistrer';btn.disabled=false;
+  if(error){showToast('Erreur: '+error.message,'error');return}
+  showToast(editingArticleId?'Article modifié ✓':'Article publié ✓');
+  closeModal('article');loadBlog();
+}
+
+async function deleteArticle(id){
+  if(!confirm('Supprimer cet article ?')) return;
+  await sb.from('articles').delete().eq('id',id);
+  showToast('Article supprimé');loadBlog();
+}
+
+// ══════════════════════════════════
+// COMMANDES
+// ══════════════════════════════════
+async function loadCommandes(){
+  if(!sb) return;
+  const {data}=await sb.from('commandes').select('*').order('created_at',{ascending:false});
+  const tb=document.getElementById('commandes-tbody');
+  if(!data||!data.length){tb.innerHTML='<tr><td colspan="8"><div class="empty"><i class="fas fa-bag-shopping"></i><p>Aucune commande</p></div></td></tr>';return}
+  const statutColors={en_attente:'badge-orange',confirmee:'badge-green',livree:'badge-blue',annulee:'badge-red'};
+  const payLabels={momo:'Mobile Money',wave:'Wave',card:'Carte',cash:'Espèces'};
+  tb.innerHTML=data.map(c=>`<tr>
+    <td><strong>${c.client_nom}</strong><br><small style="color:var(--muted)">${c.client_adresse||''}</small></td>
+    <td>${c.client_telephone}</td>
+    <td style="font-size:.82rem;color:var(--muted)">${Array.isArray(c.articles)?c.articles.map(a=>`${a.nom} ×${a.qty}`).join(', '):'-'}</td>
+    <td><strong>${fmt(c.total)} FCFA</strong></td>
+    <td><span class="badge badge-blue">${payLabels[c.mode_paiement]||c.mode_paiement}</span></td>
+    <td>
+      <select class="badge" style="border:none;padding:4px 8px;border-radius:20px;font-size:.75rem;cursor:pointer;background:var(--orange-soft);color:var(--orange)"
+        onchange="updateStatutCommande('${c.id}',this.value)">
+        <option value="en_attente" ${c.statut==='en_attente'?'selected':''}>En attente</option>
+        <option value="confirmee" ${c.statut==='confirmee'?'selected':''}>Confirmée</option>
+        <option value="livree" ${c.statut==='livree'?'selected':''}>Livrée</option>
+        <option value="annulee" ${c.statut==='annulee'?'selected':''}>Annulée</option>
+      </select>
+    </td>
+    <td style="color:var(--muted);font-size:.82rem">${fmtDate(c.created_at)}</td>
+    <td>
+      <a href="https://wa.me/${c.client_telephone}" target="_blank" class="btn btn-success btn-sm"><i class="fab fa-whatsapp"></i></a>
+      <button class="btn btn-danger btn-sm" onclick="deleteCommande('${c.id}')"><i class="fas fa-trash"></i></button>
+    </td>
+  </tr>`).join('');
+}
+
+async function updateStatutCommande(id,statut){
+  await sb.from('commandes').update({statut}).eq('id',id);
+  showToast('Statut mis à jour ✓');
+}
+async function deleteCommande(id){
+  if(!confirm('Supprimer cette commande ?')) return;
+  await sb.from('commandes').delete().eq('id',id);
+  showToast('Commande supprimée');loadCommandes();loadDashboard();
+}
+
+// ══════════════════════════════════
+// MESSAGES
+// ══════════════════════════════════
+async function loadMessages(){
+  if(!sb) return;
+  const {data}=await sb.from('messages_contact').select('*').order('created_at',{ascending:false});
+  const tb=document.getElementById('messages-tbody');
+  if(!data||!data.length){tb.innerHTML='<tr><td colspan="7"><div class="empty"><i class="fas fa-envelope"></i><p>Aucun message</p></div></td></tr>';return}
+  tb.innerHTML=data.map(m=>`<tr style="${!m.lu?'font-weight:600':''}">
+    <td>${m.nom}</td>
+    <td style="color:var(--muted);font-size:.85rem">${m.email}</td>
+    <td>${m.sujet||'-'}</td>
+    <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.85rem;color:var(--muted)">${m.message||''}</td>
+    <td><span class="badge ${m.lu?'badge-green':'badge-orange'}">${m.lu?'Lu':'Non lu'}</span></td>
+    <td style="color:var(--muted);font-size:.82rem">${fmtDate(m.created_at)}</td>
+    <td>
+      ${!m.lu?`<button class="btn btn-success btn-sm" onclick="marquerLu('${m.id}')"><i class="fas fa-check"></i></button>`:''}
+      <a href="mailto:${m.email}" class="btn btn-ghost btn-sm"><i class="fas fa-reply"></i></a>
+      <button class="btn btn-danger btn-sm" onclick="deleteMessage('${m.id}')"><i class="fas fa-trash"></i></button>
+    </td>
+  </tr>`).join('');
+}
+
+async function marquerLu(id){
+  await sb.from('messages_contact').update({lu:true}).eq('id',id);
+  showToast('Marqué comme lu ✓');loadMessages();loadDashboard();
+}
+async function deleteMessage(id){
+  if(!confirm('Supprimer ce message ?')) return;
+  await sb.from('messages_contact').delete().eq('id',id);
+  showToast('Message supprimé');loadMessages();
+}
+
+// ══════════════════════════════════
+// INSCRIPTIONS
+// ══════════════════════════════════
+async function loadInscriptions(){
+  if(!sb) return;
+  const {data}=await sb.from('inscriptions_formation').select('*').order('created_at',{ascending:false});
+  const tb=document.getElementById('inscriptions-tbody');
+  if(!data||!data.length){tb.innerHTML='<tr><td colspan="7"><div class="empty"><i class="fas fa-graduation-cap"></i><p>Aucune inscription</p></div></td></tr>';return}
+  tb.innerHTML=data.map(i=>`<tr>
+    <td><strong>${i.nom}</strong></td>
+    <td style="font-size:.85rem;color:var(--muted)">${i.email}</td>
+    <td>${i.telephone}</td>
+    <td><span class="badge badge-blue">${i.formation}</span></td>
+    <td>
+      <select style="border:1px solid var(--line);border-radius:8px;padding:4px 8px;font-size:.8rem;cursor:pointer"
+        onchange="updateStatutInscription('${i.id}',this.value)">
+        <option value="en_attente" ${i.statut==='en_attente'?'selected':''}>En attente</option>
+        <option value="confirmee" ${i.statut==='confirmee'?'selected':''}>Confirmée</option>
+        <option value="annulee" ${i.statut==='annulee'?'selected':''}>Annulée</option>
+      </select>
+    </td>
+    <td style="color:var(--muted);font-size:.82rem">${fmtDate(i.created_at)}</td>
+    <td>
+      <a href="https://wa.me/${i.telephone}" target="_blank" class="btn btn-success btn-sm"><i class="fab fa-whatsapp"></i></a>
+      <button class="btn btn-danger btn-sm" onclick="deleteInscription('${i.id}')"><i class="fas fa-trash"></i></button>
+    </td>
+  </tr>`).join('');
+}
+
+async function updateStatutInscription(id,statut){
+  await sb.from('inscriptions_formation').update({statut}).eq('id',id);
+  showToast('Statut mis à jour ✓');
+}
+async function deleteInscription(id){
+  if(!confirm('Supprimer cette inscription ?')) return;
+  await sb.from('inscriptions_formation').delete().eq('id',id);
+  showToast('Inscription supprimée');loadInscriptions();
+}
+
+// ══════════════════════════════════
+// UTILS
+// ══════════════════════════════════
+const fmt=n=>new Intl.NumberFormat('fr-FR').format(n);
+const fmtDate=d=>new Date(d).toLocaleDateString('fr-FR',{day:'numeric',month:'short',year:'numeric'});
+
+let toastTimer;
+function showToast(msg,type='success'){
+  const t=document.getElementById('toast');
+  t.querySelector('span').textContent=msg;
+  t.querySelector('i').className=type==='success'?'fas fa-check-circle':'fas fa-exclamation-circle';
+  t.className='toast show '+(type==='success'?'success':'error');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>t.classList.remove('show'),3000);
+}
+
+// Close modal on overlay click
+document.querySelectorAll('.modal-overlay').forEach(o=>{
+  o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('active')});
+});
+
+// Enter key for login
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape') document.querySelectorAll('.modal-overlay').forEach(o=>o.classList.remove('active'));
+});
+
+// ══════════════════════════════════
+// ══════════════════════════════════
+// TÉMOIGNAGES ADMIN
+// ══════════════════════════════════
+async function loadTemoignagesAdmin(){
+  if(!sb) return;
+  const {data}=await sb.from('temoignages').select('*').order('created_at',{ascending:false});
+  const tb=document.getElementById('temoignages-tbody');
+  // Badge
+  const pending=data?data.filter(t=>!t.approuve).length:0;
+  if(pending>0){document.getElementById('badgeTemoignages').textContent=pending;document.getElementById('badgeTemoignages').style.display='inline-block';}
+  if(!data||!data.length){tb.innerHTML='<tr><td colspan="7"><div class="empty"><i class="fas fa-comment-dots"></i><p>Aucun témoignage</p></div></td></tr>';return;}
+  tb.innerHTML=data.map(t=>`<tr>
+    <td><strong>${t.nom}</strong></td>
+    <td>${t.ville||'-'}</td>
+    <td style="color:#F59E0B">${'★'.repeat(t.note||5)}</td>
+    <td style="max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.85rem">${t.message}</td>
+    <td><span class="badge ${t.approuve?'badge-green':'badge-orange'}">${t.approuve?'Approuvé':'En attente'}</span></td>
+    <td style="color:var(--muted);font-size:.82rem">${fmtDate(t.created_at)}</td>
+    <td>
+      ${!t.approuve?`<button class="btn btn-success btn-sm" onclick="approuverTemoignage('${t.id}')"><i class="fas fa-check"></i> Approuver</button>`:''}
+      <button class="btn btn-danger btn-sm" onclick="deleteTemoignage('${t.id}')"><i class="fas fa-trash"></i></button>
+    </td>
+  </tr>`).join('');
+}
+
+async function approuverTemoignage(id){
+  await sb.from('temoignages').update({approuve:true}).eq('id',id);
+  showToast('Témoignage approuvé ✓ — visible sur le site');
+  loadTemoignagesAdmin();
+}
+async function deleteTemoignage(id){
+  if(!confirm('Supprimer ce témoignage ?')) return;
+  await sb.from('temoignages').delete().eq('id',id);
+  showToast('Témoignage supprimé');loadTemoignagesAdmin();
+}
+
+// ══════════════════════════════════
+// NEWSLETTER ADMIN
+// ══════════════════════════════════
+async function loadNewsletterAdmin(){
+  if(!sb) return;
+  const {data}=await sb.from('newsletter').select('*').order('created_at',{ascending:false});
+  const tb=document.getElementById('newsletter-tbody');
+  if(!data||!data.length){tb.innerHTML='<tr><td colspan="3"><div class="empty"><i class="fas fa-envelope-open-text"></i><p>Aucun abonné</p></div></td></tr>';return;}
+  tb.innerHTML=data.map(n=>`<tr>
+    <td><strong>${n.email}</strong></td>
+    <td style="color:var(--muted);font-size:.85rem">${fmtDate(n.created_at)}</td>
+    <td>
+      <a href="mailto:${n.email}" class="btn btn-ghost btn-sm"><i class="fas fa-envelope"></i></a>
+      <button class="btn btn-danger btn-sm" onclick="deleteNewsletter('${n.id}')"><i class="fas fa-trash"></i></button>
+    </td>
+  </tr>`).join('');
+}
+async function deleteNewsletter(id){
+  if(!confirm('Désinscrire cet email ?')) return;
+  await sb.from('newsletter').delete().eq('id',id);
+  showToast('Email supprimé');loadNewsletterAdmin();
+}
+
+
+// ══════════════════════════════════
+// UPLOAD IMAGE → Supabase Storage
+// ══════════════════════════════════
+async function uploadImage(file, targetInputId, previewEl, progressEl, urlEl){
+  if(!file) return;
+  if(!sb) await loadSupabase();
+  
+  // Show progress
+  if(progressEl){ progressEl.style.display='block'; }
+  const bar = progressEl ? progressEl.querySelector('.upload-progress-bar') : null;
+  if(bar) bar.style.width='20%';
+
+  // Preview
+  if(previewEl){
+    const reader=new FileReader();
+    reader.onload=e=>{previewEl.src=e.target.result;previewEl.style.display='block';}
+    reader.readAsDataURL(file);
+  }
+
+  // Upload to Supabase Storage
+  const ext = file.name.split('.').pop();
+  const filename = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+  
+  if(bar) bar.style.width='50%';
+  
+  const {data, error} = await sb.storage.from('images').upload(filename, file, {
+    cacheControl: '3600', upsert: false
+  });
+
+  if(bar) bar.style.width='100%';
+  
+  if(error){
+    showToast('Erreur upload: '+error.message, 'error');
+    if(progressEl) progressEl.style.display='none';
+    return;
+  }
+
+  // Get public URL
+  const {data: urlData} = sb.storage.from('images').getPublicUrl(filename);
+  const publicUrl = urlData.publicUrl;
+
+  // Set URL in target input
+  const input = document.getElementById(targetInputId);
+  if(input) input.value = publicUrl;
+
+  // Show URL
+  if(urlEl){
+    urlEl.textContent = '✓ Image uploadée';
+    urlEl.style.display='block';
+  }
+
+  setTimeout(()=>{ if(progressEl) progressEl.style.display='none'; }, 1000);
+  showToast('✓ Image uploadée !');
+  return publicUrl;
+}
+
+function handleFileInput(inputEl, targetInputId, zoneId){
+  const file = inputEl.files[0];
+  if(!file) return;
+  const zone = document.getElementById(zoneId);
+  const preview = zone ? zone.querySelector('.upload-preview') : null;
+  const progress = zone ? zone.querySelector('.upload-progress') : null;
+  const urlDisplay = zone ? zone.querySelector('.upload-url-display') : null;
+  uploadImage(file, targetInputId, preview, progress, urlDisplay);
+}
+
+// RLS ADMIN — permettre lecture/écriture admin
+// Colle ce SQL dans Supabase pour l'admin :
+/*
+  -- Permettre toutes les opérations via service_role (admin)
+  -- Les policies existantes suffisent pour la lecture
+  -- Pour l'écriture admin (update/delete produits, galerie, articles):
+  
+  CREATE POLICY "Admin peut tout faire sur produits"
+    ON produits FOR ALL USING (true) WITH CHECK (true);
+  CREATE POLICY "Admin peut tout faire sur galerie"
+    ON galerie FOR ALL USING (true) WITH CHECK (true);
+  CREATE POLICY "Admin peut tout faire sur articles"
+    ON articles FOR ALL USING (true) WITH CHECK (true);
+  CREATE POLICY "Admin peut tout faire sur commandes"
+    ON commandes FOR ALL USING (true) WITH CHECK (true);
+  CREATE POLICY "Admin peut tout faire sur messages"
+    ON messages_contact FOR ALL USING (true) WITH CHECK (true);
+  CREATE POLICY "Admin peut tout faire sur inscriptions"
+    ON inscriptions_formation FOR ALL USING (true) WITH CHECK (true);
+*/
+</script>
+</body>
+</html>
