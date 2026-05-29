@@ -297,7 +297,7 @@ function renderBoutique(filter) {
 
 // -- PAGE GALERIE ------------------------------------------
 async function loadGalerie() {
-  const el = $('#galerieGrid');
+  const el = $('#galleryGrid') || $('#galerieGrid');
   if (!el) return;
   el.innerHTML = '<div style="text-align:center;padding:40px;grid-column:1/-1;color:#888"><i class="fas fa-spinner fa-spin"></i></div>';
   if (!sb) await initSupabase();
