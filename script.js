@@ -238,12 +238,13 @@ function productCard(p) {
     <div class="product-body">
       <div class="product-cat">${p.categorie || ''}</div>
       <h3 class="product-name">${p.nom}</h3>
+      ${p.description ? `<p class="product-desc" style="font-size:.82rem;color:#888;margin:6px 0 8px;line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${p.description}</p>` : ''}
       <div class="product-footer">
         <span class="product-price">${fmt(p.prix)} <span>FCFA</span></span>
       </div>
       <div class="product-actions" style="display:flex;gap:8px;margin-top:10px">
         <button class="btn-add-cart" onclick="addToCart('${p.id}')"><i class="fas fa-cart-plus"></i> Ajouter</button>
-        <a href="https://wa.me/${WHATSAPP} text=${waMsg}" target="_blank" class="btn-whatsapp-product" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+        <a href="https://wa.me/${WHATSAPP}?text=${waMsg}" target="_blank" class="btn-whatsapp-product" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
       </div>
     </div>
   </div>`;
