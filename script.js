@@ -1,3 +1,42 @@
+
+// -- LIGHTBOX -----------------------------------------------
+function openLightbox(src, alt) {
+  const lb = document.getElementById('lightbox');
+  const img = document.getElementById('lightboxImg');
+  if (!lb || !img) {
+    // Create lightbox if it doesn't exist on this page
+    const el = document.createElement('div');
+    el.id = 'lightbox';
+    el.className = 'lightbox';
+    el.innerHTML = '<span class="close-lightbox" onclick="closeLightbox()">&times;</span><img class="lightbox-content" id="lightboxImg" alt="">';
+    el.onclick = e => { if (e.target === el) closeLightbox(); };
+    document.body.appendChild(el);
+  }
+  document.getElementById('lightboxImg').src = src;
+  document.getElementById('lightboxImg').alt = alt || '';
+  document.getElementById('lightbox').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeLightbox() {
+  const lb = document.getElementById('lightbox');
+  if (lb) lb.classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+// Close lightbox with Escape key
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeLightbox();
+});
+
+// Wire existing lightbox close button
+document.addEventListener('DOMContentLoaded', () => {
+  const close = document.querySelector('.close-lightbox');
+  if (close) close.onclick = closeLightbox;
+  const lb = document.getElementById('lightbox');
+  if (lb) lb.onclick = e => { if (e.target === lb) closeLightbox(); };
+});
+
 /* =========================================================
    ESPRIT DU PAGNE - script.js (version propre et stable)
    ========================================================= */
@@ -232,7 +271,7 @@ function productCard(p) {
   const waMsg = encodeURIComponent('Bonjour, je suis interesse(e) par : ' + p.nom + ' (' + fmt(p.prix) + ' FCFA)');
   return `<div class="product-card" data-cat="${(p.categorie||'').toLowerCase()}">
     ${p.badge ? `<span class="product-badge">${p.badge}</span>` : ''}
-    <div class="product-image-wrap">
+    <div class="product-image-wrap" style="cursor:zoom-in" onclick="this.querySelector('img') && openLightbox(this.querySelector('img').src, '${p.nom}')">
       ${p.image_url ? `<img src="${p.image_url}" alt="${p.nom}" loading="lazy">` : `<div style="height:100%;background:#f5f5f5;display:flex;align-items:center;justify-content:center;font-size:3rem"> </div>`}
     </div>
     <div class="product-body">
@@ -306,7 +345,7 @@ async function loadGalerie() {
   const { data } = await sb.from('galerie').select('*').order('ordre');
   if (!data .length) { el.innerHTML = '<p style="text-align:center;grid-column:1/-1;color:#888">Galerie bientot disponible</p>'; return; }
   el.innerHTML = data.map(g => `
-    <div class="gallery-item">
+    <div class="gallery-item" style="cursor:zoom-in" onclick="openLightbox('${g.image_url}', '${g.titre || ''}')">
       <img src="${g.image_url}" alt="${g.titre || ''}" loading="lazy">
       ${g.titre ? `<div class="gallery-caption">${g.titre}</div>` : ''}
     </div>`).join('');

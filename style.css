@@ -1298,3 +1298,33 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
   .hero-title{font-size:1.7rem !important}
   .navbar-inner{padding:0 12px}
 }
+
+/* ── Lightbox amélioré ── */
+.lightbox{
+  display:none;position:fixed;inset:0;
+  background:rgba(0,0,0,.95);z-index:2000;
+  align-items:center;justify-content:center;
+  padding:20px;cursor:zoom-out;
+}
+.lightbox.active{display:flex;animation:fadeIn .2s ease}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.lightbox-content{
+  max-width:92vw;max-height:90vh;
+  border-radius:8px;
+  box-shadow:0 20px 60px rgba(0,0,0,.5);
+  cursor:default;
+  animation:zoomIn .25s ease;
+}
+@keyframes zoomIn{from{transform:scale(.92)}to{transform:scale(1)}}
+.close-lightbox{
+  position:fixed;top:20px;right:24px;
+  color:#fff;font-size:2.5rem;cursor:pointer;
+  width:44px;height:44px;
+  display:flex;align-items:center;justify-content:center;
+  border-radius:50%;background:rgba(255,255,255,.15);
+  transition:background .2s;line-height:1;z-index:2001;
+}
+.close-lightbox:hover{background:rgba(255,255,255,.3)}
+/* Cursor zoom sur images produit */
+.product-image-wrap{cursor:zoom-in}
+.gallery-item{cursor:zoom-in}
