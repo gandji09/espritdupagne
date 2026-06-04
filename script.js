@@ -271,22 +271,34 @@ function productCard(p) {
   const waMsg = encodeURIComponent('Bonjour, je suis interesse(e) par : ' + p.nom + ' (' + fmt(p.prix) + ' FCFA)');
   return `<div class="product-card" data-cat="${(p.categorie||'').toLowerCase()}">
     ${p.badge ? `<span class="product-badge">${p.badge}</span>` : ''}
-    <div class="product-image-wrap" style="cursor:zoom-in" onclick="this.querySelector('img') && openLightbox(this.querySelector('img').src, '${p.nom}')">
-      ${p.image_url ? `<img src="${p.image_url}" alt="${p.nom}" loading="lazy">` : `<div style="height:100%;background:#f5f5f5;display:flex;align-items:center;justify-content:center;font-size:3rem"> </div>`}
+    <div class="product-image-wrap" onclick="p_zoom(this)" style="cursor:zoom-in">
+      ${p.image_url
+        ? `<img src="${p.image_url}" alt="${p.nom}" loading="lazy">`
+        : `<div class="product-no-img"><i class="fas fa-shirt"></i></div>`}
+      <div class="product-zoom-hint"><i class="fas fa-magnifying-glass-plus"></i></div>
     </div>
     <div class="product-body">
-      <div class="product-cat">${p.categorie || ''}</div>
+      <span class="product-cat-tag">${p.categorie || ''}</span>
       <h3 class="product-name">${p.nom}</h3>
-      ${p.description ? `<p class="product-desc" style="font-size:.82rem;color:#888;margin:6px 0 8px;line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${p.description}</p>` : ''}
-      <div class="product-footer">
-        <span class="product-price">${fmt(p.prix)} <span>FCFA</span></span>
+      ${p.description ? `<p class="product-desc">${p.description}</p>` : ''}
+      <div class="product-price-row">
+        <span class="product-price">${fmt(p.prix)} <small>FCFA</small></span>
       </div>
-      <div class="product-actions" style="display:flex;gap:8px;margin-top:10px">
-        <button class="btn-add-cart" onclick="addToCart('${p.id}')"><i class="fas fa-cart-plus"></i> Ajouter</button>
-        <a href="https://wa.me/${WHATSAPP}?text=${waMsg}" target="_blank" class="btn-whatsapp-product" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+      <div class="product-actions">
+        <button class="btn-add-cart" onclick="addToCart('${p.id}')">
+          <i class="fas fa-cart-plus"></i> Ajouter au panier
+        </button>
+        <a href="https://wa.me/${WHATSAPP}?text=${waMsg}" target="_blank" class="btn-whatsapp-product" title="Commander via WhatsApp">
+          <i class="fab fa-whatsapp"></i>
+        </a>
       </div>
     </div>
   </div>`;
+}
+
+function p_zoom(el) {
+  const img = el.querySelector('img');
+  if (img) openLightbox(img.src, img.alt);
 }
 
 // -- PAGE ACCUEIL : FEATURED PRODUCTS ---------------------
@@ -329,7 +341,21 @@ function renderBoutique(filter) {
   if (!el) return;
   let list = window._PRODUITS || [];
   if (filter && filter !== 'all') {
-    list = list.filter(p => (p.categorie || '').toLowerCase().includes(filter.toLowerCase()));
+    list = list.filter(p => {
+      const cat = (p.categorie || '').toLowerCase().trim();
+      const f = filter.toLowerCase().trim();
+      // hommes/homme → match Homme
+      if (f === 'hommes' || f === 'homme') return cat === 'homme' || cat === 'hommes';
+      // robes → match Robes, Robes femmes
+      if (f === 'robes') return cat.includes('robe');
+      // boubous → match Boubou, Boubous
+      if (f === 'boubous') return cat.includes('boubou');
+      // enfants → match Enfant, Enfants
+      if (f === 'enfants' || f === 'enfant') return cat.includes('enfant');
+      // accessoires
+      if (f === 'accessoires') return cat.includes('accessoire');
+      return cat.includes(f);
+    });
   }
   if (!list.length) { el.innerHTML = '<p style="text-align:center;grid-column:1/-1;padding:40px;color:#888">Aucun produit dans cette categorie</p>'; return; }
   el.innerHTML = list.map(productCard).join('');
