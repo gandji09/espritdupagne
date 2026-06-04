@@ -2,30 +2,131 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="theme-color" content="#CC0000">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<meta name="description" content="Formations professionnelles en tissage, coupe-couture et broderie — Esprit du Pagne, Porto-Novo.">
+<meta name="description" content="Formations professionnelles en tissage, coupe-couture et broderie — CPFPA-EP Esprit du Pagne, Porto-Novo.">
 <title>Formations — Esprit du Pagne</title>
-<meta property="og:type" content="website">
 <meta property="og:title" content="Formations professionnelles — Esprit du Pagne">
 <meta property="og:description" content="Tissage, coupe-couture, broderie. Formations diplômantes à Porto-Novo, Bénin.">
-<meta property="og:image" content="https://pasencoredispo.netlify.app/images/logo.png">
-<meta property="og:url" content="https://espritdupagne.com/site/formations.html">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Formations professionnelles — Esprit du Pagne">
-<meta name="twitter:description" content="Tissage, coupe-couture, broderie. Formations diplômantes à Porto-Novo, Bénin.">
-<meta name="twitter:image" content="https://pasencoredispo.netlify.app/images/logo.png">
-<link rel="canonical" href="https://pasencoredispo.netlify.app/formations.html">
+<meta property="og:image" content="https://esprit-du-pagne.com/images/logo.png">
+<link rel="canonical" href="https://esprit-du-pagne.com/formations">
 <meta name="robots" content="index, follow">
-
-
-<meta name="referrer" content="strict-origin-when-cross-origin">
 <link rel="dns-prefetch" href="https://xxtkywcchutdhwcjawrz.supabase.co">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="style.css">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+/* ── Formations cards ── */
+.formations-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+  gap:28px;
+  padding:60px 0;
+}
+.formation-card{
+  background:#fff;border-radius:20px;
+  box-shadow:0 4px 20px rgba(0,0,0,.08);
+  overflow:hidden;transition:transform .3s,box-shadow .3s;
+}
+.formation-card:hover{transform:translateY(-6px);box-shadow:0 16px 40px rgba(0,0,0,.12)}
+.formation-card-banner{
+  padding:32px 28px;
+  position:relative;overflow:hidden;
+}
+.formation-card-banner.tissage{background:linear-gradient(135deg,#1a1a2e,#16213e)}
+.formation-card-banner.couture{background:linear-gradient(135deg,#CC0000,#8B0000)}
+.formation-card-banner.broderie{background:linear-gradient(135deg,#1e3a5f,#0d2137)}
+.formation-card-banner::after{
+  content:'';position:absolute;right:-20px;bottom:-20px;
+  width:120px;height:120px;border-radius:50%;
+  background:rgba(255,255,255,.06);
+}
+.formation-icon{
+  width:56px;height:56px;border-radius:16px;
+  background:rgba(255,255,255,.15);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.4rem;color:#fff;margin-bottom:16px;
+}
+.formation-card-banner h3{
+  font-family:'Playfair Display',serif;
+  font-size:1.4rem;color:#fff;margin-bottom:8px;
+}
+.formation-card-banner p{color:rgba(255,255,255,.75);font-size:.88rem;line-height:1.5}
+.formation-duree{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(255,255,255,.15);color:#fff;
+  font-size:.75rem;font-weight:600;
+  padding:5px 12px;border-radius:20px;margin-top:14px;
+}
+.formation-card-footer{
+  padding:20px 24px;
+  display:flex;gap:10px;align-items:center;
+  border-top:1px solid #f0f0f0;
+}
+.btn-inscrire{
+  flex:1;padding:12px;background:#CC0000;color:#fff;
+  border:none;border-radius:10px;font-size:.88rem;font-weight:600;
+  cursor:pointer;font-family:'Poppins',sans-serif;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  transition:background .2s;text-decoration:none;
+}
+.btn-inscrire:hover{background:#A30000}
+.btn-details{
+  padding:12px 18px;background:#f5f5f5;color:#333;
+  border:none;border-radius:10px;font-size:.88rem;font-weight:600;
+  cursor:pointer;font-family:'Poppins',sans-serif;
+  transition:background .2s;white-space:nowrap;
+}
+.btn-details:hover{background:#eee}
+
+/* ── Modal détails ── */
+.details-modal{
+  position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:1000;
+  display:flex;align-items:center;justify-content:center;
+  padding:20px;opacity:0;pointer-events:none;transition:opacity .25s;
+}
+.details-modal.active{opacity:1;pointer-events:all}
+.details-modal-box{
+  background:#fff;border-radius:20px;width:100%;max-width:620px;
+  max-height:90vh;overflow-y:auto;
+  transform:translateY(20px);transition:transform .25s;
+}
+.details-modal.active .details-modal-box{transform:translateY(0)}
+.details-modal-header{
+  padding:24px 28px;border-bottom:1px solid #eee;
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;background:#fff;z-index:2;border-radius:20px 20px 0 0;
+}
+.details-modal-header h3{font-family:'Playfair Display',serif;font-size:1.2rem}
+.details-close{
+  width:36px;height:36px;border-radius:10px;background:#f5f5f5;
+  border:none;cursor:pointer;font-size:1rem;
+  display:flex;align-items:center;justify-content:center;
+}
+.details-modal-body{padding:24px 28px}
+.details-section{margin-bottom:22px}
+.details-section h4{
+  font-size:.82rem;font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;color:#CC0000;margin-bottom:10px;
+  display:flex;align-items:center;gap:8px;
+}
+.details-row{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:8px 0;border-bottom:1px solid #f5f5f5;font-size:.9rem;
+}
+.details-row:last-child{border-bottom:none}
+.details-row .price{font-weight:700;color:#333}
+.details-row.total-row{
+  background:#fff8f8;padding:10px 12px;border-radius:8px;
+  border:1px solid #ffeeee;margin-top:6px;
+}
+.details-row.total-row .price{color:#CC0000;font-size:1rem}
+.details-modal-footer{
+  padding:20px 28px;border-top:1px solid #eee;
+  display:flex;gap:10px;
+}
+</style>
 </head>
 <body>
 <a href="https://wa.me/2290196725416" class="whatsapp-float" target="_blank"><i class="fab fa-whatsapp"></i></a>
@@ -42,269 +143,317 @@
     <li><a href="blog.html">Blog</a></li>
     <li><a href="contact.html">Contact</a></li>
   </ul></div>
-  <div class="nav-icons"><a href="#" class="cart-icon" id="cartIcon"><i class="fas fa-cart-shopping"></i><span class="cart-count" id="cartCount">0</span></a><a href="admin.html" class="admin-lock-btn" aria-label="Administration" title="Admin"></a><div class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></div></div>
+  <div class="nav-icons">
+    <a href="#" class="cart-icon" id="cartIcon"><i class="fas fa-cart-shopping"></i><span class="cart-count" id="cartCount">0</span></a>
+    <a href="admin.html" class="admin-lock-btn" aria-label="Administration" title="Admin"></a>
+    <div class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></div>
+  </div>
 </div></nav>
 <div style="height:73px"></div>
 
+<!-- Hero -->
 <section class="formations-hero">
   <div class="container">
-    <span class="eyebrow" style="color:var(--red);font-weight:600;letter-spacing:.2em;text-transform:uppercase;font-size:.8rem">Diplômes reconnus</span>
-    <h1>Formations Professionnelles</h1>
+    <span class="eyebrow" style="color:var(--red)">Diplômes reconnus par l'État</span>
+    <h1>Nos Formations</h1>
     <div class="separator"></div>
-    <p>Maîtrisez les métiers de la mode africaine au sein de notre centre d'excellence</p>
+    <p>Choisissez votre spécialité et lancez votre carrière dans la mode africaine</p>
   </div>
 </section>
 
-<div class="courses-container">
+<!-- Formations cards -->
+<section style="background:#f6f6f6;padding-bottom:60px">
+  <div class="container">
+    <div class="formations-grid">
 
-  <!-- TISSAGE -->
-  <div class="course-card-pro">
-    <div class="course-card-header">
-      <h2>Formation en Tissage Traditionnel</h2>
-      <p>Maîtrisez l'art ancestral du tissage africain</p>
-    </div>
-    <div class="course-card-body">
-      <div class="info-sections">
-        <div class="info-block">
-          <div class="info-block-title"><i class="fas fa-file-alt"></i><span>Pièces à fournir</span></div>
-          <ul class="info-block-list">
-            <li>Certificat visite/contre-visite <span class="price">5.000 F</span></li>
-            <li>Acte de naissance <span class="price">—</span></li>
-            <li>04 photos d'identité <span class="price">1.000 F</span></li>
-            <li>Cahier TP + dessinateur <span class="price">2.000 F</span></li>
-          </ul>
+      <!-- TISSAGE -->
+      <div class="formation-card">
+        <div class="formation-card-banner tissage">
+          <div class="formation-icon"><i class="fas fa-th"></i></div>
+          <h3>Tissage Traditionnel</h3>
+          <p>Maîtrisez l'art ancestral du tissage africain et créez des tissus uniques d'exception.</p>
+          <div class="formation-duree"><i class="fas fa-clock"></i> 2 à 3 ans</div>
         </div>
-        <div class="info-block">
-          <div class="info-block-title"><i class="fas fa-id-card"></i><span>Frais CPFPA-EP</span></div>
-          <ul class="info-block-list">
-            <li>Carte d'apprentissage <span class="price">1.000 F</span></li>
-            <li>Contrat (6 ex.) <span class="price">1.000 F</span></li>
-            <li>Polo du centre <span class="price">3.500 F</span></li>
-          </ul>
-        </div>
-        <div class="info-block">
-          <div class="info-block-title"><i class="fas fa-toolbox"></i><span>Kit apprenant</span></div>
-          <ul class="info-block-list">
-            <li>Pirogue (douzaine) <span class="price">3.600 F</span></li>
-            <li>Filé (4 paires) <span class="price">6.000 F</span></li>
-            <li>Bobine (5 douzaines) <span class="price">5.000 F</span></li>
-            <li>Batteur (×2) <span class="price">3.000 F</span></li>
-            <li><strong>Total kit</strong> <span class="price total">17.600 F</span></li>
-          </ul>
+        <div class="formation-card-footer">
+          <button class="btn-inscrire" onclick="showInscriptionModal('Tissage Traditionnel')">
+            <i class="fas fa-graduation-cap"></i> S'inscrire
+          </button>
+          <button class="btn-details" onclick="showDetails('tissage')">
+            <i class="fas fa-eye"></i> Détails
+          </button>
         </div>
       </div>
-      <div class="fees-table">
-        <div class="fees-row header"><span class="fees-label">Frais de formation</span><span class="fees-value">Montant</span></div>
-        <div class="fees-row"><span>Inscription</span><span class="fees-value">20.000 FCFA</span></div>
-        <div class="fees-row"><span>Formation pro (2 ans)</span><span class="fees-value">250.000 FCFA</span></div>
-        <div class="fees-row highlight"><span>Formation pro (3 ans)</span><span class="fees-value">300.000 FCFA</span></div>
+
+      <!-- COUPE-COUTURE -->
+      <div class="formation-card">
+        <div class="formation-card-banner couture">
+          <div class="formation-icon"><i class="fas fa-scissors"></i></div>
+          <h3>Coupe-Couture</h3>
+          <p>Devenez un expert de la création textile, du patron à la pièce finie.</p>
+          <div class="formation-duree"><i class="fas fa-clock"></i> 1 à 3 ans</div>
+        </div>
+        <div class="formation-card-footer">
+          <button class="btn-inscrire" onclick="showInscriptionModal('Coupe-Couture')">
+            <i class="fas fa-graduation-cap"></i> S'inscrire
+          </button>
+          <button class="btn-details" onclick="showDetails('couture')">
+            <i class="fas fa-eye"></i> Détails
+          </button>
+        </div>
       </div>
-      <div class="badge-info"><i class="fas fa-info-circle"></i><div><strong>Modalités</strong><br>1ère tranche payable à l'inscription. Frais de dossier réglés au démarrage.</div></div>
-      <button class="btn-inscription-pro" onclick="showInscriptionModal('Tissage Traditionnel')"><i class="fas fa-graduation-cap"></i> S'inscrire à la formation</button>
+
+      <!-- BRODERIE -->
+      <div class="formation-card">
+        <div class="formation-card-banner broderie">
+          <div class="formation-icon"><i class="fas fa-wand-magic-sparkles"></i></div>
+          <h3>Broderie</h3>
+          <p>L'art délicat de la broderie professionnelle, de l'initiation à la spécialisation.</p>
+          <div class="formation-duree"><i class="fas fa-clock"></i> 6 mois à 1 an</div>
+        </div>
+        <div class="formation-card-footer">
+          <button class="btn-inscrire" onclick="showInscriptionModal('Broderie')">
+            <i class="fas fa-graduation-cap"></i> S'inscrire
+          </button>
+          <button class="btn-details" onclick="showDetails('broderie')">
+            <i class="fas fa-eye"></i> Détails
+          </button>
+        </div>
+      </div>
+
     </div>
   </div>
+</section>
 
-  <!-- COUPE-COUTURE -->
-  <div class="course-card-pro">
-    <div class="course-card-header">
-      <h2>Formation en Coupe-Couture</h2>
-      <p>Devenez un expert de la création textile</p>
-    </div>
-    <div class="course-card-body">
-      <div class="info-sections">
-        <div class="info-block">
-          <div class="info-block-title"><i class="fas fa-file-alt"></i><span>Pièces à fournir</span></div>
-          <ul class="info-block-list">
-            <li>Certificat médical <span class="price">5.000 F</span></li>
-            <li>Acte de naissance <span class="price">—</span></li>
-            <li>04 photos d'identité <span class="price">1.000 F</span></li>
-            <li>Cahier TP <span class="price">2.000 F</span></li>
-          </ul>
-        </div>
-        <div class="info-block">
-          <div class="info-block-title"><i class="fas fa-id-card"></i><span>Frais CPFPA-EP</span></div>
-          <ul class="info-block-list">
-            <li>Carte d'apprentissage <span class="price">1.000 F</span></li>
-            <li>Contrat (6 ex.) <span class="price">1.000 F</span></li>
-            <li>Polo du centre <span class="price">3.500 F</span></li>
-          </ul>
-        </div>
-        <div class="info-block">
-          <div class="info-block-title"><i class="fas fa-toolbox"></i><span>Kit apprenant</span></div>
-          <ul class="info-block-list">
-            <li>Popeline + mètre ruban</li>
-            <li>Aiguilles + fil</li>
-            <li>Ciseaux Germany Steel</li>
-            <li>Règles + traceur</li>
-            <li><strong>Total kit</strong> <span class="price total">25.000 F</span></li>
-          </ul>
-        </div>
-      </div>
-      <div class="fees-table">
-        <div class="fees-row header"><span class="fees-label">Frais de formation</span><span class="fees-value">Montant</span></div>
-        <div class="fees-row"><span>Inscription</span><span class="fees-value">20.000 FCFA</span></div>
-        <div class="fees-row"><span>Apprentissage (par an)</span><span class="fees-value">250.000 FCFA</span></div>
-        <div class="fees-row"><span>Formation accélérée (1 an)</span><span class="fees-value">350.000 FCFA</span></div>
-        <div class="fees-row highlight"><span>Perfectionnement (6 mois)</span><span class="fees-value">200.000 FCFA</span></div>
-      </div>
-      <div class="badge-info"><i class="fas fa-info-circle"></i><div><strong>Modalités</strong><br>1ère tranche payable à l'inscription.</div></div>
-      <button class="btn-inscription-pro" onclick="showInscriptionModal('Coupe-Couture')"><i class="fas fa-graduation-cap"></i> S'inscrire à la formation</button>
-    </div>
-  </div>
-
-  <!-- BRODERIE -->
-  <div class="course-card-pro">
-    <div class="course-card-header">
-      <h2>Formation en Broderie</h2>
-      <p>L'art délicat de la broderie professionnelle</p>
-    </div>
-    <div class="course-card-body">
-      <div class="info-sections">
-        <div class="info-block">
-          <div class="info-block-title"><i class="fas fa-file-alt"></i><span>Pièces à fournir</span></div>
-          <ul class="info-block-list">
-            <li>Certificat médical <span class="price">5.000 F</span></li>
-            <li>Acte de naissance <span class="price">—</span></li>
-            <li>04 photos d'identité <span class="price">1.000 F</span></li>
-            <li>Cahier TP <span class="price">2.000 F</span></li>
-          </ul>
-        </div>
-        <div class="info-block">
-          <div class="info-block-title"><i class="fas fa-id-card"></i><span>Frais CPFPA-EP</span></div>
-          <ul class="info-block-list">
-            <li>Carte d'apprentissage <span class="price">1.000 F</span></li>
-            <li>Contrat (6 ex.) <span class="price">1.000 F</span></li>
-            <li>Polo du centre <span class="price">3.500 F</span></li>
-          </ul>
-        </div>
-        <div class="info-block">
-          <div class="info-block-title"><i class="fas fa-toolbox"></i><span>Kit apprenant</span></div>
-          <ul class="info-block-list">
-            <li>Métier à broder</li>
-            <li>Fils de soie variés</li>
-            <li>Aiguilles spéciales</li>
-            <li>Tissus d'entraînement</li>
-            <li><strong>Total kit</strong> <span class="price total">20.000 F</span></li>
-          </ul>
-        </div>
-      </div>
-      <div class="fees-table">
-        <div class="fees-row header"><span class="fees-label">Frais de formation</span><span class="fees-value">Montant</span></div>
-        <div class="fees-row"><span>Inscription</span><span class="fees-value">15.000 FCFA</span></div>
-        <div class="fees-row"><span>Formation complète (1 an)</span><span class="fees-value">200.000 FCFA</span></div>
-        <div class="fees-row highlight"><span>Initiation (3 mois)</span><span class="fees-value">80.000 FCFA</span></div>
-      </div>
-      <div class="badge-info"><i class="fas fa-info-circle"></i><div><strong>Modalités</strong><br>Possibilité de paiement échelonné.</div></div>
-      <button class="btn-inscription-pro" onclick="showInscriptionModal('Broderie')"><i class="fas fa-graduation-cap"></i> S'inscrire à la formation</button>
-    </div>
-  </div>
-
-</div>
-
+<!-- CTA -->
 <section class="cta-banner">
   <div class="container">
     <h2>Une question avant de vous inscrire ?</h2>
     <p>Notre équipe vous répond personnellement sur WhatsApp.</p>
-    <a href="https://wa.me/2290196725416?text=Bonjour%2C%20j'aimerais%20des%20infos%20sur%20vos%20formations" class="btn btn-dark btn-lg"><i class="fab fa-whatsapp"></i> Discuter avec un conseiller</a>
+    <a href="https://wa.me/2290196725416?text=Bonjour%2C%20j'aimerais%20des%20infos%20sur%20vos%20formations" class="btn btn-dark btn-lg" target="_blank"><i class="fab fa-whatsapp"></i> Discuter avec un conseiller</a>
   </div>
 </section>
 
-<!-- Inscription Modal -->
+<!-- ── MODAL DÉTAILS TISSAGE ── -->
+<div id="modal-tissage" class="details-modal" onclick="if(event.target===this)closeDetails('tissage')">
+  <div class="details-modal-box">
+    <div class="details-modal-header">
+      <h3><i class="fas fa-th" style="color:#CC0000;margin-right:8px"></i>Tissage Traditionnel</h3>
+      <button class="details-close" onclick="closeDetails('tissage')"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="details-modal-body">
+      <div class="details-section">
+        <h4><i class="fas fa-clock"></i> Durée</h4>
+        <div class="details-row"><span>Formation professionnelle</span><span class="price">2 ans</span></div>
+        <div class="details-row"><span>Formation approfondie</span><span class="price">3 ans</span></div>
+      </div>
+      <div class="details-section">
+        <h4><i class="fas fa-file-alt"></i> Pièces à fournir</h4>
+        <div class="details-row"><span>Certificat visite/contre-visite</span><span class="price">5.000 F</span></div>
+        <div class="details-row"><span>Acte de naissance</span><span class="price">—</span></div>
+        <div class="details-row"><span>4 photos d'identité</span><span class="price">1.000 F</span></div>
+        <div class="details-row"><span>Cahier TP + dessinateur</span><span class="price">2.000 F</span></div>
+      </div>
+      <div class="details-section">
+        <h4><i class="fas fa-id-card"></i> Frais CPFPA-EP</h4>
+        <div class="details-row"><span>Carte d'apprentissage</span><span class="price">1.000 F</span></div>
+        <div class="details-row"><span>Contrat (4 exemplaires)</span><span class="price">1.000 F</span></div>
+        <div class="details-row"><span>Polo du centre</span><span class="price">3.500 F</span></div>
+      </div>
+      <div class="details-section">
+        <h4><i class="fas fa-toolbox"></i> Kit apprenant</h4>
+        <div class="details-row"><span>Pirogue (douzaine)</span><span class="price">3.600 F</span></div>
+        <div class="details-row"><span>Filé (4 paires)</span><span class="price">6.000 F</span></div>
+        <div class="details-row"><span>Bobine (5 douzaines)</span><span class="price">5.000 F</span></div>
+        <div class="details-row"><span>Batteur (×2)</span><span class="price">3.000 F</span></div>
+        <div class="details-row total-row"><span><strong>Total kit</strong></span><span class="price">17.600 F</span></div>
+      </div>
+      <div style="background:#fff8f8;border-radius:10px;padding:14px 16px;border-left:3px solid #CC0000;font-size:.88rem;color:#555">
+        <i class="fas fa-info-circle" style="color:#CC0000;margin-right:6px"></i>
+        <strong>Modalités :</strong> 1ère tranche payable à l'inscription. Frais de dossier réglés au démarrage.
+      </div>
+    </div>
+    <div class="details-modal-footer">
+      <button class="btn-inscrire" onclick="closeDetails('tissage');showInscriptionModal('Tissage Traditionnel')">
+        <i class="fas fa-graduation-cap"></i> S'inscrire maintenant
+      </button>
+      <button class="btn-details" onclick="closeDetails('tissage')">Fermer</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── MODAL DÉTAILS COUPE-COUTURE ── -->
+<div id="modal-couture" class="details-modal" onclick="if(event.target===this)closeDetails('couture')">
+  <div class="details-modal-box">
+    <div class="details-modal-header">
+      <h3><i class="fas fa-scissors" style="color:#CC0000;margin-right:8px"></i>Coupe-Couture</h3>
+      <button class="details-close" onclick="closeDetails('couture')"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="details-modal-body">
+      <div class="details-section">
+        <h4><i class="fas fa-clock"></i> Durée & Frais de formation</h4>
+        <div class="details-row"><span>Inscription</span><span class="price">20.000 FCFA</span></div>
+        <div class="details-row"><span>Apprentissage (par an)</span><span class="price">250.000 FCFA</span></div>
+        <div class="details-row"><span>Formation accélérée (1 an)</span><span class="price">350.000 FCFA</span></div>
+        <div class="details-row total-row"><span>Perfectionnement (6 mois)</span><span class="price">200.000 FCFA</span></div>
+      </div>
+      <div class="details-section">
+        <h4><i class="fas fa-file-alt"></i> Pièces à fournir</h4>
+        <div class="details-row"><span>Certificat médical</span><span class="price">5.000 F</span></div>
+        <div class="details-row"><span>Acte de naissance</span><span class="price">—</span></div>
+        <div class="details-row"><span>4 photos d'identité</span><span class="price">1.000 F</span></div>
+        <div class="details-row"><span>Cahier TP</span><span class="price">2.000 F</span></div>
+      </div>
+      <div class="details-section">
+        <h4><i class="fas fa-id-card"></i> Frais CPFPA-EP</h4>
+        <div class="details-row"><span>Carte d'apprentissage</span><span class="price">1.000 F</span></div>
+        <div class="details-row"><span>Contrat (4 exemplaires)</span><span class="price">1.000 F</span></div>
+        <div class="details-row"><span>Polo du centre</span><span class="price">3.500 F</span></div>
+      </div>
+      <div class="details-section">
+        <h4><i class="fas fa-toolbox"></i> Kit apprenant</h4>
+        <div class="details-row"><span>Popeline + mètre ruban</span><span class="price">—</span></div>
+        <div class="details-row"><span>Aiguilles + fil</span><span class="price">—</span></div>
+        <div class="details-row"><span>Ciseaux Germany Steel</span><span class="price">—</span></div>
+        <div class="details-row"><span>Règles + traceur</span><span class="price">—</span></div>
+        <div class="details-row total-row"><span><strong>Total kit</strong></span><span class="price">25.000 F</span></div>
+      </div>
+      <div style="background:#fff8f8;border-radius:10px;padding:14px 16px;border-left:3px solid #CC0000;font-size:.88rem;color:#555">
+        <i class="fas fa-info-circle" style="color:#CC0000;margin-right:6px"></i>
+        <strong>Modalités :</strong> 1ère tranche payable à l'inscription.
+      </div>
+    </div>
+    <div class="details-modal-footer">
+      <button class="btn-inscrire" onclick="closeDetails('couture');showInscriptionModal('Coupe-Couture')">
+        <i class="fas fa-graduation-cap"></i> S'inscrire maintenant
+      </button>
+      <button class="btn-details" onclick="closeDetails('couture')">Fermer</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── MODAL DÉTAILS BRODERIE ── -->
+<div id="modal-broderie" class="details-modal" onclick="if(event.target===this)closeDetails('broderie')">
+  <div class="details-modal-box">
+    <div class="details-modal-header">
+      <h3><i class="fas fa-wand-magic-sparkles" style="color:#CC0000;margin-right:8px"></i>Broderie</h3>
+      <button class="details-close" onclick="closeDetails('broderie')"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="details-modal-body">
+      <div class="details-section">
+        <h4><i class="fas fa-clock"></i> Durée & Frais de formation</h4>
+        <div class="details-row"><span>Inscription</span><span class="price">15.000 FCFA</span></div>
+        <div class="details-row"><span>Formation complète (1 an)</span><span class="price">200.000 FCFA</span></div>
+        <div class="details-row total-row"><span>Initiation (6 mois)</span><span class="price">100.000 FCFA</span></div>
+      </div>
+      <div class="details-section">
+        <h4><i class="fas fa-file-alt"></i> Pièces à fournir</h4>
+        <div class="details-row"><span>Certificat médical</span><span class="price">5.000 F</span></div>
+        <div class="details-row"><span>Acte de naissance</span><span class="price">—</span></div>
+        <div class="details-row"><span>4 photos d'identité</span><span class="price">1.000 F</span></div>
+        <div class="details-row"><span>Cahier TP</span><span class="price">2.000 F</span></div>
+      </div>
+      <div class="details-section">
+        <h4><i class="fas fa-id-card"></i> Frais CPFPA-EP</h4>
+        <div class="details-row"><span>Carte d'apprentissage</span><span class="price">1.000 F</span></div>
+        <div class="details-row"><span>Contrat (4 exemplaires)</span><span class="price">1.000 F</span></div>
+        <div class="details-row"><span>Polo du centre</span><span class="price">3.500 F</span></div>
+      </div>
+      <div class="details-section">
+        <h4><i class="fas fa-toolbox"></i> Kit apprenant</h4>
+        <div class="details-row"><span>Métier à broder</span><span class="price">—</span></div>
+        <div class="details-row"><span>Fils de soie variés</span><span class="price">—</span></div>
+        <div class="details-row"><span>Aiguilles spéciales</span><span class="price">—</span></div>
+        <div class="details-row"><span>Tissus d'entraînement</span><span class="price">—</span></div>
+        <div class="details-row total-row"><span><strong>Total kit</strong></span><span class="price">20.000 F</span></div>
+      </div>
+      <div style="background:#fff8f8;border-radius:10px;padding:14px 16px;border-left:3px solid #CC0000;font-size:.88rem;color:#555">
+        <i class="fas fa-info-circle" style="color:#CC0000;margin-right:6px"></i>
+        <strong>Modalités :</strong> Possibilité de paiement échelonné.
+      </div>
+    </div>
+    <div class="details-modal-footer">
+      <button class="btn-inscrire" onclick="closeDetails('broderie');showInscriptionModal('Broderie')">
+        <i class="fas fa-graduation-cap"></i> S'inscrire maintenant
+      </button>
+      <button class="btn-details" onclick="closeDetails('broderie')">Fermer</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── MODAL INSCRIPTION ── -->
 <div id="inscriptionModal" class="modal">
   <div class="modal-content">
-    <span class="close">&times;</span>
+    <span class="close" onclick="document.getElementById('inscriptionModal').classList.remove('active')">&times;</span>
     <h2>Inscription à la formation</h2>
-    <p style="color:var(--muted);margin-bottom:18px">Formation : <strong id="inscritFormation">—</strong></p>
+    <p style="color:#888;margin-bottom:18px">Formation : <strong id="inscritFormation">—</strong></p>
     <form id="inscriptionForm">
-      <div class="form-group"><label>Nom complet</label><input type="text" id="inscritNom" required></div>
-      <div class="form-group"><label>Email</label><input type="email" id="inscritEmail" required></div>
-      <div class="form-group"><label>Téléphone</label><input type="tel" id="inscritTelephone" required></div>
-      <button type="submit" class="btn btn-primary" style="width:100%"><i class="fas fa-paper-plane"></i> Envoyer mon inscription</button>
+      <div class="form-group"><label>Nom complet *</label><input type="text" id="inscritNom" required placeholder="Votre nom"></div>
+      <div class="form-group"><label>Email *</label><input type="email" id="inscritEmail" required placeholder="votre@email.com"></div>
+      <div class="form-group"><label>Téléphone *</label><input type="tel" id="inscritTelephone" required placeholder="+229..."></div>
+      <button type="submit" class="btn btn-primary" style="width:100%;margin-top:8px"><i class="fas fa-paper-plane"></i> Envoyer mon inscription</button>
     </form>
   </div>
 </div>
 
 <footer class="footer"><div class="container">
   <div class="footer-content">
-    <div class="footer-section"><h3>Esprit du Pagne</h3><p>Atelier de mode haut de gamme à Porto-Novo.</p><div class="social-links"><a href="#"><i class="fab fa-facebook-f"></i></a><a href="#"><i class="fab fa-instagram"></i></a><a href="#"><i class="fab fa-tiktok"></i></a><a href="https://wa.me/2290196725416"><i class="fab fa-whatsapp"></i></a></div></div>
+    <div class="footer-section"><h3>Esprit du Pagne</h3><p>Atelier de mode haut de gamme à Porto-Novo.</p>
+      <div class="social-links">
+        <a href="https://www.facebook.com/Espritdupagne" target="_blank" rel="noopener" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+        <a href="https://www.instagram.com/espr.itdupagne?igsh=Z3drYzZqZWJ2eW82" target="_blank" rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="https://www.tiktok.com/@eleganceenfete?_r=1&_t=ZS-96LzRbKK9Vl" target="_blank" rel="noopener" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+        <a href="https://wa.me/2290196725416" target="_blank" rel="noopener"><i class="fab fa-whatsapp"></i></a>
+      </div>
+    </div>
     <div class="footer-section"><h4>Boutique</h4><ul><li><a href="boutique.html">Robes femmes</a></li><li><a href="boutique.html">Boubous</a></li><li><a href="boutique.html">Homme</a></li><li><a href="boutique.html">Enfants</a></li><li><a href="boutique.html">Accessoires</a></li></ul></div>
-    <div class="footer-section"><h4>Maison</h4><ul><li><a href="apropos.html">À propos</a></li><li><a href="formations.html">Formations</a></li><li><a href="contact.html">Contact</a></li></ul></div>
-    <div class="footer-section"><h4>Contact</h4><p><i class="fas fa-phone"></i> +229 01 96 72 54 16</p><p><i class="fas fa-envelope"></i> espritdupagnec@gmail.com</p></div>
+    <div class="footer-section"><h4>Navigation</h4><ul><li><a href="apropos.html">À propos</a></li><li><a href="formations.html">Formations</a></li><li><a href="galerie.html">Galerie</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+    <div class="footer-section"><h4>Contact</h4>
+      <p><i class="fas fa-map-marker-alt"></i> Porto-Novo, Ouando, Bénin</p>
+      <p><i class="fas fa-phone"></i> +229 01 96 72 54 16</p>
+      <p><i class="fas fa-envelope"></i> espritdupagnec@gmail.com</p>
+      <p><i class="fas fa-clock"></i> Lun–Sam : 8h–17h</p>
+    </div>
   </div>
-  <div class="footer-bottom"><p>&copy; 2026 Esprit du Pagne</p></div>
+  <div class="footer-bottom"><p>&copy; 2026 Esprit du Pagne · Tous droits réservés</p></div>
 </div></footer>
 
-<script src="script.js" defer></script>
-<!-- Overlay panier -->
-<div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+<script>
+function showDetails(nom) {
+  document.getElementById('modal-' + nom).classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+function closeDetails(nom) {
+  document.getElementById('modal-' + nom).classList.remove('active');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    ['tissage','couture','broderie'].forEach(closeDetails);
+    document.getElementById('inscriptionModal')?.classList.remove('active');
+  }
+});
+</script>
 
-<!-- Drawer Panier -->
+<script src="script.js" defer></script>
+
+<div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
 <div class="cart-drawer" id="cartDrawer">
   <div class="cart-drawer-header">
     <h2><i class="fas fa-cart-shopping"></i> Mon Panier <span class="cart-item-count" id="cartItemCount">0 article</span></h2>
-    <button class="cart-close-btn" onclick="closeCart()" aria-label="Fermer"><i class="fas fa-times"></i></button>
+    <button class="cart-close-btn" onclick="closeCart()"><i class="fas fa-times"></i></button>
   </div>
-  <div class="cart-drawer-body" id="cartDrawerBody">
-    <div class="cart-empty">
-      <div class="cart-empty-icon"><i class="fas fa-cart-shopping"></i></div>
-      <h3>Votre panier est vide</h3>
-      <p>Ajoutez des créations depuis la boutique pour commencer vos achats.</p>
-    </div>
-  </div>
+  <div class="cart-drawer-body" id="cartDrawerBody"></div>
   <div class="cart-drawer-footer" id="cartDrawerFooter" style="display:none">
     <div class="cart-recap">
-      <div class="cart-recap-line"><span>Sous-total</span><span id="cartSubtotal">0 FCFA</span></div>
-      <div class="cart-recap-line"><span>Livraison</span><span style="color:var(--green)">À calculer</span></div>
       <div class="cart-recap-line total"><span>Total</span><span id="cartTotalDrawer">0 FCFA</span></div>
     </div>
-    <div class="cart-pay-methods">
-      <button class="cart-pay-btn active" data-pay="momo" onclick="selectPay(this)">
-        <div class="pay-logos">
-          <svg viewBox="0 0 40 16" width="36"><rect width="40" height="16" rx="3" fill="#FFCB00"/><text x="20" y="12" text-anchor="middle" font-family="Arial Black" font-weight="900" font-size="7" fill="#000">MTN</text></svg>
-          <svg viewBox="0 0 40 16" width="36"><rect width="40" height="16" rx="3" fill="#0057A8"/><text x="20" y="12" text-anchor="middle" font-family="Arial Black" font-weight="900" font-size="6" fill="#fff">MOOV</text></svg>
-        </div>
-        <span>Mobile Money</span>
-      </button>
-      <button class="cart-pay-btn" data-pay="wave" onclick="selectPay(this)">
-        <div class="pay-logos">
-          <svg viewBox="0 0 40 16" width="36"><rect width="40" height="16" rx="3" fill="#1EC8EE"/><text x="20" y="12" text-anchor="middle" font-family="Arial Black" font-weight="900" font-size="7" fill="#fff">Wave</text></svg>
-        </div>
-        <span>Wave</span>
-      </button>
-      <button class="cart-pay-btn" data-pay="celtiis" onclick="selectPay(this)">
-        <div class="pay-logos">
-          <svg viewBox="0 0 40 16" width="36"><rect width="40" height="16" rx="3" fill="#E30613"/><text x="20" y="12" text-anchor="middle" font-family="Arial Black" font-weight="900" font-size="5.5" fill="#fff">CELTIIS</text></svg>
-        </div>
-        <span>Celtiis</span>
-      </button>
-      <button class="cart-pay-btn" data-pay="card" onclick="selectPay(this)">
-        <div class="pay-logos">
-          <svg viewBox="0 0 40 16" width="34"><rect width="40" height="16" rx="3" fill="#1A1F71"/><text x="20" y="13" text-anchor="middle" font-family="Arial" font-weight="900" font-size="9" font-style="italic" fill="#fff">VISA</text></svg>
-          <svg viewBox="0 0 40 16" width="34"><rect width="40" height="16" rx="3" fill="#252525"/><circle cx="15" cy="8" r="6" fill="#EB001B"/><circle cx="25" cy="8" r="6" fill="#F79E1B"/><ellipse cx="20" cy="8" rx="3" ry="5.5" fill="#FF5F00"/></svg>
-        </div>
-        <span>Carte bancaire</span>
-      </button>
-    </div>
-    <button class="cart-continue-btn" onclick="closeCart()"><i class="fas fa-arrow-left"></i> Continuer mes achats</button>
-    <button class="cart-checkout-btn" id="checkoutBtn" onclick="checkout()">
-      <i class="fas fa-lock"></i> Passer commande
-    </button>
-    <p class="cart-secure"><i class="fas fa-shield-halved"></i> Paiement 100% sécurisé</p>
+    <button class="cart-checkout-btn" id="checkoutBtn" onclick="checkout()"><i class="fas fa-lock"></i> Passer commande</button>
   </div>
 </div>
 
-
-
-<!-- Réseaux sociaux flottants -->
 <div class="social-float">
-  <a href="https://www.facebook.com/Espritdupagne" target="_blank" rel="noopener noreferrer" aria-label="Facebook" class="social-float-btn sf-fb">
-    <i class="fab fa-facebook-f"></i>
-  </a>
-  <a href="https://www.instagram.com/espr.itdupagne?igsh=Z3drYzZqZWJ2eW82" target="_blank" rel="noopener noreferrer" aria-label="Instagram" class="social-float-btn sf-ig">
-    <i class="fab fa-instagram"></i>
-  </a>
-  <a href="https://www.tiktok.com/@eleganceenfete?_r=1&_t=ZS-96LzRbKK9Vl" target="_blank" rel="noopener noreferrer" aria-label="TikTok" class="social-float-btn sf-tt">
-    <i class="fab fa-tiktok"></i>
-  </a>
+  <a href="https://www.facebook.com/Espritdupagne" target="_blank" rel="noopener noreferrer" class="social-float-btn sf-fb"><i class="fab fa-facebook-f"></i></a>
+  <a href="https://www.instagram.com/espr.itdupagne?igsh=Z3drYzZqZWJ2eW82" target="_blank" rel="noopener noreferrer" class="social-float-btn sf-ig"><i class="fab fa-instagram"></i></a>
+  <a href="https://www.tiktok.com/@eleganceenfete?_r=1&_t=ZS-96LzRbKK9Vl" target="_blank" rel="noopener noreferrer" class="social-float-btn sf-tt"><i class="fab fa-tiktok"></i></a>
 </div>
 </body></html>
