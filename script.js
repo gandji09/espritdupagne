@@ -344,15 +344,10 @@ function renderBoutique(filter) {
     list = list.filter(p => {
       const cat = (p.categorie || '').toLowerCase().trim();
       const f = filter.toLowerCase().trim();
-      // hommes/homme → match Homme
-      if (f === 'hommes' || f === 'homme') return cat === 'homme' || cat === 'hommes';
-      // robes → match Robes, Robes femmes
-      if (f === 'robes') return cat.includes('robe');
-      // boubous → match Boubou, Boubous
-      if (f === 'boubous') return cat.includes('boubou');
-      // enfants → match Enfant, Enfants
+      if (f === 'femmes' || f === 'femme') return cat.includes('femme') || cat.includes('robe') || cat.includes('ensemble');
+      if (f === 'hommes' || f === 'homme') return cat.includes('homme');
       if (f === 'enfants' || f === 'enfant') return cat.includes('enfant');
-      // accessoires
+      if (f === 'boubous' || f === 'boubou') return cat.includes('boubou');
       if (f === 'accessoires') return cat.includes('accessoire');
       return cat.includes(f);
     });
@@ -362,6 +357,19 @@ function renderBoutique(filter) {
 }
 
 // -- PAGE GALERIE ------------------------------------------
+async function loadHomeGalerie() {
+  const el = $('#homeGalerie');
+  if (!el) return;
+  if (!sb) await initSupabase();
+  if (!sb) return;
+  const { data } = await sb.from('galerie').select('*').order('ordre').limit(6);
+  if (!data || !data.length) { el.innerHTML = '<p style="text-align:center;grid-column:1/-1;color:#888">Galerie bientôt disponible</p>'; return; }
+  el.innerHTML = data.map(g => `
+    <div style="aspect-ratio:1;border-radius:12px;overflow:hidden;cursor:zoom-in" onclick="openLightbox('${g.image_url}','${g.titre||''}')">
+      <img src="${g.image_url}" alt="${g.titre||''}" loading="lazy" style="width:100%;height:100%;object-fit:cover;transition:transform .3s">
+    </div>`).join('');
+}
+
 async function loadGalerie() {
   const el = $('#galleryGrid') || $('#galerieGrid');
   if (!el) return;
@@ -526,6 +534,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   loadFeatured();
   loadBoutique();
   loadGalerie();
+  loadHomeGalerie();
   loadBlog();
   loadTemoignages();
 

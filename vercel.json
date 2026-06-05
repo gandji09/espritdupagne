@@ -1,4 +1,6 @@
 {
+  "cleanUrls": true,
+  "trailingSlash": false,
   "rewrites": [
     {"source": "/boutique", "destination": "/boutique.html"},
     {"source": "/galerie", "destination": "/galerie.html"},
@@ -19,9 +21,7 @@
     },
     {
       "source": "/admin.html",
-      "headers": [
-        {"key": "X-Robots-Tag", "value": "noindex, nofollow"}
-      ]
+      "headers": [{"key": "X-Robots-Tag", "value": "noindex, nofollow"}]
     }
   ]
 }

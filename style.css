@@ -384,8 +384,9 @@ section{padding:90px 0}
 }
 .formations-hero::before{
   content:"";position:absolute;inset:0;
-  background:rgba(0,0,0,.62);
+  background:rgba(0,0,0,.75);
 }
+.formations-hero .container{position:relative;z-index:1}
 .formations-hero .container{position:relative}
 .formations-hero h1{color:var(--white);font-size:clamp(2.2rem,4.5vw,3.4rem);margin-bottom:14px}
 .formations-hero p{opacity:.85;max-width:600px;margin:0 auto;font-size:1.08rem}
