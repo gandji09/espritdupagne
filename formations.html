@@ -1,7 +1,7 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8"><link rel="icon" type="image/png" href="images/logo.png"><link rel="apple-touch-icon" href="images/logo.png"><meta name="theme-color" content="#CC0000">
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <meta name="description" content="Formations professionnelles en tissage, coupe-couture et broderie — CPFPA-EP Esprit du Pagne, Porto-Novo.">
 <title>Formations — Esprit du Pagne</title>
@@ -34,9 +34,9 @@
   padding:32px 28px;
   position:relative;overflow:hidden;
 }
-.formation-card-banner.tissage{background:linear-gradient(135deg,#1a1a2e,#16213e)}
-.formation-card-banner.couture{background:linear-gradient(135deg,#CC0000,#8B0000)}
-.formation-card-banner.broderie{background:linear-gradient(135deg,#1e3a5f,#0d2137)}
+.formation-card-banner.tissage{background:linear-gradient(135deg,#111,#1a1a1a)}
+.formation-card-banner.couture{background:linear-gradient(135deg,#1a1a1a,#2d2d2d)}
+.formation-card-banner.broderie{background:linear-gradient(135deg,#111,#1a1a1a)}
 .formation-card-banner::after{
   content:'';position:absolute;right:-20px;bottom:-20px;
   width:120px;height:120px;border-radius:50%;
@@ -220,6 +220,24 @@
         </div>
       </div>
 
+      <!-- BRODERIE INDUSTRIELLE -->
+      <div class="formation-card">
+        <div class="formation-card-banner" style="background:linear-gradient(135deg,#2d1b00,#5c3300)">
+          <div class="formation-icon"><i class="fas fa-industry"></i></div>
+          <h3>Broderie Industrielle</h3>
+          <p>Maîtrisez les techniques avancées de broderie industrielle sur machines professionnelles.</p>
+          <div class="formation-duree"><i class="fas fa-clock"></i> 9 mois</div>
+        </div>
+        <div class="formation-card-footer">
+          <button class="btn-inscrire" onclick="showInscriptionModal('Broderie Industrielle')">
+            <i class="fas fa-graduation-cap"></i> S'inscrire
+          </button>
+          <button class="btn-details" onclick="showDetails('broderie-industrielle')">
+            <i class="fas fa-eye"></i> Détails
+          </button>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
@@ -380,6 +398,54 @@
   </div>
 </div>
 
+<!-- ── MODAL DÉTAILS BRODERIE INDUSTRIELLE ── -->
+<div id="modal-broderie-industrielle" class="details-modal" onclick="if(event.target===this)closeDetails('broderie-industrielle')">
+  <div class="details-modal-box">
+    <div class="details-modal-header">
+      <h3><i class="fas fa-industry" style="color:#CC0000;margin-right:8px"></i>Broderie Industrielle</h3>
+      <button class="details-close" onclick="closeDetails('broderie-industrielle')"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="details-modal-body">
+      <div class="details-section">
+        <h4><i class="fas fa-clock"></i> Durée & Frais de formation</h4>
+        <div class="details-row"><span>Inscription</span><span class="price">15.000 FCFA</span></div>
+        <div class="details-row total-row"><span>Formation complète (9 mois)</span><span class="price">450.000 FCFA</span></div>
+      </div>
+      <div class="details-section">
+        <h4><i class="fas fa-file-alt"></i> Pièces à fournir</h4>
+        <div class="details-row"><span>Certificat médical</span><span class="price">5.000 F</span></div>
+        <div class="details-row"><span>Acte de naissance</span><span class="price">—</span></div>
+        <div class="details-row"><span>4 photos d'identité</span><span class="price">1.000 F</span></div>
+        <div class="details-row"><span>Cahier TP</span><span class="price">2.000 F</span></div>
+      </div>
+      <div class="details-section">
+        <h4><i class="fas fa-id-card"></i> Frais CPFPA-EP</h4>
+        <div class="details-row"><span>Carte d'apprentissage</span><span class="price">1.000 F</span></div>
+        <div class="details-row"><span>Contrat (4 exemplaires)</span><span class="price">1.000 F</span></div>
+        <div class="details-row"><span>Polo du centre</span><span class="price">3.500 F</span></div>
+      </div>
+      <div class="details-section">
+        <h4><i class="fas fa-toolbox"></i> Kit apprenant</h4>
+        <div class="details-row"><span>Métier à broder industriel</span><span class="price">—</span></div>
+        <div class="details-row"><span>Fils de soie variés</span><span class="price">—</span></div>
+        <div class="details-row"><span>Aiguilles spéciales</span><span class="price">—</span></div>
+        <div class="details-row"><span>Tissus d'entraînement</span><span class="price">—</span></div>
+        <div class="details-row total-row"><span><strong>Total kit</strong></span><span class="price">20.000 F</span></div>
+      </div>
+      <div style="background:#fff8f8;border-radius:10px;padding:14px 16px;border-left:3px solid #CC0000;font-size:.88rem;color:#555">
+        <i class="fas fa-info-circle" style="color:#CC0000;margin-right:6px"></i>
+        <strong>Modalités :</strong> Possibilité de paiement échelonné. 1ère tranche à l'inscription.
+      </div>
+    </div>
+    <div class="details-modal-footer">
+      <button class="btn-inscrire" onclick="closeDetails('broderie-industrielle');showInscriptionModal('Broderie Industrielle')">
+        <i class="fas fa-graduation-cap"></i> S'inscrire maintenant
+      </button>
+      <button class="btn-details" onclick="closeDetails('broderie-industrielle')">Fermer</button>
+    </div>
+  </div>
+</div>
+
 <!-- ── MODAL INSCRIPTION ── -->
 <div id="inscriptionModal" class="modal">
   <div class="modal-content">
@@ -428,7 +494,7 @@ function closeDetails(nom) {
 }
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') {
-    ['tissage','couture','broderie'].forEach(closeDetails);
+    ['tissage','couture','broderie','broderie-industrielle'].forEach(closeDetails);
     document.getElementById('inscriptionModal')?.classList.remove('active');
   }
 });
@@ -457,4 +523,3 @@ document.addEventListener('keydown', e => {
   <a href="https://www.tiktok.com/@eleganceenfete?_r=1&_t=ZS-96LzRbKK9Vl" target="_blank" rel="noopener noreferrer" class="social-float-btn sf-tt"><i class="fab fa-tiktok"></i></a>
 </div>
 </body></html>
-
