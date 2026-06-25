@@ -1,0 +1,410 @@
+/* ============================================================
+   ESPRIT DU PAGNE — animations.css
+   Animations & micro-interactions professionnelles
+   ============================================================ */
+
+/* ── Variables ── */
+:root {
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --duration-fast: 0.25s;
+  --duration-normal: 0.5s;
+  --duration-slow: 0.8s;
+}
+
+/* ============================================================
+   1. SCROLL REVEAL — apparition au défilement
+   ============================================================ */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity var(--duration-slow) var(--ease-out),
+              transform var(--duration-slow) var(--ease-out);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-left {
+  opacity: 0;
+  transform: translateX(-50px);
+  transition: opacity var(--duration-slow) var(--ease-out),
+              transform var(--duration-slow) var(--ease-out);
+}
+.reveal-left.visible { opacity: 1; transform: translateX(0); }
+
+.reveal-right {
+  opacity: 0;
+  transform: translateX(50px);
+  transition: opacity var(--duration-slow) var(--ease-out),
+              transform var(--duration-slow) var(--ease-out);
+}
+.reveal-right.visible { opacity: 1; transform: translateX(0); }
+
+.reveal-scale {
+  opacity: 0;
+  transform: scale(0.9);
+  transition: opacity var(--duration-slow) var(--ease-out),
+              transform var(--duration-slow) var(--ease-out);
+}
+.reveal-scale.visible { opacity: 1; transform: scale(1); }
+
+/* Délais en cascade */
+.delay-1 { transition-delay: 0.1s !important; }
+.delay-2 { transition-delay: 0.2s !important; }
+.delay-3 { transition-delay: 0.3s !important; }
+.delay-4 { transition-delay: 0.4s !important; }
+.delay-5 { transition-delay: 0.5s !important; }
+.delay-6 { transition-delay: 0.6s !important; }
+
+/* ============================================================
+   2. NAVBAR — transition fluide au scroll
+   ============================================================ */
+.navbar {
+  transition: background 0.4s var(--ease-out),
+              box-shadow 0.4s var(--ease-out),
+              padding 0.3s var(--ease-out) !important;
+}
+.navbar.scrolled {
+  padding-top: 10px !important;
+  padding-bottom: 10px !important;
+}
+
+/* Logo hover pulse */
+.logo img {
+  transition: transform 0.3s var(--ease-out);
+}
+.logo:hover img { transform: scale(1.04); }
+
+/* Nav links underline slide */
+.nav-menu a {
+  position: relative;
+}
+.nav-menu a::after {
+  content: '';
+  position: absolute;
+  bottom: 4px; left: 50%;
+  width: 0; height: 2px;
+  background: var(--red);
+  border-radius: 2px;
+  transition: width 0.3s var(--ease-out), left 0.3s var(--ease-out);
+}
+.nav-menu a:hover::after,
+.nav-menu a.active::after {
+  width: 60%; left: 20%;
+}
+
+/* ============================================================
+   3. HERO SLIDER — transitions cinématiques
+   ============================================================ */
+.slide {
+  transition: opacity 0.8s var(--ease-in-out) !important;
+}
+.slide img {
+  transition: transform 8s linear !important;
+}
+.slide.active img {
+  transform: scale(1.06) !important;
+}
+
+/* Texte slider animation */
+.slide-content {
+  animation: none;
+}
+.slide.active .slide-content {
+  animation: heroIn 0.9s var(--ease-out) forwards;
+}
+@keyframes heroIn {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ============================================================
+   4. BOUTONS — micro-interactions
+   ============================================================ */
+.btn {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s var(--ease-out),
+              box-shadow 0.2s var(--ease-out),
+              background 0.2s !important;
+}
+.btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255,255,255,0.15);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,.2); }
+.btn:hover::after { opacity: 1; }
+.btn:active { transform: translateY(0); box-shadow: none; }
+
+/* Ripple effect au clic */
+.btn-ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.4);
+  transform: scale(0);
+  animation: ripple 0.5s linear;
+  pointer-events: none;
+}
+@keyframes ripple {
+  to { transform: scale(4); opacity: 0; }
+}
+
+/* ============================================================
+   5. CARTES PRODUIT — hover élaboré
+   ============================================================ */
+.product-card {
+  transition: transform 0.4s var(--ease-out),
+              box-shadow 0.4s var(--ease-out) !important;
+}
+.product-card:hover {
+  transform: translateY(-8px) !important;
+  box-shadow: 0 20px 50px rgba(0,0,0,.15) !important;
+}
+.product-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 1.5px solid rgba(204,0,0,0);
+  transition: border-color 0.3s;
+  pointer-events: none;
+  z-index: 1;
+}
+.product-card:hover::before {
+  border-color: rgba(204,0,0,0.3);
+}
+
+/* Image zoom plus doux */
+.product-image-wrap img {
+  transition: transform 0.6s var(--ease-out) !important;
+}
+.product-card:hover .product-image-wrap img {
+  transform: scale(1.08) !important;
+}
+
+/* Bouton ajouter — glisse vers le haut */
+.product-actions {
+  transform: translateY(4px);
+  transition: transform 0.3s var(--ease-out);
+}
+.product-card:hover .product-actions {
+  transform: translateY(0);
+}
+
+/* ============================================================
+   6. GALERIE — effet masonry hover
+   ============================================================ */
+.gallery-item {
+  transition: transform 0.4s var(--ease-out),
+              box-shadow 0.4s var(--ease-out) !important;
+  overflow: hidden;
+}
+.gallery-item:hover {
+  transform: scale(1.03);
+  box-shadow: 0 16px 40px rgba(0,0,0,.2);
+  z-index: 2;
+}
+.gallery-item img {
+  transition: transform 0.6s var(--ease-out) !important;
+}
+.gallery-item:hover img { transform: scale(1.08) !important; }
+
+/* ============================================================
+   7. FORMATIONS CARDS — tilt effect
+   ============================================================ */
+.formation-card {
+  transition: transform 0.4s var(--ease-out),
+              box-shadow 0.4s var(--ease-out) !important;
+}
+.formation-card:hover {
+  transform: translateY(-10px) !important;
+  box-shadow: 0 24px 60px rgba(0,0,0,.2) !important;
+}
+.formation-icon {
+  transition: transform 0.4s var(--ease-out),
+              background 0.3s !important;
+}
+.formation-card:hover .formation-icon {
+  transform: scale(1.15) rotate(-5deg);
+  background: rgba(204,0,0,0.4) !important;
+}
+
+/* ============================================================
+   8. TÉMOIGNAGES — apparition en cascade
+   ============================================================ */
+.testimonial-card {
+  transition: transform 0.4s var(--ease-out),
+              box-shadow 0.4s var(--ease-out);
+}
+.testimonial-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 40px rgba(0,0,0,.12);
+}
+
+/* ============================================================
+   9. CHIFFRES STATS — compteur animé
+   ============================================================ */
+.stat-num {
+  display: inline-block;
+  transition: transform 0.3s var(--ease-out);
+}
+.stat-card:hover .stat-num {
+  transform: scale(1.1);
+  color: var(--red);
+}
+
+/* ============================================================
+   10. FOOTER — liens hover
+   ============================================================ */
+.footer-section ul li a {
+  transition: color 0.2s, padding-left 0.2s var(--ease-out);
+  display: inline-block;
+}
+.footer-section ul li a:hover {
+  color: var(--red) !important;
+  padding-left: 8px;
+}
+
+/* Social links spin */
+.social-links a {
+  transition: transform 0.3s var(--ease-out),
+              background 0.2s !important;
+}
+.social-links a:hover { transform: translateY(-4px) scale(1.1) !important; }
+
+/* ============================================================
+   11. PANIER DRAWER — slide + blur
+   ============================================================ */
+.cart-drawer {
+  transition: transform 0.45s var(--ease-out) !important;
+}
+.cart-overlay {
+  transition: opacity 0.35s var(--ease-out) !important;
+  backdrop-filter: blur(4px);
+}
+
+/* Cart item hover */
+.cart-line {
+  transition: background 0.2s;
+}
+.cart-line:hover { background: #fafafa; }
+
+/* ============================================================
+   12. LIGHTBOX — zoom entrant
+   ============================================================ */
+.lightbox {
+  backdrop-filter: blur(8px);
+}
+.lightbox-content {
+  animation: lightboxIn 0.35s var(--ease-out) !important;
+}
+@keyframes lightboxIn {
+  from { transform: scale(0.85); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
+}
+
+/* ============================================================
+   13. PAGE TRANSITIONS — fade entre pages
+   ============================================================ */
+body {
+  animation: pageFadeIn 0.5s var(--ease-out);
+}
+@keyframes pageFadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ============================================================
+   14. WHATSAPP BUTTON — pulsation améliorée
+   ============================================================ */
+.whatsapp-float {
+  animation: waPulse 2.5s infinite !important;
+  transition: transform 0.2s var(--ease-out) !important;
+}
+.whatsapp-float:hover {
+  transform: scale(1.15) !important;
+  animation: none !important;
+}
+@keyframes waPulse {
+  0%,100% { box-shadow: 0 6px 24px rgba(37,211,102,.5); }
+  50% { box-shadow: 0 6px 24px rgba(37,211,102,.5), 0 0 0 12px rgba(37,211,102,0); }
+}
+
+/* ============================================================
+   15. PROMO BAR — défilement texte
+   ============================================================ */
+.promo-bar {
+  overflow: hidden;
+  position: relative;
+}
+
+/* ============================================================
+   16. SCROLL TO TOP — apparition douce
+   ============================================================ */
+.scroll-top {
+  transition: opacity 0.3s, transform 0.3s var(--ease-out) !important;
+}
+.scroll-top:not(.visible) {
+  opacity: 0 !important;
+  transform: translateY(10px) !important;
+  pointer-events: none !important;
+}
+.scroll-top.visible { opacity: 1 !important; transform: translateY(0) !important; }
+.scroll-top:hover { transform: translateY(-3px) !important; }
+
+/* ============================================================
+   17. FORMULAIRES — focus animations
+   ============================================================ */
+input, textarea, select {
+  transition: border-color 0.25s, box-shadow 0.25s, transform 0.2s !important;
+}
+input:focus, textarea:focus, select:focus {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(204,0,0,.12) !important;
+}
+
+/* ============================================================
+   18. SECTIONS — séparateur animé
+   ============================================================ */
+.separator {
+  position: relative;
+  overflow: hidden;
+}
+.separator::after {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+  animation: shimmerSep 3s infinite;
+}
+@keyframes shimmerSep {
+  to { left: 100%; }
+}
+
+/* ============================================================
+   19. EYEBROW — apparition lettre par lettre (CSS)
+   ============================================================ */
+.eyebrow {
+  display: inline-block;
+  animation: eyebrowIn 0.8s var(--ease-out) both;
+}
+@keyframes eyebrowIn {
+  from { opacity: 0; letter-spacing: 0.3em; }
+  to   { opacity: 1; letter-spacing: 0.15em; }
+}
+
+/* ============================================================
+   20. MOBILE — réduire animations si needed
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
