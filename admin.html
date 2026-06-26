@@ -319,36 +319,6 @@ textarea{resize:vertical;min-height:100px}
   display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:99;
 }
 .sidebar-overlay.active{display:block}
-
-/* ── Upload image ── */
-.upload-zone{
-  border:2px dashed var(--line);border-radius:var(--radius-sm);
-  padding:20px;text-align:center;cursor:pointer;
-  transition:border-color .2s,background .2s;
-  background:var(--bg-soft);position:relative;
-}
-.upload-zone:hover{border-color:var(--red);background:var(--red-soft)}
-.upload-zone input[type=file]{
-  position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;
-}
-.upload-zone i{font-size:1.8rem;color:var(--muted);margin-bottom:8px;display:block}
-.upload-zone p{font-size:.85rem;color:var(--muted);margin:0}
-.upload-zone .upload-preview{
-  width:100%;height:140px;object-fit:cover;
-  border-radius:8px;margin-bottom:8px;display:none;
-}
-.upload-progress{
-  height:4px;background:var(--line);border-radius:2px;
-  margin-top:10px;overflow:hidden;display:none;
-}
-.upload-progress-bar{
-  height:100%;background:var(--red);border-radius:2px;
-  width:0%;transition:width .3s;
-}
-.upload-url-display{
-  font-size:.75rem;color:var(--green);margin-top:6px;
-  word-break:break-all;display:none;
-}
 </style>
 </head>
 <body>
@@ -359,9 +329,10 @@ textarea{resize:vertical;min-height:100px}
     <div class="login-logo">E</div>
     <h2>Espace Admin</h2>
     <p>Esprit du Pagne — Tableau de bord</p>
-    <input type="password" id="loginPassword" class="login-field" placeholder="Mot de passe admin" onkeydown="if(event.key==='Enter')doLogin()">
-    <button class="login-btn" onclick="doLogin()"><i class="fas fa-unlock"></i> Connexion</button>
-    <p class="login-error" id="loginError"><i class="fas fa-exclamation-circle"></i> Mot de passe incorrect</p>
+    <input type="email" id="loginEmail" class="login-field" placeholder="Email admin" onkeydown="if(event.key==='Enter')doLogin()">
+    <input type="password" id="loginPassword" class="login-field" placeholder="Mot de passe" onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="login-btn" id="loginBtn" onclick="doLogin()"><i class="fas fa-unlock"></i> Connexion</button>
+    <p class="login-error" id="loginError"><i class="fas fa-exclamation-circle"></i> Email ou mot de passe incorrect</p>
   </div>
 </div>
 
@@ -408,15 +379,11 @@ textarea{resize:vertical;min-height:100px}
         <i class="fas fa-graduation-cap"></i> Inscriptions
         <span class="nav-badge" id="badgeInscriptions" style="display:none">0</span>
       </button>
-      <button class="nav-item" onclick="showSection('temoignages')" id="navTemoignages">
-        <i class="fas fa-comment-dots"></i> Témoignages
-        <span class="nav-badge" id="badgeTemoignages" style="display:none">0</span>
-      </button>
-      <button class="nav-item" onclick="showSection('newsletter')" id="navNewsletter">
-        <i class="fas fa-envelope-open-text"></i> Newsletter
-      </button>
     </nav>
     <div class="sidebar-footer">
+      <button class="nav-item" onclick="showSection('motdepasse')" style="color:rgba(255,255,255,.5);font-size:.85rem">
+        <i class="fas fa-key"></i> Changer mot de passe
+      </button>
       <button class="logout-btn" onclick="logout()"><i class="fas fa-right-from-bracket"></i> Déconnexion</button>
     </div>
   </aside>
@@ -556,32 +523,25 @@ textarea{resize:vertical;min-height:100px}
         </div>
       </div>
 
-      <!-- ══ TÉMOIGNAGES ══ -->
-      <div class="section" id="sec-temoignages">
-        <div class="card">
+      <!-- ══ MOT DE PASSE ══ -->
+      <div class="section" id="sec-motdepasse">
+        <div class="card" style="max-width:500px;margin:0 auto">
           <div class="card-header">
-            <span class="card-title"><i class="fas fa-comment-dots" style="color:var(--red);margin-right:8px"></i>Témoignages à valider</span>
+            <span class="card-title"><i class="fas fa-key" style="color:var(--red);margin-right:8px"></i>Changer le mot de passe</span>
           </div>
-          <div class="table-wrap">
-            <table>
-              <thead><tr><th>Nom</th><th>Ville</th><th>Note</th><th>Message</th><th>Statut</th><th>Date</th><th>Actions</th></tr></thead>
-              <tbody id="temoignages-tbody"><tr class="loading-row"><td colspan="7"><div class="spinner"></div></td></tr></tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <!-- ══ NEWSLETTER ══ -->
-      <div class="section" id="sec-newsletter">
-        <div class="card">
-          <div class="card-header">
-            <span class="card-title"><i class="fas fa-envelope-open-text" style="color:var(--red);margin-right:8px"></i>Abonnés Newsletter</span>
-          </div>
-          <div class="table-wrap">
-            <table>
-              <thead><tr><th>Email</th><th>Date d'inscription</th><th>Actions</th></tr></thead>
-              <tbody id="newsletter-tbody"><tr class="loading-row"><td colspan="3"><div class="spinner"></div></td></tr></tbody>
-            </table>
+          <div class="card-body">
+            <div class="form-group" style="margin-bottom:16px">
+              <label>Nouveau mot de passe</label>
+              <input type="password" id="newPassword" placeholder="Minimum 8 caractères" style="width:100%">
+            </div>
+            <div class="form-group" style="margin-bottom:20px">
+              <label>Confirmer le mot de passe</label>
+              <input type="password" id="confirmPassword" placeholder="Répétez le mot de passe" style="width:100%">
+            </div>
+            <button class="btn btn-primary" onclick="changePassword()" style="width:100%">
+              <i class="fas fa-save"></i> Mettre à jour le mot de passe
+            </button>
+            <p id="pwMsg" style="margin-top:12px;font-size:.85rem;text-align:center;display:none"></p>
           </div>
         </div>
       </div>
@@ -621,11 +581,9 @@ textarea{resize:vertical;min-height:100px}
         <div class="form-group">
           <label>Catégorie *</label>
           <select id="p-categorie">
-            <option value="Robes">Robes femmes</option>
+            <option value="Robes">Robes</option>
             <option value="Boubous">Boubous</option>
             <option value="Ensembles">Ensembles</option>
-            <option value="Homme">Homme</option>
-            <option value="Enfants">Enfants</option>
             <option value="Accessoires">Accessoires</option>
             <option value="Sur-mesure">Sur-mesure</option>
           </select>
@@ -635,16 +593,8 @@ textarea{resize:vertical;min-height:100px}
           <input type="number" id="p-prix" placeholder="85000">
         </div>
         <div class="form-group full">
-          <label>Image du produit</label>
-          <div class="upload-zone" id="zone-p-image">
-            <input type="file" accept="image/*" onchange="handleFileInput(this,'p-image','zone-p-image')">
-            <img class="upload-preview" alt="preview">
-            <i class="fas fa-cloud-arrow-up"></i>
-            <p>Appuyer pour choisir une photo</p>
-            <div class="upload-progress"><div class="upload-progress-bar"></div></div>
-            <div class="upload-url-display"></div>
-          </div>
-          <input type="url" id="p-image" placeholder="URL générée automatiquement" style="margin-top:8px;font-size:.8rem;color:var(--muted)" readonly>
+          <label>URL de l'image</label>
+          <input type="url" id="p-image" placeholder="https://...">
         </div>
         <div class="form-group">
           <label>Badge (optionnel)</label>
@@ -686,16 +636,8 @@ textarea{resize:vertical;min-height:100px}
           <input type="text" id="g-titre" placeholder="Ex: Collection Été 2025">
         </div>
         <div class="form-group">
-          <label>Image *</label>
-          <div class="upload-zone" id="zone-g-image">
-            <input type="file" accept="image/*" onchange="handleFileInput(this,'g-image','zone-g-image')">
-            <img class="upload-preview" alt="preview">
-            <i class="fas fa-cloud-arrow-up"></i>
-            <p>Appuyer pour choisir une photo</p>
-            <div class="upload-progress"><div class="upload-progress-bar"></div></div>
-            <div class="upload-url-display"></div>
-          </div>
-          <input type="url" id="g-image" placeholder="URL générée automatiquement" style="margin-top:8px;font-size:.8rem;color:var(--muted)" readonly>
+          <label>URL de l'image *</label>
+          <input type="url" id="g-image" placeholder="https://...">
         </div>
         <div class="form-group">
           <label>Ordre d'affichage</label>
@@ -724,16 +666,8 @@ textarea{resize:vertical;min-height:100px}
           <input type="text" id="a-titre" placeholder="Titre de l'article">
         </div>
         <div class="form-group">
-          <label>Image de couverture</label>
-          <div class="upload-zone" id="zone-a-image">
-            <input type="file" accept="image/*" onchange="handleFileInput(this,'a-image','zone-a-image')">
-            <img class="upload-preview" alt="preview">
-            <i class="fas fa-cloud-arrow-up"></i>
-            <p>Appuyer pour choisir une photo</p>
-            <div class="upload-progress"><div class="upload-progress-bar"></div></div>
-            <div class="upload-url-display"></div>
-          </div>
-          <input type="url" id="a-image" placeholder="URL générée automatiquement" style="margin-top:8px;font-size:.8rem;color:var(--muted)" readonly>
+          <label>URL image de couverture</label>
+          <input type="url" id="a-image" placeholder="https://...">
         </div>
         <div class="form-group">
           <label>Extrait (résumé court)</label>
@@ -766,9 +700,8 @@ textarea{resize:vertical;min-height:100px}
 // ══════════════════════════════════
 // CONFIG
 // ══════════════════════════════════
-const ADMIN_PASSWORD = 'espritdupagne2025'; // ← CHANGE CE MOT DE PASSE
-const SUPABASE_URL = 'https://xxtkywcchutdhwcjawrz.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh4dGt5d2NjaHV0ZGh3Y2phd3J6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg1Njk3MjAsImV4cCI6MjA5NDE0NTcyMH0.UzDTCSboartGYeiLJ6bo8P-3NibVMVEiBMLgkxdKSRQ';
+const SUPABASE_URL = 'https://vkscpdkmklatwzswsxks.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZrc2NwZGtta2xhdHd6c3dzeGtzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgyOTU4OTYsImV4cCI6MjA5Mzg3MTg5Nn0.xcIalSAAVhOFkLC5NqJ2APyedlge2HCUiFzjBNDL3wM';
 
 let sb = null;
 let editingId = null;
@@ -791,23 +724,73 @@ function loadSupabase(){
 // ══════════════════════════════════
 // LOGIN
 // ══════════════════════════════════
-function doLogin(){
-  const pw=document.getElementById('loginPassword').value;
-  const err=document.getElementById('loginError');
-  if(pw===ADMIN_PASSWORD){
+async function doLogin(){
+  const email = document.getElementById('loginEmail').value.trim();
+  const pw = document.getElementById('loginPassword').value;
+  const err = document.getElementById('loginError');
+  const btn = document.getElementById('loginBtn');
+  err.style.display = 'none';
+  if(!email || !pw){ err.style.display='block'; err.textContent='Remplissez tous les champs'; return; }
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Connexion...';
+  btn.disabled = true;
+  await loadSupabase();
+  const { data, error } = await sb.auth.signInWithPassword({ email, password: pw });
+  btn.innerHTML = '<i class="fas fa-unlock"></i> Connexion';
+  btn.disabled = false;
+  if(error){
+    err.style.display='block';
+    err.innerHTML='<i class="fas fa-exclamation-circle"></i> Email ou mot de passe incorrect';
+    document.getElementById('loginPassword').value='';
+    return;
+  }
+  document.getElementById('loginScreen').style.display='none';
+  document.getElementById('app').style.display='flex';
+  initApp();
+}
+
+async function logout(){
+  await sb.auth.signOut();
+  document.getElementById('loginScreen').style.display='flex';
+  document.getElementById('app').style.display='none';
+  document.getElementById('loginEmail').value='';
+  document.getElementById('loginPassword').value='';
+}
+
+async function changePassword(){
+  const pw = document.getElementById('newPassword').value;
+  const confirm = document.getElementById('confirmPassword').value;
+  const msg = document.getElementById('pwMsg');
+  if(!pw || pw.length < 8){
+    msg.style.display='block'; msg.style.color='var(--red)';
+    msg.textContent='Le mot de passe doit contenir au moins 8 caractères'; return;
+  }
+  if(pw !== confirm){
+    msg.style.display='block'; msg.style.color='var(--red)';
+    msg.textContent='Les mots de passe ne correspondent pas'; return;
+  }
+  const { error } = await sb.auth.updateUser({ password: pw });
+  if(error){
+    msg.style.display='block'; msg.style.color='var(--red)';
+    msg.textContent='Erreur: ' + error.message; return;
+  }
+  msg.style.display='block'; msg.style.color='var(--green)';
+  msg.textContent='✓ Mot de passe mis à jour avec succès !';
+  document.getElementById('newPassword').value='';
+  document.getElementById('confirmPassword').value='';
+  showToast('Mot de passe mis à jour ✓');
+}
+
+// Vérifier si déjà connecté au chargement
+async function checkSession(){
+  await loadSupabase();
+  const { data } = await sb.auth.getSession();
+  if(data?.session){
     document.getElementById('loginScreen').style.display='none';
     document.getElementById('app').style.display='flex';
     initApp();
-  } else {
-    err.style.display='block';
-    document.getElementById('loginPassword').value='';
   }
 }
-function logout(){
-  document.getElementById('loginScreen').style.display='flex';
-  document.getElementById('app').style.display='none';
-  document.getElementById('loginPassword').value='';
-}
+checkSession();
 
 // ══════════════════════════════════
 // APP INIT
@@ -823,7 +806,7 @@ async function initApp(){
 // ══════════════════════════════════
 // NAVIGATION
 // ══════════════════════════════════
-const titles={dashboard:'Vue d\'ensemble',produits:'Produits',galerie:'Galerie',blog:'Blog',commandes:'Commandes',messages:'Messages',inscriptions:'Inscriptions',temoignages:'Témoignages',newsletter:'Newsletter'};
+const titles={dashboard:'Vue d\'ensemble',produits:'Produits',galerie:'Galerie',blog:'Blog',commandes:'Commandes',messages:'Messages',inscriptions:'Inscriptions'};
 function showSection(name){
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
@@ -836,8 +819,6 @@ function showSection(name){
   if(name==='commandes') loadCommandes();
   if(name==='messages') loadMessages();
   if(name==='inscriptions') loadInscriptions();
-  if(name==='temoignages') loadTemoignagesAdmin();
-  if(name==='newsletter') loadNewsletterAdmin();
 }
 function openSidebar(){document.getElementById('sidebar').classList.add('open');document.getElementById('sidebarOverlay').classList.add('active')}
 function closeSidebar(){document.getElementById('sidebar').classList.remove('open');document.getElementById('sidebarOverlay').classList.remove('active')}
@@ -1211,132 +1192,6 @@ document.addEventListener('keydown',e=>{
 });
 
 // ══════════════════════════════════
-// ══════════════════════════════════
-// TÉMOIGNAGES ADMIN
-// ══════════════════════════════════
-async function loadTemoignagesAdmin(){
-  if(!sb) return;
-  const {data}=await sb.from('temoignages').select('*').order('created_at',{ascending:false});
-  const tb=document.getElementById('temoignages-tbody');
-  // Badge
-  const pending=data?data.filter(t=>!t.approuve).length:0;
-  if(pending>0){document.getElementById('badgeTemoignages').textContent=pending;document.getElementById('badgeTemoignages').style.display='inline-block';}
-  if(!data||!data.length){tb.innerHTML='<tr><td colspan="7"><div class="empty"><i class="fas fa-comment-dots"></i><p>Aucun témoignage</p></div></td></tr>';return;}
-  tb.innerHTML=data.map(t=>`<tr>
-    <td><strong>${t.nom}</strong></td>
-    <td>${t.ville||'-'}</td>
-    <td style="color:#F59E0B">${'★'.repeat(t.note||5)}</td>
-    <td style="max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.85rem">${t.message}</td>
-    <td><span class="badge ${t.approuve?'badge-green':'badge-orange'}">${t.approuve?'Approuvé':'En attente'}</span></td>
-    <td style="color:var(--muted);font-size:.82rem">${fmtDate(t.created_at)}</td>
-    <td>
-      ${!t.approuve?`<button class="btn btn-success btn-sm" onclick="approuverTemoignage('${t.id}')"><i class="fas fa-check"></i> Approuver</button>`:''}
-      <button class="btn btn-danger btn-sm" onclick="deleteTemoignage('${t.id}')"><i class="fas fa-trash"></i></button>
-    </td>
-  </tr>`).join('');
-}
-
-async function approuverTemoignage(id){
-  await sb.from('temoignages').update({approuve:true}).eq('id',id);
-  showToast('Témoignage approuvé ✓ — visible sur le site');
-  loadTemoignagesAdmin();
-}
-async function deleteTemoignage(id){
-  if(!confirm('Supprimer ce témoignage ?')) return;
-  await sb.from('temoignages').delete().eq('id',id);
-  showToast('Témoignage supprimé');loadTemoignagesAdmin();
-}
-
-// ══════════════════════════════════
-// NEWSLETTER ADMIN
-// ══════════════════════════════════
-async function loadNewsletterAdmin(){
-  if(!sb) return;
-  const {data}=await sb.from('newsletter').select('*').order('created_at',{ascending:false});
-  const tb=document.getElementById('newsletter-tbody');
-  if(!data||!data.length){tb.innerHTML='<tr><td colspan="3"><div class="empty"><i class="fas fa-envelope-open-text"></i><p>Aucun abonné</p></div></td></tr>';return;}
-  tb.innerHTML=data.map(n=>`<tr>
-    <td><strong>${n.email}</strong></td>
-    <td style="color:var(--muted);font-size:.85rem">${fmtDate(n.created_at)}</td>
-    <td>
-      <a href="mailto:${n.email}" class="btn btn-ghost btn-sm"><i class="fas fa-envelope"></i></a>
-      <button class="btn btn-danger btn-sm" onclick="deleteNewsletter('${n.id}')"><i class="fas fa-trash"></i></button>
-    </td>
-  </tr>`).join('');
-}
-async function deleteNewsletter(id){
-  if(!confirm('Désinscrire cet email ?')) return;
-  await sb.from('newsletter').delete().eq('id',id);
-  showToast('Email supprimé');loadNewsletterAdmin();
-}
-
-
-// ══════════════════════════════════
-// UPLOAD IMAGE → Supabase Storage
-// ══════════════════════════════════
-async function uploadImage(file, targetInputId, previewEl, progressEl, urlEl){
-  if(!file) return;
-  if(!sb) await loadSupabase();
-  
-  // Show progress
-  if(progressEl){ progressEl.style.display='block'; }
-  const bar = progressEl ? progressEl.querySelector('.upload-progress-bar') : null;
-  if(bar) bar.style.width='20%';
-
-  // Preview
-  if(previewEl){
-    const reader=new FileReader();
-    reader.onload=e=>{previewEl.src=e.target.result;previewEl.style.display='block';}
-    reader.readAsDataURL(file);
-  }
-
-  // Upload to Supabase Storage
-  const ext = file.name.split('.').pop();
-  const filename = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
-  
-  if(bar) bar.style.width='50%';
-  
-  const {data, error} = await sb.storage.from('images').upload(filename, file, {
-    cacheControl: '3600', upsert: false
-  });
-
-  if(bar) bar.style.width='100%';
-  
-  if(error){
-    showToast('Erreur upload: '+error.message, 'error');
-    if(progressEl) progressEl.style.display='none';
-    return;
-  }
-
-  // Get public URL
-  const {data: urlData} = sb.storage.from('images').getPublicUrl(filename);
-  const publicUrl = urlData.publicUrl;
-
-  // Set URL in target input
-  const input = document.getElementById(targetInputId);
-  if(input) input.value = publicUrl;
-
-  // Show URL
-  if(urlEl){
-    urlEl.textContent = '✓ Image uploadée';
-    urlEl.style.display='block';
-  }
-
-  setTimeout(()=>{ if(progressEl) progressEl.style.display='none'; }, 1000);
-  showToast('✓ Image uploadée !');
-  return publicUrl;
-}
-
-function handleFileInput(inputEl, targetInputId, zoneId){
-  const file = inputEl.files[0];
-  if(!file) return;
-  const zone = document.getElementById(zoneId);
-  const preview = zone ? zone.querySelector('.upload-preview') : null;
-  const progress = zone ? zone.querySelector('.upload-progress') : null;
-  const urlDisplay = zone ? zone.querySelector('.upload-url-display') : null;
-  uploadImage(file, targetInputId, preview, progress, urlDisplay);
-}
-
 // RLS ADMIN — permettre lecture/écriture admin
 // Colle ce SQL dans Supabase pour l'admin :
 /*
