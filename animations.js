@@ -73,32 +73,53 @@
 
   // ── 3. COMPTEUR ANIMÉ POUR LES STATS ────────────────────
   function initCounters() {
-    const counters = document.querySelectorAll('.stat-num, [style*="font-size:2.8rem"], [style*="font-size:2rem"]');
+    // Cible les éléments avec data-target ou les chiffres de stats
+    const counters = document.querySelectorAll(
+      '.count-num, .stat-num, .stat-card h3, ' +
+      '[style*="font-size:2.8rem"], [style*="font-size:3rem"]'
+    );
+    
+    const animateCounter = (el) => {
+      if (el.dataset.counted) return;
+      el.dataset.counted = '1';
+      
+      const original = el.textContent.trim();
+      const numStr = original.replace(/[^0-9]/g, '');
+      const num = parseInt(numStr);
+      const suffix = original.replace(/[0-9]/g, '');
+      
+      // Skip non-numeric or year values like CPFPA-EP
+      if (!num || isNaN(num)) return;
+      
+      // For year 2003 - count from 1990
+      const start = num > 2000 ? num - 20 : 0;
+      const duration = 1800;
+      const steps = 60;
+      const increment = (num - start) / steps;
+      let current = start;
+      let step = 0;
+      
+      const timer = setInterval(() => {
+        step++;
+        current = start + (increment * step);
+        if (step >= steps) {
+          el.textContent = num + suffix;
+          clearInterval(timer);
+        } else {
+          el.textContent = Math.floor(current) + suffix;
+        }
+      }, duration / steps);
+    };
+    
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
-        if (!entry.isIntersecting) return;
-        const el = entry.target;
-        const text = el.textContent.trim();
-        const num = parseInt(text.replace(/\D/g, ''));
-        if (!num || num > 2100 || el.dataset.counted) return;
-        el.dataset.counted = '1';
-        const suffix = text.replace(/[\d]/g, '').trim();
-        let start = 0;
-        const duration = 1500;
-        const step = 16;
-        const increment = num / (duration / step);
-        const timer = setInterval(() => {
-          start += increment;
-          if (start >= num) {
-            el.textContent = num + suffix;
-            clearInterval(timer);
-          } else {
-            el.textContent = Math.floor(start) + suffix;
-          }
-        }, step);
-        observer.unobserve(el);
+        if (entry.isIntersecting) {
+          animateCounter(entry.target);
+          observer.unobserve(entry.target);
+        }
       });
-    }, { threshold: 0.5 });
+    }, { threshold: 0.6 });
+    
     counters.forEach(el => observer.observe(el));
   }
 
