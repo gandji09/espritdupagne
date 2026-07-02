@@ -730,22 +730,42 @@ async function doLogin(){
   const err = document.getElementById('loginError');
   const btn = document.getElementById('loginBtn');
   err.style.display = 'none';
-  if(!email || !pw){ err.style.display='block'; err.textContent='Remplissez tous les champs'; return; }
-  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Connexion...';
-  btn.disabled = true;
-  await loadSupabase();
-  const { data, error } = await sb.auth.signInWithPassword({ email, password: pw });
-  btn.innerHTML = '<i class="fas fa-unlock"></i> Connexion';
-  btn.disabled = false;
-  if(error){
+  if(!email || !pw){
     err.style.display='block';
-    err.innerHTML='<i class="fas fa-exclamation-circle"></i> Email ou mot de passe incorrect';
-    document.getElementById('loginPassword').value='';
+    err.textContent='Remplissez tous les champs';
     return;
   }
-  document.getElementById('loginScreen').style.display='none';
-  document.getElementById('app').style.display='flex';
-  initApp();
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Connexion...';
+  btn.disabled = true;
+  
+  try {
+    await loadSupabase();
+    const result = await sb.auth.signInWithPassword({ email: email, password: pw });
+    
+    btn.innerHTML = '<i class="fas fa-unlock"></i> Connexion';
+    btn.disabled = false;
+    
+    if(result.error){
+      err.style.display='block';
+      err.innerHTML='<i class="fas fa-exclamation-circle"></i> Email ou mot de passe incorrect';
+      document.getElementById('loginPassword').value='';
+      return;
+    }
+    
+    if(result.data && result.data.user){
+      document.getElementById('loginScreen').style.display='none';
+      document.getElementById('app').style.display='flex';
+      initApp();
+    } else {
+      err.style.display='block';
+      err.innerHTML='<i class="fas fa-exclamation-circle"></i> Erreur de connexion, réessayez';
+    }
+  } catch(e) {
+    btn.innerHTML = '<i class="fas fa-unlock"></i> Connexion';
+    btn.disabled = false;
+    err.style.display='block';
+    err.textContent = 'Erreur: ' + e.message;
+  }
 }
 
 async function logout(){
@@ -782,12 +802,16 @@ async function changePassword(){
 
 // Vérifier si déjà connecté au chargement
 async function checkSession(){
-  await loadSupabase();
-  const { data } = await sb.auth.getSession();
-  if(data?.session){
-    document.getElementById('loginScreen').style.display='none';
-    document.getElementById('app').style.display='flex';
-    initApp();
+  try {
+    await loadSupabase();
+    const result = await sb.auth.getSession();
+    if(result.data && result.data.session){
+      document.getElementById('loginScreen').style.display='none';
+      document.getElementById('app').style.display='flex';
+      initApp();
+    }
+  } catch(e) {
+    console.log('Session check failed:', e);
   }
 }
 checkSession();
