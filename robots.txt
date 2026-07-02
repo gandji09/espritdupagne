@@ -1,5 +1,10 @@
 User-agent: *
 Allow: /
+
+# Bloquer les pages sensibles
+Disallow: /centrepro-dashboard.html
+Disallow: /centrepro-dashboard
+Disallow: /reset-password.html
 Disallow: /admin.html
 
 Sitemap: https://esprit-du-pagne.com/sitemap.xml
