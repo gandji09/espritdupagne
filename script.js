@@ -347,7 +347,6 @@ function renderBoutique(filter) {
       if (f === 'femmes' || f === 'femme') return cat.includes('femme') || cat.includes('robe') || cat.includes('ensemble');
       if (f === 'hommes' || f === 'homme') return cat.includes('homme');
       if (f === 'enfants' || f === 'enfant') return cat.includes('enfant');
-      if (f === 'boubous' || f === 'boubou') return cat.includes('boubou');
       if (f === 'accessoires') return cat.includes('accessoire');
       return cat.includes(f);
     });
