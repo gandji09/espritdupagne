@@ -272,7 +272,7 @@
     initLazyLoad();
     initSmoothScroll();
     initCursor();
-    initProgressBar();
+    // initProgressBar();
     // Typewriter avec délai
     setTimeout(initTypewriter, 500);
   });
