@@ -244,29 +244,182 @@ function renderCart() {
 // -- CHECKOUT ---------------------------------------------
 async function checkout() {
   if (!panier.length) { toast('Votre panier est vide', 'error'); return; }
-  const nom = prompt('Votre nom complet  ');
-  if (!nom) return;
-  const tel = prompt('Votre numero de telephone  ');
-  if (!tel) return;
-  const adresse = prompt('Votre adresse de livraison  ') || '';
-  const btn = $('#checkoutBtn');
-  if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Traitement...'; }
-  if (!sb) await initSupabase();
+  
   const total = panier.reduce((s, p) => s + p.prix * p.qty, 0);
-  const { error } = await sb.from('commandes').insert({
-    client_nom: nom, client_telephone: tel, client_adresse: adresse,
-    articles: panier.map(p => ({ id: p.id, nom: p.nom, prix: p.prix, qty: p.qty })),
-    total, mode_paiement: paymentMethod, statut: 'en_attente'
-  });
-  if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-lock"></i> Passer commande'; }
-  if (error) { toast('Erreur: ' + error.message, 'error'); return; }
-  toast('  Commande enregistree ! Nous vous contacterons.');
-  panier = []; localStorage.removeItem('panier');
-  updateCartCount();
-  closeCart();
+  
+  // Créer le modal checkout
+  const existing = document.getElementById('checkoutModal');
+  if (existing) existing.remove();
+  
+  const modal = document.createElement('div');
+  modal.id = 'checkoutModal';
+  modal.style.cssText = [
+    'position:fixed', 'inset:0', 'background:rgba(0,0,0,.7)',
+    'z-index:9999', 'display:flex', 'align-items:center',
+    'justify-content:center', 'padding:16px'
+  ].join(';');
+  
+  modal.innerHTML = `
+    <div style="background:#fff;border-radius:20px;width:100%;max-width:460px;max-height:92vh;overflow-y:auto;box-shadow:0 30px 80px rgba(0,0,0,.3)">
+      <div style="padding:24px 24px 0;display:flex;align-items:center;justify-content:space-between">
+        <h2 style="font-family:'Playfair Display',serif;font-size:1.25rem;margin:0">Finaliser la commande</h2>
+        <button onclick="document.getElementById('checkoutModal').remove()" style="width:36px;height:36px;border-radius:10px;background:#f5f5f5;border:none;font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center">✕</button>
+      </div>
+      
+      <div style="padding:16px 24px">
+        <div style="background:#fff8f8;border-radius:12px;padding:14px 16px;margin-bottom:20px;display:flex;justify-content:space-between;align-items:center">
+          <span style="font-size:.88rem;color:#555">Total à payer</span>
+          <span style="font-size:1.2rem;font-weight:800;color:#CC0000;font-family:'Playfair Display',serif">${new Intl.NumberFormat('fr-FR').format(total)} FCFA</span>
+        </div>
+        
+        <div style="display:flex;flex-direction:column;gap:14px;margin-bottom:20px">
+          <div>
+            <label style="display:block;font-size:.82rem;font-weight:600;margin-bottom:5px;color:#333">Nom complet *</label>
+            <input id="co-nom" type="text" placeholder="Ex: Jean Kouassi" style="width:100%;padding:12px 14px;border:2px solid #eee;border-radius:10px;font-size:.9rem;font-family:'Poppins',sans-serif;outline:none;box-sizing:border-box;transition:border-color .2s" onfocus="this.style.borderColor='#CC0000'" onblur="this.style.borderColor='#eee'">
+          </div>
+          <div>
+            <label style="display:block;font-size:.82rem;font-weight:600;margin-bottom:5px;color:#333">Téléphone *</label>
+            <input id="co-tel" type="tel" placeholder="+229 01 XX XX XX XX" style="width:100%;padding:12px 14px;border:2px solid #eee;border-radius:10px;font-size:.9rem;font-family:'Poppins',sans-serif;outline:none;box-sizing:border-box;transition:border-color .2s" onfocus="this.style.borderColor='#CC0000'" onblur="this.style.borderColor='#eee'">
+          </div>
+          <div>
+            <label style="display:block;font-size:.82rem;font-weight:600;margin-bottom:5px;color:#333">Email <span style="color:#aaa;font-weight:400">(optionnel)</span></label>
+            <input id="co-email" type="email" placeholder="votre@email.com" style="width:100%;padding:12px 14px;border:2px solid #eee;border-radius:10px;font-size:.9rem;font-family:'Poppins',sans-serif;outline:none;box-sizing:border-box;transition:border-color .2s" onfocus="this.style.borderColor='#CC0000'" onblur="this.style.borderColor='#eee'">
+          </div>
+          <div>
+            <label style="display:block;font-size:.82rem;font-weight:600;margin-bottom:5px;color:#333">Adresse de livraison *</label>
+            <input id="co-adresse" type="text" placeholder="Quartier, ville, point de repère..." style="width:100%;padding:12px 14px;border:2px solid #eee;border-radius:10px;font-size:.9rem;font-family:'Poppins',sans-serif;outline:none;box-sizing:border-box;transition:border-color .2s" onfocus="this.style.borderColor='#CC0000'" onblur="this.style.borderColor='#eee'">
+          </div>
+        </div>
+        
+        <button id="fedapayBtn" onclick="lancerPaiementFedaPay(${total})" style="width:100%;padding:15px;background:#CC0000;color:#fff;border:none;border-radius:12px;font-size:1rem;font-weight:700;cursor:pointer;font-family:'Poppins',sans-serif;display:flex;align-items:center;justify-content:center;gap:10px;transition:background .2s" onmouseover="this.style.background='#A30000'" onmouseout="this.style.background='#CC0000'">
+          <i class="fas fa-lock"></i> Payer ${new Intl.NumberFormat('fr-FR').format(total)} FCFA
+        </button>
+        
+        <p style="text-align:center;font-size:.72rem;color:#aaa;margin-top:10px;margin-bottom:0">
+          <i class="fas fa-shield-halved" style="color:#CC0000"></i> Paiement 100% sécurisé via FedaPay
+        </p>
+        <div style="display:flex;justify-content:center;gap:8px;margin-top:8px;flex-wrap:wrap">
+          <span style="font-size:.7rem;background:#f5f5f5;padding:3px 10px;border-radius:20px;color:#555">MTN MoMo</span>
+          <span style="font-size:.7rem;background:#f5f5f5;padding:3px 10px;border-radius:20px;color:#555">Moov Money</span>
+          <span style="font-size:.7rem;background:#f5f5f5;padding:3px 10px;border-radius:20px;color:#555">Wave</span>
+          <span style="font-size:.7rem;background:#f5f5f5;padding:3px 10px;border-radius:20px;color:#555">Visa / Mastercard</span>
+        </div>
+      </div>
+    </div>`;
+  
+  document.body.appendChild(modal);
+  modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
+  
+  // Focus premier champ
+  setTimeout(() => document.getElementById('co-nom')?.focus(), 100);
 }
 
-// -- PRODUITS ---------------------------------------------
+async function lancerPaiementFedaPay(total) {
+  const nom     = document.getElementById('co-nom')?.value.trim();
+  const tel     = document.getElementById('co-tel')?.value.trim();
+  const email   = document.getElementById('co-email')?.value.trim();
+  const adresse = document.getElementById('co-adresse')?.value.trim();
+  
+  if (!nom)     { document.getElementById('co-nom').style.borderColor='#CC0000'; document.getElementById('co-nom').focus(); toast('Entrez votre nom', 'error'); return; }
+  if (!tel)     { document.getElementById('co-tel').style.borderColor='#CC0000'; document.getElementById('co-tel').focus(); toast('Entrez votre téléphone', 'error'); return; }
+  if (!adresse) { document.getElementById('co-adresse').style.borderColor='#CC0000'; document.getElementById('co-adresse').focus(); toast('Entrez votre adresse', 'error'); return; }
+  
+  const btn = document.getElementById('fedapayBtn');
+  if (btn) { btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Connexion à FedaPay...'; btn.disabled = true; btn.style.background = '#999'; }
+  
+  // Charger FedaPay SDK si pas encore chargé
+  if (!window.FedaPay) {
+    try {
+      await new Promise((resolve, reject) => {
+        const s = document.createElement('script');
+        s.src = 'https://cdn.fedapay.com/checkout.js?v=1.1.7';
+        s.onload = resolve;
+        s.onerror = reject;
+        document.head.appendChild(s);
+      });
+    } catch(e) {
+      toast('Erreur chargement FedaPay. Vérifiez votre connexion.', 'error');
+      if (btn) { btn.innerHTML = '<i class="fas fa-lock"></i> Réessayer'; btn.disabled = false; btn.style.background = '#CC0000'; }
+      return;
+    }
+  }
+  
+  const articles = panier.map(p => p.nom + ' x' + p.qty).join(', ');
+  
+  FedaPay.init({
+    public_key: 'pk_live_rGc-2ZJV-1Zk-nKSso7cwr_H',
+    transaction: {
+      amount: total,
+      description: 'Esprit du Pagne — ' + articles.substring(0, 100),
+      currency: { iso: 'XOF' },
+    },
+    customer: {
+      firstname: nom.split(' ')[0] || nom,
+      lastname:  nom.split(' ').slice(1).join(' ') || '-',
+      email:     email || 'client@esprit-du-pagne.com',
+      phone_number: {
+        number:  tel.replace(/[\s\-\+]/g, ''),
+        country: 'BJ',
+      },
+    },
+    onComplete: async function(resp) {
+      if (resp.reason === FedaPay.DIALOG_DISMISSED) {
+        if (btn) { btn.innerHTML = '<i class="fas fa-lock"></i> Payer ' + new Intl.NumberFormat('fr-FR').format(total) + ' FCFA'; btn.disabled = false; btn.style.background = '#CC0000'; }
+        toast('Paiement annulé', 'error');
+        return;
+      }
+      
+      if (resp.reason === FedaPay.CHECKOUT_COMPLETED) {
+        if (btn) { btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enregistrement...'; }
+        
+        const transactionId = resp.transaction?.id;
+        let modePaiement = 'FedaPay';
+        
+        // Vérifier via Edge Function
+        try {
+          if (!sb) await initSupabase();
+          const { data: verif } = await sb.functions.invoke('verify-payment', {
+            body: { transaction_id: transactionId }
+          });
+          if (verif?.payment_method) modePaiement = verif.payment_method;
+        } catch(e) {
+          console.warn('Vérification Edge Function:', e);
+        }
+        
+        // Enregistrer commande
+        if (!sb) await initSupabase();
+        const { error } = await sb.from('commandes').insert({
+          client_nom:       nom,
+          client_telephone: tel,
+          client_email:     email || null,
+          adresse_livraison: adresse,
+          articles:         panier.map(p => ({ id: p.id, nom: p.nom, prix: p.prix, qty: p.qty })),
+          total:            total,
+          mode_paiement:    modePaiement,
+          statut:           'confirmee',
+          fedapay_id:       transactionId || null,
+        });
+        
+        if (!error) {
+          panier = [];
+          saveCart();
+          updateCartUI();
+          closeCart();
+          document.getElementById('checkoutModal')?.remove();
+          toast('✓ Commande confirmée ! Merci pour votre achat.', 'success');
+          setTimeout(() => { window.location.href = 'index.html?paiement=success'; }, 2000);
+        } else {
+          toast('Paiement reçu mais erreur technique. Contactez-nous.', 'error');
+          console.error('Erreur commande:', error);
+        }
+      }
+    }
+  }).open();
+  
+  if (btn) { btn.innerHTML = '<i class="fas fa-lock"></i> Payer ' + new Intl.NumberFormat('fr-FR').format(total) + ' FCFA'; btn.disabled = false; btn.style.background = '#CC0000'; }
+}
+
+
 function productCard(p) {
   const waMsg = encodeURIComponent('Bonjour, je suis interesse(e) par : ' + p.nom + ' (' + fmt(p.prix) + ' FCFA)');
   return `<div class="product-card" data-cat="${(p.categorie||'').toLowerCase()}">
