@@ -33,7 +33,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link rel="stylesheet" href="animations.css">
-<link rel="icon" type="image/png" href="images/logo.png">
 <style>
 /* Fix slider image alignment */
 .hero-slider{position:relative;width:100%;overflow:hidden}
@@ -117,7 +116,7 @@
       <div class="slide-content">
         <span class="eyebrow"><span class="dot"></span> Sur-mesure</span>
         <h2>Élégance & <em>Modernité.</em></h2>
-        <p>Accessoires sur-mesure pour célébrer chaque moment.</p>
+        <p>Robes, boubous et accessoires sur-mesure pour célébrer chaque moment.</p>
         <div class="slide-cta">
           <a href="boutique.html" class="btn btn-primary btn-lg">Commander maintenant</a>
           <a href="#" data-contact="whatsapp" class="btn btn-outline btn-lg"><i class="fab fa-whatsapp"></i> Chat WhatsApp</a>
@@ -433,6 +432,8 @@
         <h4>Boutique</h4>
         <ul>
           <li><a href="boutique.html">Toutes les créations</a></li>
+          <li><a href="boutique.html">Robes</a></li>
+          <li><a href="boutique.html">Boubous</a></li>
           <li><a href="boutique.html">Accessoires</a></li>
         </ul>
       </div>
@@ -455,7 +456,8 @@
         </form>
       </div>
     </div>
-    <div class="footer-bottom"><p>&copy; 2026 Esprit du Pagne · Tous droits réservés · Porto-Novo, Bénin</p></div>
+    <div class="footer-bottom"><p>&copy; 2026 Esprit du Pagne · Tous droits réservés · Porto-Novo, Bénin</p>
+      <div class="footer-legal" style="margin-top:8px;font-size:.78rem;display:flex;gap:16px;flex-wrap:wrap"><a href="politique-confidentialite.html" style="color:rgba(255,255,255,.5)">Politique de confidentialité</a><a href="mentions-legales.html" style="color:rgba(255,255,255,.5)">Mentions légales</a></div></div>
   </div>
 </footer>
 
@@ -541,5 +543,21 @@
   <img class="lightbox-content" id="lightboxImg" alt="">
 </div>
 <script src="animations.js" defer></script>
+
+<script>
+// Afficher message succès paiement FedaPay
+window.addEventListener('DOMContentLoaded', () => {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('paiement') === 'success') {
+    const msg = document.createElement('div');
+    msg.style.cssText = 'position:fixed;top:90px;left:50%;transform:translateX(-50%);background:#16A34A;color:#fff;padding:14px 28px;border-radius:50px;font-size:.9rem;font-weight:600;z-index:9999;box-shadow:0 8px 24px rgba(0,0,0,.2);display:flex;align-items:center;gap:10px';
+    msg.innerHTML = '<i class="fas fa-check-circle"></i> Commande confirmée ! Merci pour votre achat.';
+    document.body.appendChild(msg);
+    setTimeout(() => msg.remove(), 5000);
+    // Nettoyer URL
+    window.history.replaceState({}, '', '/');
+  }
+});
+</script>
 </body>
 </html>
