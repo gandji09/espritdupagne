@@ -356,9 +356,9 @@ async function lancerPaiementFedaPay(total) {
     customer: {
       firstname: nom.split(' ')[0] || nom,
       lastname:  nom.split(' ').slice(1).join(' ') || '-',
-      email:     email || 'client@esprit-du-pagne.com',
+      email:     email || (nom.toLowerCase().replace(/\s/g,'.') + '@espritdupagne.client'),
       phone_number: {
-        number:  tel.replace(/[\s\-\+]/g, ''),
+        number:  tel.replace(/\s/g, '').replace(/^\+229/, '').replace(/^229/, ''),
         country: 'BJ',
       },
     },
