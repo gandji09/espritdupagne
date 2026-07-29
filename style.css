@@ -874,14 +874,8 @@ section{padding:90px 0}
 }
 
 /* ── Logos modes de paiement ── */
-.pay-logos {
-  display:flex;align-items:center;justify-content:center;
-  gap:5px;margin-bottom:5px;min-height:28px;
-}
-.pay-logos img {
-  height:22px;width:auto;object-fit:contain;
-  filter:grayscale(20%);transition:filter .2s;
-}
+
+
 .cart-pay-btn{
   flex-direction:column;
   padding:10px 8px !important;
@@ -890,15 +884,15 @@ section{padding:90px 0}
 }
 .cart-pay-btn span{font-size:.72rem;font-weight:600;color:var(--muted)}
 .cart-pay-btn.active span{color:var(--red)}
-.cart-pay-btn.active .pay-logos img{filter:none}
-.cart-pay-btn:hover .pay-logos img{filter:none}
+.cart-pay-btn.active 
+.cart-pay-btn:hover 
 
 /* Payment methods dans modal commande */
 .payment-methods .pay{
   display:flex;flex-direction:column;align-items:center;
   gap:5px;font-size:.8rem;
 }
-.payment-methods .pay .pay-logos img{height:20px}
+.payment-methods .pay 
 
 /* Sur mobile : grille 2x2 */
 @media(max-width:480px){
@@ -911,50 +905,22 @@ section{padding:90px 0}
 }
 
 /* ── Section logos paiement avant footer ── */
-.payment-logos-section{
-  background:var(--white);
-  border-top:1px solid var(--line);
-  border-bottom:1px solid var(--line);
-  padding:28px 0;
-}
-.payment-logos-wrap{
-  display:flex;align-items:center;gap:24px;flex-wrap:wrap;
-  justify-content:center;
-}
-.payment-logos-label{
-  font-size:.78rem;font-weight:700;
-  text-transform:uppercase;letter-spacing:.12em;
-  color:var(--muted);white-space:nowrap;
-}
-.payment-logos-list{
-  display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:center;
-}
-.pay-logo-item{
-  display:flex;flex-direction:column;align-items:center;gap:5px;
-  transition:transform .2s;cursor:default;
-}
-.pay-logo-item:hover{transform:translateY(-2px)}
-.pay-logo-item svg{
-  height:36px;width:auto;
-  border-radius:8px;
-  box-shadow:0 2px 8px rgba(0,0,0,.10);
-}
-.pay-logo-item span{
-  font-size:.68rem;font-weight:600;
-  color:var(--muted);text-align:center;
-}
-.pay-logo-divider{
-  width:1px;height:40px;
-  background:var(--line);
-  margin:0 4px;
-}
+
+
+
+
+
+
+
+
+
 
 @media(max-width:480px){
-  .payment-logos-wrap{gap:12px}
-  .payment-logos-list{gap:8px}
-  .pay-logo-item svg{height:30px}
-  .pay-logo-divider{display:none}
-  .payment-logos-label{width:100%;text-align:center}
+  
+  
+  
+  
+  
 }
 
 /* ═══════════════════════════════════════

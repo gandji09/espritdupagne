@@ -30,7 +30,20 @@ document.addEventListener('keydown', e => {
 });
 
 // Wire existing lightbox close button
+
+// Précharger FedaPay SDK au chargement de la page
+function preloadFedaPay() {
+  if (window.FedaPay || document.querySelector('script[src*="fedapay"]')) return;
+  const s = document.createElement('script');
+  s.src = 'https://cdn.fedapay.com/checkout.js?v=1.1.7';
+  s.async = true;
+  s.onload = () => console.log('FedaPay SDK chargé');
+  s.onerror = () => console.warn('FedaPay SDK non disponible');
+  document.head.appendChild(s);
+}
+
 document.addEventListener('DOMContentLoaded', () => {
+  preloadFedaPay();
   const close = document.querySelector('.close-lightbox');
   if (close) close.onclick = closeLightbox;
   const lb = document.getElementById('lightbox');
@@ -327,18 +340,30 @@ async function lancerPaiementFedaPay(total) {
   const btn = document.getElementById('fedapayBtn');
   if (btn) { btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Connexion à FedaPay...'; btn.disabled = true; btn.style.background = '#999'; }
   
-  // Charger FedaPay SDK si pas encore chargé
+  // Attendre que FedaPay soit chargé
   if (!window.FedaPay) {
     try {
       await new Promise((resolve, reject) => {
-        const s = document.createElement('script');
-        s.src = 'https://cdn.fedapay.com/checkout.js?v=1.1.7';
-        s.onload = resolve;
-        s.onerror = reject;
-        document.head.appendChild(s);
+        if (window.FedaPay) return resolve();
+        const existing = document.querySelector('script[src*="fedapay"]');
+        if (existing) {
+          // SDK en cours de chargement, attendre
+          let tries = 0;
+          const check = setInterval(() => {
+            tries++;
+            if (window.FedaPay) { clearInterval(check); resolve(); }
+            if (tries > 50) { clearInterval(check); reject(new Error('Timeout')); }
+          }, 100);
+        } else {
+          const s = document.createElement('script');
+          s.src = 'https://cdn.fedapay.com/checkout.js?v=1.1.7';
+          s.onload = resolve;
+          s.onerror = reject;
+          document.head.appendChild(s);
+        }
       });
     } catch(e) {
-      toast('Erreur chargement FedaPay. Vérifiez votre connexion.', 'error');
+      toast('Erreur FedaPay. Vérifiez votre connexion internet.', 'error');
       if (btn) { btn.innerHTML = '<i class="fas fa-lock"></i> Réessayer'; btn.disabled = false; btn.style.background = '#CC0000'; }
       return;
     }
