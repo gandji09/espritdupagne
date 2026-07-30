@@ -33,6 +33,10 @@
     {
       "source": "/politique-confidentialite",
       "destination": "/politique-confidentialite.html"
+    },
+    {
+      "source": "/mentions-legales",
+      "destination": "/mentions-legales.html"
     }
   ],
   "headers": [
