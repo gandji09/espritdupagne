@@ -68,7 +68,7 @@ const fmtDate = d => new Date(d).toLocaleDateString('fr-FR', {day:'numeric',mont
 // --  TAT -------------------------------------------------
 let sb = null;
 let panier = JSON.parse(localStorage.getItem('panier') || '[]');
-let paymentMethod = 'momo';
+
 
 // -- SUPABASE ---------------------------------------------
 function initSupabase() {
@@ -174,11 +174,7 @@ function closeCart() {
   document.body.style.overflow = '';
 }
 
-function selectPay(btn) {
-  $$('.cart-pay-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  paymentMethod = btn.dataset.pay;
-}
+
 
 function addToCart(id) {
   const p = window._PRODUITS .find(x => String(x.id) === String(id));
@@ -420,7 +416,7 @@ async function lancerPaiementFedaPay(total) {
           adresse_livraison: adresse,
           articles:         panier.map(p => ({ id: p.id, nom: p.nom, prix: p.prix, qty: p.qty })),
           total:            total,
-          mode_paiement:    modePaiement,
+          mode_paiement: modePaiement || 'FedaPay',
           statut:           'confirmee',
           fedapay_id:       transactionId || null,
         });
