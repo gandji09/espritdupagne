@@ -367,6 +367,10 @@ async function lancerPaiementFedaPay(total) {
   
   const articles = panier.map(p => p.nom + ' x' + p.qty).join(', ');
   
+  // Masquer le modal checkout pour que FedaPay soit au premier plan
+  const checkoutModal = document.getElementById('checkoutModal');
+  if (checkoutModal) checkoutModal.style.display = 'none';
+
   FedaPay.init({
     public_key: 'pk_live_rGc-2ZJV-1Zk-nKSso7cwr_H',
     transaction: {
@@ -385,6 +389,9 @@ async function lancerPaiementFedaPay(total) {
     },
     onComplete: async function(resp) {
       if (resp.reason === FedaPay.DIALOG_DISMISSED) {
+        // Réafficher le modal checkout
+        const modal = document.getElementById('checkoutModal');
+        if (modal) modal.style.display = 'flex';
         if (btn) { btn.innerHTML = '<i class="fas fa-lock"></i> Payer ' + new Intl.NumberFormat('fr-FR').format(total) + ' FCFA'; btn.disabled = false; btn.style.background = '#CC0000'; }
         toast('Paiement annulé', 'error');
         return;
