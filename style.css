@@ -1,3 +1,5 @@
+/* Inter font override */
+body,button,input,textarea,select{font-family:'Inter',sans-serif!important}
 /* =========================================================
    ESPRIT DU PAGNE — Design System Premium
    Palette stricte : #CC0000 / #FFFFFF / #1A1A1A
@@ -69,7 +71,7 @@ h1,h2,h3,h4{font-family:'Playfair Display',serif;font-weight:700;color:var(--bla
   font-family:'Playfair Display',serif;font-weight:900;font-size:1.4rem;
   box-shadow:var(--shadow-sm);
 }
-.logo-text h1{font-size:1.05rem;letter-spacing:.06em;font-family:'Poppins',sans-serif;font-weight:700}
+.logo-text h1{font-size:1.05rem;letter-spacing:.06em;font-family:'Inter',sans-serif;font-weight:700}
 .logo-text h1 span{color:var(--red)}
 .logo-tagline{font-size:.7rem;color:var(--muted);letter-spacing:.15em;text-transform:uppercase}
 .nav-menu ul{display:flex;gap:6px}
@@ -118,7 +120,7 @@ h1,h2,h3,h4{font-family:'Playfair Display',serif;font-weight:700;color:var(--bla
 .btn{
   display:inline-flex;align-items:center;justify-content:center;gap:10px;
   padding:14px 28px;border-radius:50px;border:none;cursor:pointer;
-  font-family:'Poppins',sans-serif;font-weight:600;font-size:.95rem;letter-spacing:.02em;
+  font-family:'Inter',sans-serif;font-weight:600;font-size:.95rem;letter-spacing:.02em;
   transition:var(--transition);text-decoration:none;
 }
 .btn-primary{background:var(--red);color:var(--white)}
@@ -189,7 +191,7 @@ section{padding:90px 0}
 .trust-strip .container{display:grid;grid-template-columns:repeat(4,1fr);gap:32px}
 .trust-item{display:flex;align-items:center;gap:14px}
 .trust-item i{font-size:1.6rem;color:var(--red)}
-.trust-item h4{color:var(--white);font-size:.95rem;font-family:'Poppins',sans-serif;margin-bottom:2px}
+.trust-item h4{color:var(--white);font-size:.95rem;font-family:'Inter',sans-serif;margin-bottom:2px}
 .trust-item p{font-size:.82rem;opacity:.65;color:var(--white)}
 
 /* ===== Product / Course / Card grids ===== */
@@ -337,7 +339,7 @@ section{padding:90px 0}
 .info-card{background:var(--white);padding:28px;border-radius:var(--radius-lg);border:1px solid var(--line);margin-bottom:18px;transition:var(--transition)}
 .info-card:hover{border-color:var(--red);box-shadow:var(--shadow-md)}
 .info-card .icon-circle{width:52px;height:52px;border-radius:14px;background:var(--red-soft);color:var(--red);display:flex;align-items:center;justify-content:center;font-size:1.3rem;margin-bottom:16px}
-.info-card h3{font-family:'Poppins',sans-serif;font-size:1rem;margin-bottom:6px}
+.info-card h3{font-family:'Inter',sans-serif;font-size:1rem;margin-bottom:6px}
 .info-card p{color:var(--muted)}
 .info-card a{color:var(--black);font-weight:500}
 .info-card a:hover{color:var(--red)}
@@ -355,7 +357,7 @@ section{padding:90px 0}
 /* FAQ */
 .faq-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:18px;max-width:1100px;margin:0 auto}
 .faq-card{background:var(--bg-soft);padding:26px;border-radius:var(--radius);border-left:4px solid var(--red)}
-.faq-card h4{color:var(--black);margin-bottom:8px;font-family:'Poppins',sans-serif;font-size:1rem}
+.faq-card h4{color:var(--black);margin-bottom:8px;font-family:'Inter',sans-serif;font-size:1rem}
 .faq-card p{color:var(--muted);font-size:.92rem}
 
 /* Hours / dark sections */
@@ -363,7 +365,7 @@ section{padding:90px 0}
 .dark-section h2,.dark-section h3{color:var(--white)}
 .hours-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:32px;text-align:center;max-width:1000px;margin:0 auto}
 .hours-grid i{font-size:2rem;color:var(--red);margin-bottom:14px}
-.hours-grid h3{font-size:1.1rem;margin-bottom:8px;font-family:'Poppins',sans-serif;letter-spacing:.05em;text-transform:uppercase}
+.hours-grid h3{font-size:1.1rem;margin-bottom:8px;font-family:'Inter',sans-serif;letter-spacing:.05em;text-transform:uppercase}
 .hours-grid p{opacity:.75}
 
 /* ===== CTA Banner ===== */
@@ -401,7 +403,7 @@ section{padding:90px 0}
 .info-sections{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-bottom:28px}
 .info-block{background:var(--bg-soft);border:1px solid var(--line);border-radius:var(--radius);padding:22px;transition:var(--transition)}
 .info-block:hover{border-color:var(--red);box-shadow:var(--shadow-sm)}
-.info-block-title{font-weight:700;font-size:1rem;color:var(--red);margin-bottom:14px;padding-bottom:10px;border-bottom:2px solid var(--line);display:flex;align-items:center;gap:10px;font-family:'Poppins',sans-serif}
+.info-block-title{font-weight:700;font-size:1rem;color:var(--red);margin-bottom:14px;padding-bottom:10px;border-bottom:2px solid var(--line);display:flex;align-items:center;gap:10px;font-family:'Inter',sans-serif}
 .info-block-list li{padding:10px 0;color:#3a3a3a;font-size:.88rem;border-bottom:1px dashed var(--line);display:flex;justify-content:space-between;gap:10px}
 .info-block-list li:last-child{border-bottom:none}
 .info-block-list .price{font-weight:600;color:var(--red);white-space:nowrap}
@@ -426,7 +428,7 @@ section{padding:90px 0}
 .footer{background:var(--black);color:var(--white);padding:80px 0 0;margin-top:0}
 .footer-content{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:48px;padding-bottom:48px;border-bottom:1px solid rgba(255,255,255,.1)}
 .footer-section h3{color:var(--white);font-size:1.2rem;margin-bottom:16px}
-.footer-section h4{color:var(--white);font-size:.95rem;margin-bottom:18px;font-family:'Poppins',sans-serif;text-transform:uppercase;letter-spacing:.12em}
+.footer-section h4{color:var(--white);font-size:.95rem;margin-bottom:18px;font-family:'Inter',sans-serif;text-transform:uppercase;letter-spacing:.12em}
 .footer-section p{opacity:.7;margin-bottom:8px;font-size:.92rem}
 .footer-section ul li{margin-bottom:10px}
 .footer-section a{color:rgba(255,255,255,.7);font-size:.92rem}
@@ -602,7 +604,7 @@ section{padding:90px 0}
 .cart-item-count {
   background:var(--red-soft); color:var(--red);
   font-size:.75rem; font-weight:700; padding:3px 10px; border-radius:20px;
-  font-family:'Poppins',sans-serif;
+  font-family:'Inter',sans-serif;
 }
 .cart-close-btn {
   width:38px; height:38px; border-radius:10px; background:var(--bg);
@@ -695,7 +697,7 @@ section{padding:90px 0}
   border-radius:10px; background:var(--white); cursor:pointer;
   font-size:.78rem; font-weight:600; color:var(--muted);
   display:flex; flex-direction:column; align-items:center; gap:4px;
-  transition:all .2s; font-family:'Poppins',sans-serif;
+  transition:all .2s; font-family:'Inter',sans-serif;
 }
 .cart-pay-btn i { font-size:1.1rem; }
 .cart-pay-btn:hover { border-color:var(--red); color:var(--red); }
@@ -705,7 +707,7 @@ section{padding:90px 0}
 .cart-checkout-btn {
   width:100%; padding:16px; background:var(--red); color:#fff;
   border:none; border-radius:12px; font-size:1rem; font-weight:700;
-  cursor:pointer; font-family:'Poppins',sans-serif;
+  cursor:pointer; font-family:'Inter',sans-serif;
   display:flex; align-items:center; justify-content:center; gap:10px;
   transition:background .2s; letter-spacing:.02em;
 }
@@ -718,7 +720,7 @@ section{padding:90px 0}
   display:block; width:100%; padding:11px; text-align:center;
   background:var(--bg); border:none; border-radius:10px;
   font-size:.88rem; font-weight:500; color:var(--black);
-  cursor:pointer; margin-bottom:10px; font-family:'Poppins',sans-serif;
+  cursor:pointer; margin-bottom:10px; font-family:'Inter',sans-serif;
   transition:background .2s;
 }
 .cart-continue-btn:hover { background:var(--line); }
@@ -774,7 +776,7 @@ section{padding:90px 0}
 .temoignage-form textarea {
   padding:11px 14px; border:2px solid var(--line);
   border-radius:10px; font-size:.9rem; outline:none;
-  transition:border-color .2s; font-family:'Poppins',sans-serif;
+  transition:border-color .2s; font-family:'Inter',sans-serif;
 }
 .temoignage-form input:focus,
 .temoignage-form textarea:focus { border-color:var(--red); }
@@ -991,7 +993,7 @@ section{padding:90px 0}
 .btn-add-cart{
   flex:1;padding:11px;background:var(--red);color:#fff;
   border:none;border-radius:10px;font-size:.88rem;font-weight:600;
-  cursor:pointer;font-family:'Poppins',sans-serif;
+  cursor:pointer;font-family:'Inter',sans-serif;
   transition:background .2s;display:flex;align-items:center;justify-content:center;gap:6px;
 }
 .btn-add-cart:hover{background:var(--red-dark)}
@@ -1374,7 +1376,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 }
 .product-price small{
   font-size:.72rem;font-weight:600;
-  color:#aaa;font-family:'Poppins',sans-serif;
+  color:#aaa;font-family:'Inter',sans-serif;
 }
 .product-badge{
   position:absolute;top:10px;left:10px;z-index:2;
@@ -1391,7 +1393,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
   background:var(--black);color:#fff;
   border:none;border-radius:10px;
   font-size:.82rem;font-weight:600;
-  cursor:pointer;font-family:'Poppins',sans-serif;
+  cursor:pointer;font-family:'Inter',sans-serif;
   transition:background .2s;
   display:flex;align-items:center;justify-content:center;gap:6px;
 }
