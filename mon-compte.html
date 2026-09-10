@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<link rel="icon" type="image/png" href="images/logo.png">
+<title>Mon Compte — Esprit du Pagne</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="style.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+.account-hero{background:#1a1a1a;padding:50px 0;color:#fff;position:relative;overflow:hidden}
+.account-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 80% 50%,rgba(204,0,0,.25),transparent 60%)}
+.account-hero .container{position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px}
+.account-welcome h1{font-family:'Playfair Display',serif;font-size:1.8rem;margin-bottom:6px}
+.account-welcome p{color:rgba(255,255,255,.7);font-size:.9rem}
+.btn-logout{padding:10px 20px;background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.2);border-radius:10px;font-size:.85rem;font-weight:600;cursor:pointer;font-family:'Poppins',sans-serif;transition:all .2s;display:flex;align-items:center;gap:8px}
+.btn-logout:hover{background:rgba(204,0,0,.4);border-color:#CC0000}
+.account-content{max-width:1100px;margin:0 auto;padding:40px 24px}
+.account-tabs{display:flex;gap:8px;margin-bottom:32px;flex-wrap:wrap}
+.account-tab{padding:10px 20px;background:#fff;border:2px solid #eee;border-radius:12px;font-size:.88rem;font-weight:600;cursor:pointer;font-family:'Poppins',sans-serif;transition:all .2s;color:#555}
+.account-tab.active{background:#CC0000;color:#fff;border-color:#CC0000}
+.account-tab:hover:not(.active){border-color:#CC0000;color:#CC0000}
+.account-section{display:none}
+.account-section.active{display:block}
+.card{background:#fff;border-radius:16px;padding:28px;box-shadow:0 2px 12px rgba(0,0,0,.06);margin-bottom:20px}
+.card-title{font-family:'Playfair Display',serif;font-size:1.1rem;margin-bottom:20px;display:flex;align-items:center;gap:10px}
+.card-title i{color:#CC0000}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.form-group{display:flex;flex-direction:column;gap:5px}
+.form-group.full{grid-column:1/-1}
+label{font-size:.82rem;font-weight:600;color:#333}
+input[type=text],input[type=email],input[type=tel],input[type=password]{padding:11px 14px;border:2px solid #eee;border-radius:10px;font-size:.9rem;font-family:'Poppins',sans-serif;outline:none;transition:border-color .2s;width:100%;box-sizing:border-box}
+input:focus{border-color:#CC0000}
+.btn-save{padding:12px 28px;background:#CC0000;color:#fff;border:none;border-radius:10px;font-size:.9rem;font-weight:600;cursor:pointer;font-family:'Poppins',sans-serif;transition:background .2s;display:inline-flex;align-items:center;gap:8px}
+.btn-save:hover{background:#A30000}
+/* Commandes */
+.commande-card{background:#f9f9f9;border-radius:14px;padding:20px;margin-bottom:14px;border-left:4px solid #CC0000}
+.commande-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px}
+.commande-id{font-size:.78rem;color:#aaa}
+.commande-date{font-size:.82rem;color:#888}
+.commande-total{font-size:1.1rem;font-weight:700;color:#CC0000;font-family:'Playfair Display',serif}
+.commande-articles{font-size:.85rem;color:#555;margin-bottom:10px;line-height:1.5}
+.badge-statut{display:inline-block;padding:4px 12px;border-radius:20px;font-size:.75rem;font-weight:700}
+.badge-confirmee{background:#f0fdf4;color:#16a34a}
+.badge-en_attente{background:#fff7ed;color:#ea580c}
+.badge-livree{background:#eff6ff;color:#2563eb}
+.badge-annulee{background:#fff2f2;color:#CC0000}
+/* Inscriptions */
+.inscription-card{background:#f9f9f9;border-radius:14px;padding:20px;margin-bottom:14px;border-left:4px solid #2563EB}
+.inscription-formation{font-weight:700;font-size:1rem;margin-bottom:6px}
+.inscription-info{font-size:.85rem;color:#666}
+/* Empty state */
+.empty-state{text-align:center;padding:50px 20px;color:#aaa}
+.empty-state i{font-size:3rem;margin-bottom:14px;display:block;opacity:.25}
+.empty-state p{font-size:.9rem;margin-bottom:16px}
+.spinner{display:inline-block;width:20px;height:20px;border:2px solid #eee;border-top-color:#CC0000;border-radius:50%;animation:spin .7s linear infinite;margin:20px auto;display:block}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media(max-width:600px){.form-grid{grid-template-columns:1fr}.account-hero .container{flex-direction:column;text-align:center}}
+</style>
+</head>
+<body>
+
+<a href="https://wa.me/2290196725416" class="whatsapp-float" target="_blank" rel="noopener"><i class="fab fa-whatsapp"></i></a>
+
+<nav class="navbar">
+  <div class="nav-container">
+    <a href="index.html" class="logo">
+      <img src="images/logo.png" alt="Esprit du Pagne" style="height:64px;width:auto;display:block">
+    </a>
+    <div class="nav-menu" id="navMenu">
+      <ul>
+        <li><a href="index.html">Accueil</a></li>
+        <li><a href="boutique.html">Boutique</a></li>
+        <li><a href="formations.html">Formations</a></li>
+        <li><a href="galerie.html">Galerie</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="mon-compte.html" class="active">Mon compte</a></li>
+      </ul>
+    </div>
+    <div class="nav-icons">
+      <a href="#" class="cart-icon" id="cartIcon"><i class="fas fa-cart-shopping"></i><span class="cart-count" id="cartCount">0</span></a>
+      <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
+    </div>
+  </div>
+</nav>
+<div style="height:73px"></div>
+
+<!-- HERO -->
+<div class="account-hero">
+  <div class="container">
+    <div class="account-welcome">
+      <h1>Bonjour, <span id="userName">—</span> 👋</h1>
+      <p id="userEmail" style="color:rgba(255,255,255,.6)">—</p>
+    </div>
+    <button class="btn-logout" onclick="logout()">
+      <i class="fas fa-right-from-bracket"></i> Déconnexion
+    </button>
+  </div>
+</div>
+
+<!-- CONTENU -->
+<div class="account-content">
+
+  <!-- TABS -->
+  <div class="account-tabs">
+    <button class="account-tab active" onclick="showTab('commandes')"><i class="fas fa-bag-shopping"></i> Mes commandes</button>
+    <button class="account-tab" onclick="showTab('formations')"><i class="fas fa-graduation-cap"></i> Mes formations</button>
+    <button class="account-tab" onclick="showTab('profil')"><i class="fas fa-user"></i> Mon profil</button>
+    <button class="account-tab" onclick="showTab('securite')"><i class="fas fa-lock"></i> Sécurité</button>
+  </div>
+
+  <!-- COMMANDES -->
+  <div class="account-section active" id="tab-commandes">
+    <div class="card">
+      <div class="card-title"><i class="fas fa-bag-shopping"></i> Historique des commandes</div>
+      <div id="commandesList"><div class="spinner"></div></div>
+    </div>
+  </div>
+
+  <!-- FORMATIONS -->
+  <div class="account-section" id="tab-formations">
+    <div class="card">
+      <div class="card-title"><i class="fas fa-graduation-cap"></i> Mes inscriptions aux formations</div>
+      <div id="formationsList"><div class="spinner"></div></div>
+    </div>
+  </div>
+
+  <!-- PROFIL -->
+  <div class="account-section" id="tab-profil">
+    <div class="card">
+      <div class="card-title"><i class="fas fa-user"></i> Mes informations personnelles</div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Nom complet</label>
+          <input type="text" id="profilNom" placeholder="Votre nom">
+        </div>
+        <div class="form-group">
+          <label>Téléphone</label>
+          <input type="tel" id="profilTel" placeholder="+229...">
+        </div>
+        <div class="form-group full">
+          <label>Adresse</label>
+          <input type="text" id="profilAdresse" placeholder="Votre adresse">
+        </div>
+      </div>
+      <div style="margin-top:16px">
+        <button class="btn-save" onclick="saveProfil()"><i class="fas fa-save"></i> Enregistrer</button>
+      </div>
+      <p id="profilMsg" style="margin-top:10px;font-size:.83rem;display:none"></p>
+    </div>
+  </div>
+
+  <!-- SÉCURITÉ -->
+  <div class="account-section" id="tab-securite">
+    <div class="card">
+      <div class="card-title"><i class="fas fa-lock"></i> Changer mon mot de passe</div>
+      <div style="max-width:400px">
+        <div class="form-group" style="margin-bottom:14px">
+          <label>Nouveau mot de passe</label>
+          <input type="password" id="newPw" placeholder="Minimum 8 caractères">
+        </div>
+        <div class="form-group" style="margin-bottom:18px">
+          <label>Confirmer le mot de passe</label>
+          <input type="password" id="confirmPw" placeholder="Répétez le mot de passe">
+        </div>
+        <button class="btn-save" onclick="changePw()"><i class="fas fa-save"></i> Mettre à jour</button>
+        <p id="pwMsg" style="margin-top:10px;font-size:.83rem;display:none"></p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER SIMPLE -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-bottom">
+      <p>&copy; 2026 Esprit du Pagne · <a href="politique-confidentialite.html" style="color:rgba(255,255,255,.5)">Politique de confidentialité</a> · <a href="mentions-legales.html" style="color:rgba(255,255,255,.5)">Mentions légales</a></p>
+    </div>
+  </div>
+</footer>
+
+<div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+<div class="cart-drawer" id="cartDrawer">
+  <div class="cart-drawer-header">
+    <h2><i class="fas fa-cart-shopping"></i> Mon Panier <span class="cart-item-count" id="cartItemCount">0 article</span></h2>
+    <button class="cart-close-btn" onclick="closeCart()"><i class="fas fa-times"></i></button>
+  </div>
+  <div class="cart-drawer-body" id="cartDrawerBody"></div>
+  <div class="cart-drawer-footer" id="cartDrawerFooter" style="display:none">
+    <div class="cart-recap">
+      <div class="cart-recap-line total"><span>Total</span><span id="cartTotalDrawer">0 FCFA</span></div>
+    </div>
+    <button class="cart-checkout-btn" onclick="checkout()"><i class="fas fa-lock"></i> Passer commande</button>
+  </div>
+</div>
+
+<script>
+const SUPABASE_URL = 'https://xxtkywcchutdhwcjawrz.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh4dGt5d2NjaHV0ZGh3Y2phd3J6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg1Njk3MjAsImV4cCI6MjA5NDE0NTcyMH0.UzDTCSboartGYeiLJ6bo8P-3NibVMVEiBMLgkxdKSRQ';
+let sb = null;
+let currentUser = null;
+
+const fmt = n => new Intl.NumberFormat('fr-FR').format(n);
+const fmtDate = d => new Date(d).toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'});
+
+async function initSb() {
+  if (sb) return;
+  await new Promise(r => {
+    const s = document.createElement('script');
+    s.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js';
+    s.onload = r;
+    document.head.appendChild(s);
+  });
+  sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+}
+
+async function init() {
+  await initSb();
+  const { data } = await sb.auth.getSession();
+  if (!data?.session) {
+    window.location.href = 'connexion.html';
+    return;
+  }
+  currentUser = data.session.user;
+  
+  // Afficher infos utilisateur
+  const meta = currentUser.user_metadata || {};
+  document.getElementById('userName').textContent = meta.nom || currentUser.email.split('@')[0];
+  document.getElementById('userEmail').textContent = currentUser.email;
+  
+  // Charger données
+  loadCommandes();
+  loadProfil();
+}
+
+function showTab(tab) {
+  document.querySelectorAll('.account-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.account-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  event.target.classList.add('active');
+  if (tab === 'formations') loadFormations();
+}
+
+// ── COMMANDES ──
+async function loadCommandes() {
+  const el = document.getElementById('commandesList');
+  const { data, error } = await sb.from('commandes')
+    .select('*')
+    .eq('client_email', currentUser.email)
+    .order('created_at', { ascending: false });
+  
+  if (!data || !data.length) {
+    el.innerHTML = `<div class="empty-state">
+      <i class="fas fa-bag-shopping"></i>
+      <p>Vous n'avez pas encore passé de commande.</p>
+      <a href="boutique.html" style="display:inline-flex;align-items:center;gap:8px;background:#CC0000;color:#fff;padding:10px 20px;border-radius:10px;text-decoration:none;font-size:.88rem;font-weight:600">
+        <i class="fas fa-arrow-right"></i> Découvrir la boutique
+      </a>
+    </div>`;
+    return;
+  }
+  
+  el.innerHTML = data.map(c => {
+    const articles = Array.isArray(c.articles) 
+      ? c.articles.map(a => a.nom + ' ×' + a.qty).join(', ')
+      : JSON.stringify(c.articles);
+    return `<div class="commande-card">
+      <div class="commande-header">
+        <div>
+          <div class="commande-id">Commande #${c.id.slice(0,8).toUpperCase()}</div>
+          <div class="commande-date">${fmtDate(c.created_at)}</div>
+        </div>
+        <div style="text-align:right">
+          <div class="commande-total">${fmt(c.total)} FCFA</div>
+          <span class="badge-statut badge-${c.statut}">${c.statut?.replace('_',' ')}</span>
+        </div>
+      </div>
+      <div class="commande-articles"><i class="fas fa-shirt" style="color:#CC0000;margin-right:6px"></i>${articles}</div>
+      <div style="font-size:.82rem;color:#888">
+        <i class="fas fa-map-marker-alt" style="margin-right:6px"></i>${c.client_adresse || 'Adresse non renseignée'}
+        · <i class="fas fa-credit-card" style="margin-right:6px"></i>${c.mode_paiement || 'FedaPay'}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── FORMATIONS ──
+async function loadFormations() {
+  const el = document.getElementById('formationsList');
+  el.innerHTML = '<div class="spinner"></div>';
+  const { data } = await sb.from('inscriptions_formation')
+    .select('*')
+    .eq('email', currentUser.email)
+    .order('created_at', { ascending: false });
+  
+  if (!data || !data.length) {
+    el.innerHTML = `<div class="empty-state">
+      <i class="fas fa-graduation-cap"></i>
+      <p>Vous n'êtes inscrit à aucune formation.</p>
+      <a href="formations.html" style="display:inline-flex;align-items:center;gap:8px;background:#CC0000;color:#fff;padding:10px 20px;border-radius:10px;text-decoration:none;font-size:.88rem;font-weight:600">
+        <i class="fas fa-arrow-right"></i> Voir les formations
+      </a>
+    </div>`;
+    return;
+  }
+  
+  el.innerHTML = data.map(f => `
+    <div class="inscription-card">
+      <div class="inscription-formation"><i class="fas fa-graduation-cap" style="color:#2563EB;margin-right:8px"></i>${f.formation}</div>
+      <div class="inscription-info">
+        Inscrit le ${fmtDate(f.created_at)} · 
+        <span class="badge-statut badge-${f.statut || 'en_attente'}">${(f.statut || 'en attente').replace('_',' ')}</span>
+      </div>
+      ${f.statut === 'confirmee' ? `<div style="margin-top:8px;font-size:.82rem;color:#16a34a"><i class="fas fa-check-circle"></i> Inscription confirmée — l'équipe vous contactera prochainement</div>` : ''}
+    </div>`).join('');
+}
+
+// ── PROFIL ──
+async function loadProfil() {
+  const { data } = await sb.from('profils').select('*').eq('id', currentUser.id).single();
+  if (data) {
+    document.getElementById('profilNom').value = data.nom || '';
+    document.getElementById('profilTel').value = data.telephone || '';
+    document.getElementById('profilAdresse').value = data.adresse || '';
+  } else {
+    // Préfill depuis metadata
+    const meta = currentUser.user_metadata || {};
+    document.getElementById('profilNom').value = meta.nom || '';
+    document.getElementById('profilTel').value = meta.telephone || '';
+  }
+}
+
+async function saveProfil() {
+  const nom = document.getElementById('profilNom').value.trim();
+  const telephone = document.getElementById('profilTel').value.trim();
+  const adresse = document.getElementById('profilAdresse').value.trim();
+  const msg = document.getElementById('profilMsg');
+  
+  const { error } = await sb.from('profils').upsert({ id: currentUser.id, nom, telephone, adresse });
+  msg.style.display = 'block';
+  if (error) {
+    msg.style.color = '#CC0000';
+    msg.textContent = 'Erreur : ' + error.message;
+  } else {
+    msg.style.color = '#16a34a';
+    msg.textContent = '✓ Profil mis à jour !';
+    document.getElementById('userName').textContent = nom || currentUser.email.split('@')[0];
+    setTimeout(() => msg.style.display = 'none', 3000);
+  }
+}
+
+// ── SÉCURITÉ ──
+async function changePw() {
+  const pw = document.getElementById('newPw').value;
+  const confirm = document.getElementById('confirmPw').value;
+  const msg = document.getElementById('pwMsg');
+  if (!pw || pw.length < 8) { msg.style.display='block'; msg.style.color='#CC0000'; msg.textContent='Minimum 8 caractères'; return; }
+  if (pw !== confirm) { msg.style.display='block'; msg.style.color='#CC0000'; msg.textContent='Mots de passe différents'; return; }
+  const { error } = await sb.auth.updateUser({ password: pw });
+  msg.style.display = 'block';
+  if (error) { msg.style.color='#CC0000'; msg.textContent='Erreur : '+error.message; }
+  else { msg.style.color='#16a34a'; msg.textContent='✓ Mot de passe mis à jour !'; document.getElementById('newPw').value=''; document.getElementById('confirmPw').value=''; }
+}
+
+async function logout() {
+  await sb.auth.signOut();
+  window.location.href = 'index.html';
+}
+
+init();
+</script>
+<script src="script.js" defer></script>
+</body>
+</html>

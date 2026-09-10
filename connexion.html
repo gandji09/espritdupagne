@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<link rel="icon" type="image/png" href="images/logo.png">
+<title>Connexion — Esprit du Pagne</title>
+<meta name="description" content="Connectez-vous à votre espace client Esprit du Pagne pour suivre vos commandes et inscriptions.">
+<link rel="canonical" href="https://esprit-du-pagne.com/connexion">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="style.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+.auth-page{min-height:100vh;background:linear-gradient(135deg,#1a1a1a 0%,#2d1a1a 100%);display:flex;align-items:center;justify-content:center;padding:20px;position:relative;overflow:hidden}
+.auth-page::before{content:'';position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(204,0,0,.15),transparent 70%);top:-100px;right:-100px}
+.auth-page::after{content:'';position:absolute;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(204,0,0,.1),transparent 70%);bottom:-100px;left:-100px}
+.auth-card{background:#fff;border-radius:24px;padding:48px 40px;width:100%;max-width:440px;position:relative;z-index:1;box-shadow:0 40px 80px rgba(0,0,0,.4)}
+.auth-logo{text-align:center;margin-bottom:28px}
+.auth-logo img{height:70px;object-fit:contain}
+.auth-logo h1{font-family:'Playfair Display',serif;font-size:1.5rem;margin:12px 0 4px}
+.auth-logo p{color:#888;font-size:.85rem}
+.auth-tabs{display:flex;background:#f5f5f5;border-radius:12px;padding:4px;margin-bottom:28px;gap:4px}
+.auth-tab{flex:1;padding:10px;border:none;border-radius:10px;background:none;font-size:.88rem;font-weight:600;cursor:pointer;font-family:'Poppins',sans-serif;color:#888;transition:all .2s}
+.auth-tab.active{background:#fff;color:#1a1a1a;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.auth-form{display:none}
+.auth-form.active{display:block}
+.form-group{margin-bottom:16px}
+.form-group label{display:block;font-size:.82rem;font-weight:600;margin-bottom:5px;color:#333}
+.form-group input{width:100%;padding:12px 14px;border:2px solid #eee;border-radius:10px;font-size:.9rem;font-family:'Poppins',sans-serif;outline:none;transition:border-color .2s;box-sizing:border-box}
+.form-group input:focus{border-color:#CC0000}
+.btn-auth{width:100%;padding:14px;background:#CC0000;color:#fff;border:none;border-radius:12px;font-size:1rem;font-weight:700;cursor:pointer;font-family:'Poppins',sans-serif;transition:background .2s;display:flex;align-items:center;justify-content:center;gap:10px;margin-top:8px}
+.btn-auth:hover{background:#A30000}
+.btn-auth:disabled{background:#ccc;cursor:not-allowed}
+.forgot-link{text-align:right;margin-top:-8px;margin-bottom:16px}
+.forgot-link a{font-size:.8rem;color:#CC0000;text-decoration:none}
+.forgot-link a:hover{text-decoration:underline}
+.auth-divider{text-align:center;margin:20px 0;color:#ccc;font-size:.82rem;position:relative}
+.auth-divider::before,.auth-divider::after{content:'';position:absolute;top:50%;width:42%;height:1px;background:#eee}
+.auth-divider::before{left:0}
+.auth-divider::after{right:0}
+.btn-google{width:100%;padding:12px;background:#fff;color:#333;border:2px solid #eee;border-radius:12px;font-size:.9rem;font-weight:600;cursor:pointer;font-family:'Poppins',sans-serif;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:10px}
+.btn-google:hover{border-color:#CC0000;background:#fff8f8}
+.btn-google img{width:20px;height:20px}
+.auth-msg{padding:12px 16px;border-radius:10px;font-size:.85rem;margin-bottom:16px;display:none;align-items:center;gap:8px}
+.auth-msg.success{background:#f0fdf4;color:#16a34a;border:1px solid #d1fae5;display:flex}
+.auth-msg.error{background:#fff2f2;color:#CC0000;border:1px solid #fecaca;display:flex}
+.auth-footer{text-align:center;margin-top:20px;font-size:.82rem;color:#888}
+.auth-footer a{color:#CC0000;text-decoration:none;font-weight:600}
+.back-home{position:absolute;top:20px;left:20px;color:rgba(255,255,255,.7);text-decoration:none;font-size:.85rem;display:flex;align-items:center;gap:6px;transition:color .2s;z-index:2}
+.back-home:hover{color:#fff}
+/* Reset password form */
+.reset-form{display:none}
+.reset-form.active{display:block}
+</style>
+</head>
+<body>
+
+<a href="index.html" class="back-home"><i class="fas fa-arrow-left"></i> Retour au site</a>
+
+<div class="auth-page">
+  <div class="auth-card">
+
+    <div class="auth-logo">
+      <img src="images/logo.png" alt="Esprit du Pagne">
+      <h1>Espace Client</h1>
+      <p>Suivez vos commandes et formations</p>
+    </div>
+
+    <!-- Messages -->
+    <div class="auth-msg" id="authMsg"><i class="fas fa-info-circle"></i><span id="authMsgText"></span></div>
+
+    <!-- Tabs connexion / inscription -->
+    <div class="auth-tabs" id="authTabs">
+      <button class="auth-tab active" onclick="switchTab('login')">Se connecter</button>
+      <button class="auth-tab" onclick="switchTab('register')">Créer un compte</button>
+    </div>
+
+    <!-- CONNEXION -->
+    <div class="auth-form active" id="loginForm">
+      <div class="form-group">
+        <label>Adresse email</label>
+        <input type="email" id="loginEmail" placeholder="votre@email.com" onkeydown="if(event.key==='Enter')doLogin()">
+      </div>
+      <div class="form-group">
+        <label>Mot de passe</label>
+        <input type="password" id="loginPassword" placeholder="Votre mot de passe" onkeydown="if(event.key==='Enter')doLogin()">
+      </div>
+      <div class="forgot-link"><a href="#" onclick="showReset()">Mot de passe oublié ?</a></div>
+      <button class="btn-auth" id="loginBtn" onclick="doLogin()">
+        <i class="fas fa-right-to-bracket"></i> Se connecter
+      </button>
+      <div class="auth-divider">ou</div>
+      <button class="btn-google" onclick="loginGoogle()">
+        <img src="https://www.google.com/favicon.ico" alt="Google"> Continuer avec Google
+      </button>
+    </div>
+
+    <!-- INSCRIPTION -->
+    <div class="auth-form" id="registerForm">
+      <div class="form-group">
+        <label>Nom complet</label>
+        <input type="text" id="registerNom" placeholder="Jean Kouassi">
+      </div>
+      <div class="form-group">
+        <label>Adresse email</label>
+        <input type="email" id="registerEmail" placeholder="votre@email.com">
+      </div>
+      <div class="form-group">
+        <label>Téléphone</label>
+        <input type="tel" id="registerTel" placeholder="+229 01 XX XX XX XX">
+      </div>
+      <div class="form-group">
+        <label>Mot de passe</label>
+        <input type="password" id="registerPassword" placeholder="Minimum 8 caractères">
+      </div>
+      <button class="btn-auth" id="registerBtn" onclick="doRegister()">
+        <i class="fas fa-user-plus"></i> Créer mon compte
+      </button>
+      <div class="auth-divider">ou</div>
+      <button class="btn-google" onclick="loginGoogle()">
+        <img src="https://www.google.com/favicon.ico" alt="Google"> Continuer avec Google
+      </button>
+    </div>
+
+    <!-- RESET MOT DE PASSE -->
+    <div class="reset-form" id="resetForm">
+      <p style="color:#555;font-size:.88rem;margin-bottom:16px">Entrez votre email pour recevoir un lien de réinitialisation.</p>
+      <div class="form-group">
+        <label>Adresse email</label>
+        <input type="email" id="resetEmail" placeholder="votre@email.com">
+      </div>
+      <button class="btn-auth" onclick="doReset()">
+        <i class="fas fa-paper-plane"></i> Envoyer le lien
+      </button>
+      <div style="text-align:center;margin-top:14px">
+        <a href="#" onclick="hideReset()" style="font-size:.82rem;color:#888;text-decoration:none">← Retour à la connexion</a>
+      </div>
+    </div>
+
+    <div class="auth-footer">
+      En continuant, vous acceptez notre <a href="politique-confidentialite.html">Politique de confidentialité</a>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const SUPABASE_URL = 'https://xxtkywcchutdhwcjawrz.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh4dGt5d2NjaHV0ZGh3Y2phd3J6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg1Njk3MjAsImV4cCI6MjA5NDE0NTcyMH0.UzDTCSboartGYeiLJ6bo8P-3NibVMVEiBMLgkxdKSRQ';
+let sb = null;
+
+async function initSb() {
+  if (sb) return;
+  await new Promise(r => {
+    const s = document.createElement('script');
+    s.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js';
+    s.onload = r;
+    document.head.appendChild(s);
+  });
+  sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+}
+
+// Check if already logged in
+async function checkSession() {
+  await initSb();
+  const { data } = await sb.auth.getSession();
+  if (data?.session) {
+    window.location.href = 'mon-compte.html';
+  }
+}
+checkSession();
+
+function switchTab(tab) {
+  document.querySelectorAll('.auth-tab').forEach((t,i) => t.classList.toggle('active', (tab==='login'&&i===0)||(tab==='register'&&i===1)));
+  document.getElementById('loginForm').classList.toggle('active', tab === 'login');
+  document.getElementById('registerForm').classList.toggle('active', tab === 'register');
+  hideMsg();
+}
+
+function showMsg(text, type) {
+  const el = document.getElementById('authMsg');
+  document.getElementById('authMsgText').textContent = text;
+  el.className = 'auth-msg ' + type;
+}
+
+function hideMsg() {
+  document.getElementById('authMsg').className = 'auth-msg';
+}
+
+function showReset() {
+  document.getElementById('authTabs').style.display = 'none';
+  document.getElementById('loginForm').classList.remove('active');
+  document.getElementById('resetForm').classList.add('active');
+  hideMsg();
+}
+
+function hideReset() {
+  document.getElementById('authTabs').style.display = 'flex';
+  document.getElementById('resetForm').classList.remove('active');
+  document.getElementById('loginForm').classList.add('active');
+}
+
+async function doLogin() {
+  await initSb();
+  const email = document.getElementById('loginEmail').value.trim();
+  const pw = document.getElementById('loginPassword').value;
+  if (!email || !pw) { showMsg('Remplissez tous les champs', 'error'); return; }
+  const btn = document.getElementById('loginBtn');
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Connexion...';
+  btn.disabled = true;
+  const { data, error } = await sb.auth.signInWithPassword({ email, password: pw });
+  btn.innerHTML = '<i class="fas fa-right-to-bracket"></i> Se connecter';
+  btn.disabled = false;
+  if (error) { showMsg('Email ou mot de passe incorrect', 'error'); return; }
+  window.location.href = 'mon-compte.html';
+}
+
+async function doRegister() {
+  await initSb();
+  const nom = document.getElementById('registerNom').value.trim();
+  const email = document.getElementById('registerEmail').value.trim();
+  const tel = document.getElementById('registerTel').value.trim();
+  const pw = document.getElementById('registerPassword').value;
+  if (!nom || !email || !pw) { showMsg('Remplissez tous les champs obligatoires', 'error'); return; }
+  if (pw.length < 8) { showMsg('Le mot de passe doit contenir au moins 8 caractères', 'error'); return; }
+  const btn = document.getElementById('registerBtn');
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Création...';
+  btn.disabled = true;
+  const { data, error } = await sb.auth.signUp({
+    email, password: pw,
+    options: { data: { nom, telephone: tel } }
+  });
+  btn.innerHTML = '<i class="fas fa-user-plus"></i> Créer mon compte';
+  btn.disabled = false;
+  if (error) { showMsg('Erreur : ' + error.message, 'error'); return; }
+
+  // Créer le profil
+  if (data.user) {
+    await sb.from('profils').upsert({
+      id: data.user.id,
+      nom, telephone: tel
+    });
+  }
+  showMsg('✓ Compte créé ! Vérifiez votre email pour confirmer.', 'success');
+}
+
+async function doReset() {
+  await initSb();
+  const email = document.getElementById('resetEmail').value.trim();
+  if (!email) { showMsg('Entrez votre email', 'error'); return; }
+  const { error } = await sb.auth.resetPasswordForEmail(email, {
+    redirectTo: 'https://esprit-du-pagne.com/reset-password.html'
+  });
+  if (error) { showMsg('Erreur : ' + error.message, 'error'); return; }
+  showMsg('✓ Lien envoyé ! Vérifiez votre boîte mail.', 'success');
+}
+
+async function loginGoogle() {
+  await initSb();
+  showMsg('Connexion Google bientôt disponible', 'error');
+}
+</script>
+</body>
+</html>

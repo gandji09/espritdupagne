@@ -37,6 +37,22 @@
     {
       "source": "/mentions-legales",
       "destination": "/mentions-legales.html"
+    },
+    {
+      "source": "/connexion",
+      "destination": "/connexion.html"
+    },
+    {
+      "source": "/mon-compte",
+      "destination": "/mon-compte.html"
+    },
+    {
+      "source": "/connexion",
+      "destination": "/connexion.html"
+    },
+    {
+      "source": "/mon-compte",
+      "destination": "/mon-compte.html"
     }
   ],
   "headers": [
@@ -148,6 +164,32 @@
         {
           "key": "Cache-Control",
           "value": "public, max-age=86400"
+        }
+      ]
+    },
+    {
+      "source": "/mon-compte.html",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "no-store, private"
+        }
+      ]
+    },
+    {
+      "source": "/mon-compte.html",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "no-store, private"
         }
       ]
     }

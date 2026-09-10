@@ -1,4 +1,25 @@
 
+// Vérifier session client connecté
+async function checkClientSession() {
+  try {
+    if (!sb) await initSupabase();
+    if (!sb) return;
+    const { data } = await sb.auth.getSession();
+    if (data?.session?.user) {
+      window._userEmail = data.session.user.email;
+      // Mettre à jour icône compte dans nav
+      const accountBtn = document.getElementById('accountBtn');
+      if (accountBtn) {
+        accountBtn.href = 'mon-compte.html';
+        accountBtn.style.background = '#CC0000';
+        accountBtn.style.color = '#fff';
+        accountBtn.title = 'Mon espace';
+      }
+    }
+  } catch(e) {}
+}
+
+
 // -- LIGHTBOX -----------------------------------------------
 function openLightbox(src, alt) {
   const lb = document.getElementById('lightbox');
@@ -44,6 +65,8 @@ function preloadFedaPay() {
 
 document.addEventListener('DOMContentLoaded', () => {
   preloadFedaPay();
+  // Récupérer session client connecté
+  checkClientSession();
   const close = document.querySelector('.close-lightbox');
   if (close) close.onclick = closeLightbox;
   const lb = document.getElementById('lightbox');
@@ -419,13 +442,13 @@ async function lancerPaiementFedaPay(total) {
         const { error } = await sb.from('commandes').insert({
           client_nom:       nom,
           client_telephone: tel,
-          client_email:     email || null,
-          adresse_livraison: adresse,
+          client_email:     email || (window._userEmail || null),
+          client_email:    email || (window._currentUserEmail || null),
+          client_adresse:   adresse,
           articles:         panier.map(p => ({ id: p.id, nom: p.nom, prix: p.prix, qty: p.qty })),
           total:            total,
-          mode_paiement: modePaiement || 'FedaPay',
+          mode_paiement:    modePaiement || 'FedaPay',
           statut:           'confirmee',
-          fedapay_id:       transactionId || null,
         });
         
         if (!error) {
