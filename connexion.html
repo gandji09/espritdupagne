@@ -258,7 +258,15 @@ async function doReset() {
 
 async function loginGoogle() {
   await initSb();
-  showMsg('Connexion Google bientôt disponible', 'error');
+  const { data, error } = await sb.auth.signInWithOAuth({
+    provider: 'google',
+    options: {
+      redirectTo: 'https://esprit-du-pagne.com/mon-compte.html'
+    }
+  });
+  if (error) {
+    showMsg('Erreur Google : ' + error.message, 'error');
+  }
 }
 </script>
 </body>
