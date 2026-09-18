@@ -8,41 +8,40 @@
 <meta name="robots" content="noindex">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="style.css">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
 .account-hero{background:#1a1a1a;padding:50px 0;color:#fff;position:relative;overflow:hidden}
 .account-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 80% 50%,rgba(204,0,0,.25),transparent 60%)}
 .account-hero .container{position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px}
-.account-welcome h1{font-family:'Playfair Display',serif;font-size:1.8rem;margin-bottom:6px}
+.account-welcome h1{font-family:'Inter',sans-serif;font-size:1.8rem;margin-bottom:6px}
 .account-welcome p{color:rgba(255,255,255,.7);font-size:.9rem}
-.btn-logout{padding:10px 20px;background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.2);border-radius:10px;font-size:.85rem;font-weight:600;cursor:pointer;font-family:'Poppins',sans-serif;transition:all .2s;display:flex;align-items:center;gap:8px}
+.btn-logout{padding:10px 20px;background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.2);border-radius:10px;font-size:.85rem;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s;display:flex;align-items:center;gap:8px}
 .btn-logout:hover{background:rgba(204,0,0,.4);border-color:#CC0000}
 .account-content{max-width:1100px;margin:0 auto;padding:40px 24px}
 .account-tabs{display:flex;gap:8px;margin-bottom:32px;flex-wrap:wrap}
-.account-tab{padding:10px 20px;background:#fff;border:2px solid #eee;border-radius:12px;font-size:.88rem;font-weight:600;cursor:pointer;font-family:'Poppins',sans-serif;transition:all .2s;color:#555}
+.account-tab{padding:10px 20px;background:#fff;border:2px solid #eee;border-radius:12px;font-size:.88rem;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s;color:#555}
 .account-tab.active{background:#CC0000;color:#fff;border-color:#CC0000}
 .account-tab:hover:not(.active){border-color:#CC0000;color:#CC0000}
 .account-section{display:none}
 .account-section.active{display:block}
 .card{background:#fff;border-radius:16px;padding:28px;box-shadow:0 2px 12px rgba(0,0,0,.06);margin-bottom:20px}
-.card-title{font-family:'Playfair Display',serif;font-size:1.1rem;margin-bottom:20px;display:flex;align-items:center;gap:10px}
+.card-title{font-family:'Inter',sans-serif;font-size:1.1rem;margin-bottom:20px;display:flex;align-items:center;gap:10px}
 .card-title i{color:#CC0000}
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .form-group{display:flex;flex-direction:column;gap:5px}
 .form-group.full{grid-column:1/-1}
 label{font-size:.82rem;font-weight:600;color:#333}
-input[type=text],input[type=email],input[type=tel],input[type=password]{padding:11px 14px;border:2px solid #eee;border-radius:10px;font-size:.9rem;font-family:'Poppins',sans-serif;outline:none;transition:border-color .2s;width:100%;box-sizing:border-box}
+input[type=text],input[type=email],input[type=tel],input[type=password]{padding:11px 14px;border:2px solid #eee;border-radius:10px;font-size:.9rem;font-family:'Inter',sans-serif;outline:none;transition:border-color .2s;width:100%;box-sizing:border-box}
 input:focus{border-color:#CC0000}
-.btn-save{padding:12px 28px;background:#CC0000;color:#fff;border:none;border-radius:10px;font-size:.9rem;font-weight:600;cursor:pointer;font-family:'Poppins',sans-serif;transition:background .2s;display:inline-flex;align-items:center;gap:8px}
+.btn-save{padding:12px 28px;background:#CC0000;color:#fff;border:none;border-radius:10px;font-size:.9rem;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:background .2s;display:inline-flex;align-items:center;gap:8px}
 .btn-save:hover{background:#A30000}
 /* Commandes */
 .commande-card{background:#f9f9f9;border-radius:14px;padding:20px;margin-bottom:14px;border-left:4px solid #CC0000}
 .commande-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px}
 .commande-id{font-size:.78rem;color:#aaa}
 .commande-date{font-size:.82rem;color:#888}
-.commande-total{font-size:1.1rem;font-weight:700;color:#CC0000;font-family:'Playfair Display',serif}
-.commande-articles{font-size:.85rem;color:#555;margin-bottom:10px;line-height:1.5}
+.commande-total{font-size:1.1rem;font-weight:700;color:#CC0000;font-family:'Inter',sans-serif;color:#555;margin-bottom:10px;line-height:1.5}
 .badge-statut{display:inline-block;padding:4px 12px;border-radius:20px;font-size:.75rem;font-weight:700}
 .badge-confirmee{background:#f0fdf4;color:#16a34a}
 .badge-en_attente{background:#fff7ed;color:#ea580c}

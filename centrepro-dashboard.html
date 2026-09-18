@@ -4,10 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Centre Pro Dashboard — Esprit du Pagne</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-<link rel="icon" type="image/png" href="images/logo.png">
 <style>
 :root{
   --red:#CC0000;--red-dark:#A30000;--red-soft:#FFF2F2;
@@ -21,11 +20,11 @@
   --radius:14px;--radius-sm:10px;
 }
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Poppins',sans-serif;background:var(--bg);color:var(--black);min-height:100vh}
-h1,h2,h3{font-family:'Playfair Display',serif}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--black);min-height:100vh}
+h1,h2,h3{font-family:'Inter',sans-serif}
 a{text-decoration:none;color:inherit}
-button{cursor:pointer;font-family:'Poppins',sans-serif}
-input,textarea,select{font-family:'Poppins',sans-serif}
+button{cursor:pointer;font-family:'Inter',sans-serif}
+input,textarea,select{font-family:'Inter',sans-serif}
 
 /* LOGIN */
 #loginScreen{position:fixed;inset:0;background:var(--black);display:flex;align-items:center;justify-content:center;z-index:9999}
@@ -34,9 +33,9 @@ input,textarea,select{font-family:'Poppins',sans-serif}
 .login-logo img{width:72px;height:72px;object-fit:contain}
 .login-box h2{font-size:1.5rem;margin-bottom:6px}
 .login-box p{color:var(--muted);font-size:.88rem;margin-bottom:30px}
-.login-field{width:100%;padding:14px 16px;border:2px solid var(--line);border-radius:var(--radius-sm);font-size:.95rem;transition:border-color .2s;outline:none;margin-bottom:14px;font-family:'Poppins',sans-serif}
+.login-field{width:100%;padding:14px 16px;border:2px solid var(--line);border-radius:var(--radius-sm);font-size:.95rem;transition:border-color .2s;outline:none;margin-bottom:14px;font-family:'Inter',sans-serif}
 .login-field:focus{border-color:var(--red)}
-.login-btn{width:100%;padding:14px;background:var(--red);color:#fff;border:none;border-radius:var(--radius-sm);font-size:1rem;font-weight:600;transition:background .2s;cursor:pointer;font-family:'Poppins',sans-serif}
+.login-btn{width:100%;padding:14px;background:var(--red);color:#fff;border:none;border-radius:var(--radius-sm);font-size:1rem;font-weight:600;transition:background .2s;cursor:pointer;font-family:'Inter',sans-serif}
 .login-btn:hover{background:var(--red-dark)}
 .login-error{color:var(--red);font-size:.85rem;margin-top:10px;display:none}
 
@@ -59,13 +58,13 @@ input,textarea,select{font-family:'Poppins',sans-serif}
 .nav-badge{margin-left:auto;background:var(--red);color:#fff;font-size:.7rem;font-weight:700;padding:2px 8px;border-radius:20px}
 .nav-item.active .nav-badge{background:rgba(255,255,255,.25)}
 .sidebar-footer{padding:12px;border-top:1px solid rgba(255,255,255,.08);flex-shrink:0;display:flex;flex-direction:column;gap:6px}
-.logout-btn{display:flex;align-items:center;gap:10px;padding:11px 14px;border-radius:var(--radius-sm);color:#fff;background:rgba(204,0,0,.3);font-size:.88rem;font-weight:600;cursor:pointer;transition:all .2s;border:1px solid rgba(204,0,0,.4);width:100%;font-family:'Poppins',sans-serif}
+.logout-btn{display:flex;align-items:center;gap:10px;padding:11px 14px;border-radius:var(--radius-sm);color:#fff;background:rgba(204,0,0,.3);font-size:.88rem;font-weight:600;cursor:pointer;transition:all .2s;border:1px solid rgba(204,0,0,.4);width:100%;font-family:'Inter',sans-serif}
 .logout-btn:hover{background:var(--red);border-color:var(--red)}
 
 /* MAIN */
 .main{margin-left:260px;min-height:100vh;display:flex;flex-direction:column;width:calc(100% - 260px)}
 .topbar{background:var(--white);border-bottom:1px solid var(--line);padding:16px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
-.topbar-title{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700}
+.topbar-title{font-family:'Inter',sans-serif;font-size:1.3rem;font-weight:700}
 .topbar-right{display:flex;align-items:center;gap:12px}
 .topbar-date{font-size:.82rem;color:var(--muted)}
 .content{padding:24px 28px;flex:1;display:flex;flex-direction:column;gap:20px;overflow-y:auto;height:calc(100vh - 65px)}
@@ -82,7 +81,7 @@ input,textarea,select{font-family:'Poppins',sans-serif}
 .stat-icon.green{background:var(--green-soft);color:var(--green)}
 .stat-icon.orange{background:var(--orange-soft);color:var(--orange)}
 .stat-icon.blue{background:var(--blue-soft);color:var(--blue)}
-.stat-num{font-size:1.6rem;font-weight:700;line-height:1;font-family:'Playfair Display',serif}
+.stat-num{font-size:1.6rem;font-weight:700;line-height:1;font-family:'Inter',sans-serif}
 .stat-label{font-size:.78rem;color:var(--muted);margin-top:3px}
 
 /* CARDS */
@@ -92,7 +91,7 @@ input,textarea,select{font-family:'Poppins',sans-serif}
 .card-body{padding:20px;flex:1;overflow-y:auto}
 
 /* BUTTONS */
-.btn{display:inline-flex;align-items:center;gap:8px;padding:9px 16px;border-radius:var(--radius-sm);font-size:.85rem;font-weight:600;border:none;transition:all .2s;cursor:pointer;font-family:'Poppins',sans-serif}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:9px 16px;border-radius:var(--radius-sm);font-size:.85rem;font-weight:600;border:none;transition:all .2s;cursor:pointer;font-family:'Inter',sans-serif}
 .btn-primary{background:var(--red);color:#fff}
 .btn-primary:hover{background:var(--red-dark)}
 .btn-ghost{background:var(--bg);color:var(--black)}
@@ -256,6 +255,9 @@ textarea{resize:vertical;min-height:90px}
       <button class="nav-item" onclick="showSection('temoignages',this)" id="navTemoignages">
         <i class="fas fa-comment-dots"></i> Témoignages
         <span class="nav-badge" id="badgeTemoignages" style="display:none">0</span>
+      </button>
+      <button class="nav-item" onclick="showSection('clients',this)">
+        <i class="fas fa-users"></i> Comptes clients
       </button>
       <div class="nav-section-label">Communication</div>
       <button class="nav-item" onclick="showSection('newsletter',this)">
@@ -434,6 +436,22 @@ textarea{resize:vertical;min-height:90px}
             <table>
               <thead><tr><th>Nom</th><th>Ville</th><th>Note</th><th>Message</th><th>Statut</th><th>Date</th><th>Actions</th></tr></thead>
               <tbody id="temoignages-tbody"><tr class="loading-row"><td colspan="7"><div class="spinner"></div></td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ CLIENTS ══ -->
+      <div class="section" id="sec-clients">
+        <div class="card" style="flex:1">
+          <div class="card-header">
+            <span class="card-title"><i class="fas fa-users" style="color:var(--red);margin-right:8px"></i>Comptes clients inscrits</span>
+            <span id="clientsCount" class="badge badge-blue">— clients</span>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Nom</th><th>Email</th><th>Téléphone</th><th>Commandes</th><th>Inscrit le</th><th>Actions</th></tr></thead>
+              <tbody id="clients-tbody"><tr class="loading-row"><td colspan="6"><div class="spinner"></div></td></tr></tbody>
             </table>
           </div>
         </div>
@@ -702,7 +720,7 @@ function startApp(){
 // ══════════════════════════════════
 // NAVIGATION
 // ══════════════════════════════════
-const titles={dashboard:'Vue d\'ensemble',produits:'Produits',galerie:'Galerie',blog:'Blog',commandes:'Commandes',messages:'Messages',inscriptions:'Inscriptions',temoignages:'Témoignages',newsletter:'Newsletter',motdepasse:'Mot de passe'};
+const titles={dashboard:'Vue d\'ensemble',produits:'Produits',galerie:'Galerie',blog:'Blog',commandes:'Commandes',messages:'Messages',inscriptions:'Inscriptions',temoignages:'Témoignages',newsletter:'Newsletter',clients:'Comptes clients',motdepasse:'Mot de passe'};
 
 function showSection(name, btn){
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
@@ -717,6 +735,7 @@ function showSection(name, btn){
   if(name==='inscriptions') loadInscriptions();
   if(name==='temoignages') loadTemoignagesAdmin();
   if(name==='newsletter') loadNewsletterAdmin();
+  if(name==='clients') loadClients();
   if(name==='produits') loadProduits();
 }
 
@@ -965,6 +984,73 @@ async function loadTemoignagesAdmin(){
 
 async function approuverTemoignage(id){await sb.from('temoignages').update({approuve:true}).eq('id',id);showToast('Témoignage approuvé ✓');loadTemoignagesAdmin();loadDashboard();}
 async function deleteTemoignage(id){if(!confirm('Supprimer ?')) return;await sb.from('temoignages').delete().eq('id',id);showToast('Témoignage supprimé');loadTemoignagesAdmin();}
+
+// ══════════════════════════════════
+// CLIENTS (comptes utilisateurs)
+// ══════════════════════════════════
+async function loadClients(){
+  const tb=document.getElementById('clients-tbody');
+  const countEl=document.getElementById('clientsCount');
+  tb.innerHTML='<tr class="loading-row"><td colspan="6"><div class="spinner"></div></td></tr>';
+  
+  try {
+    // Appel Edge Function pour lister les utilisateurs (nécessite service_role côté serveur)
+    const { data, error } = await sb.functions.invoke('list-clients', { body: {} });
+    
+    if(error || !data?.users){
+      // Fallback: utiliser la table profils si Edge Function pas encore déployée
+      const {data: profils} = await sb.from('profils').select('*').order('created_at',{ascending:false});
+      if(!profils?.length){
+        tb.innerHTML='<tr><td colspan="6"><div class="empty"><i class="fas fa-users"></i><p>Aucun client inscrit pour le moment</p></div></td></tr>';
+        if(countEl) countEl.textContent='0 client';
+        return;
+      }
+      if(countEl) countEl.textContent=profils.length+' client'+(profils.length>1?'s':'');
+      
+      // Compter les commandes par profil (via nom si pas d'email direct)
+      tb.innerHTML=profils.map(p=>`<tr>
+        <td><strong>${p.nom||'—'}</strong></td>
+        <td style="font-size:.83rem;color:var(--muted)">—</td>
+        <td>${p.telephone||'—'}</td>
+        <td><span class="badge badge-gray">—</span></td>
+        <td style="color:var(--muted);font-size:.82rem">${fmtDate(p.created_at)}</td>
+        <td style="display:flex;gap:6px;padding:12px 14px"><span style="color:var(--muted);font-size:.78rem">Profil</span></td>
+      </tr>`).join('');
+      return;
+    }
+    
+    const users = data.users;
+    if(countEl) countEl.textContent=users.length+' client'+(users.length>1?'s':'');
+    
+    if(!users.length){
+      tb.innerHTML='<tr><td colspan="6"><div class="empty"><i class="fas fa-users"></i><p>Aucun client inscrit</p></div></td></tr>';
+      return;
+    }
+    
+    // Pour chaque client, compter ses commandes
+    const rows = await Promise.all(users.map(async u => {
+      const { count } = await sb.from('commandes').select('id',{count:'exact'}).eq('client_email', u.email);
+      const meta = u.user_metadata || {};
+      return `<tr>
+        <td><strong>${meta.nom || '—'}</strong></td>
+        <td style="font-size:.83rem;color:var(--muted)">${u.email}</td>
+        <td>${meta.telephone || '—'}</td>
+        <td><span class="badge ${count>0?'badge-green':'badge-gray'}">${count||0} commande${count>1?'s':''}</span></td>
+        <td style="color:var(--muted);font-size:.82rem">${fmtDate(u.created_at)}</td>
+        <td style="display:flex;gap:6px;padding:12px 14px">
+          <a href="mailto:${u.email}" class="btn btn-ghost btn-sm"><i class="fas fa-envelope"></i></a>
+          ${meta.telephone?`<a href="https://wa.me/${meta.telephone.replace(/\s/g,'')}" target="_blank" class="btn btn-success btn-sm"><i class="fab fa-whatsapp"></i></a>`:''}
+        </td>
+      </tr>`;
+    }));
+    
+    tb.innerHTML = rows.join('');
+    
+  } catch(e) {
+    tb.innerHTML='<tr><td colspan="6"><div class="empty"><i class="fas fa-exclamation-triangle"></i><p>Erreur de chargement des clients</p></div></td></tr>';
+    console.error(e);
+  }
+}
 
 // ══════════════════════════════════
 // NEWSLETTER
