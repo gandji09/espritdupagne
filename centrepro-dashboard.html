@@ -1108,22 +1108,56 @@ async function uploadImage(file,targetInputId,zoneId){
   const progressBar=zone?.querySelector('.upload-progress-bar');
   const progress=zone?.querySelector('.upload-progress');
   if(progress) progress.style.display='block';
-  if(progressBar) progressBar.style.width='20%';
+  if(progressBar) progressBar.style.width='15%';
   if(preview){
     const reader=new FileReader();
     reader.onload=e=>{preview.src=e.target.result;preview.style.display='block';}
     reader.readAsDataURL(file);
   }
-  const ext=file.name.split('.').pop();
-  const filename=Date.now()+'-'+Math.random().toString(36).slice(2)+'.'+ext;
-  if(progressBar) progressBar.style.width='50%';
-  const {data,error}=await sb.storage.from('images').upload(filename,file,{cacheControl:'3600',upsert:false});
+
+  // Vérifier la session avant upload (évite les échecs silencieux)
+  const { data: sessionData } = await sb.auth.getSession();
+  if(!sessionData?.session){
+    showToast('Session expirée. Reconnectez-vous.', 'error');
+    if(progress) progress.style.display='none';
+    setTimeout(()=>logout(), 1500);
+    return;
+  }
+
+  // Nettoyer et sécuriser le nom de fichier (accents, espaces, majuscules posent probleme a Storage)
+  const rawExt = (file.name.split('.').pop() || 'jpg').toLowerCase().replace(/[^a-z0-9]/g,'');
+  const ext = rawExt || 'jpg';
+  const filename = Date.now()+'-'+Math.random().toString(36).slice(2,10)+'.'+ext;
+
+  if(progressBar) progressBar.style.width='45%';
+
+  const {data,error}=await sb.storage.from('images').upload(filename,file,{
+    cacheControl:'3600',
+    upsert:false,
+    contentType: file.type || 'image/jpeg'
+  });
+
   if(progressBar) progressBar.style.width='100%';
-  if(error){showToast('Erreur upload: '+error.message,'error');if(progress)progress.style.display='none';return;}
+
+  if(error){
+    console.error('Upload error complet:', error);
+    let msg = error.message || 'Erreur inconnue';
+    if(error.statusCode === '400' || error.error === 'InvalidKey'){
+      msg = 'Nom de fichier invalide. Réessayez.';
+    } else if(error.statusCode === '403' || /policy|permission|row-level/i.test(msg)){
+      msg = 'Accès refusé. Vérifiez que vous êtes bien connecté en admin.';
+    } else if(error.statusCode === '413' || /size|large/i.test(msg)){
+      msg = 'Image trop volumineuse (max 20 Mo).';
+    }
+    showToast('Erreur upload: '+msg,'error');
+    if(progress)progress.style.display='none';
+    return;
+  }
+
   const {data:urlData}=sb.storage.from('images').getPublicUrl(filename);
   const input=document.getElementById(targetInputId);
   if(input) input.value=urlData.publicUrl;
-  setTimeout(()=>{if(progress)progress.style.display='none';},1000);
+  setTimeout(()=>{if(progress)progress.style.display='none';},800);
   showToast('✓ Image uploadée !');
 }
 
